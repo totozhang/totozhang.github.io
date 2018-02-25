@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="深入浅出TCP," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Mathematic Revisit" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="当通信行为发生时，除了通信一端发起通信请求的，另一端被动等待情况外，还有可能存在通信两端同时具有通信意向，两端同时发起连接对端的请求的情形。当通信行为结束时，也存在同样的情况，两端同时没有数据发送给对方，而在同一时刻结束通信。TCP协议支持这种通信连接的同时建立与关闭。连接同时建立和同时关闭在什么情况下可以发生？建立与关闭的时序与正常的通信有哪些不同？本文将对同时建立和同时断开的TCP连接进行模拟">
+<meta name="keywords" content="深入浅出TCP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP连接同时建立与关闭">
+<meta property="og:url" content="http://taotao.guru/2016-01-10-tcp-simutaneous-connection/index.html">
+<meta property="og:site_name" content="Mathematic Revisit">
+<meta property="og:description" content="当通信行为发生时，除了通信一端发起通信请求的，另一端被动等待情况外，还有可能存在通信两端同时具有通信意向，两端同时发起连接对端的请求的情形。当通信行为结束时，也存在同样的情况，两端同时没有数据发送给对方，而在同一时刻结束通信。TCP协议支持这种通信连接的同时建立与关闭。连接同时建立和同时关闭在什么情况下可以发生？建立与关闭的时序与正常的通信有哪些不同？本文将对同时建立和同时断开的TCP连接进行模拟">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection1.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection2v1.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection3v1.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection4.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection5.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection6.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection7.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection8.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection9.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection10.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection11.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection12.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection13.png">
+<meta property="og:updated_time" content="2016-02-15T07:50:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TCP连接同时建立与关闭">
+<meta name="twitter:description" content="当通信行为发生时，除了通信一端发起通信请求的，另一端被动等待情况外，还有可能存在通信两端同时具有通信意向，两端同时发起连接对端的请求的情形。当通信行为结束时，也存在同样的情况，两端同时没有数据发送给对方，而在同一时刻结束通信。TCP协议支持这种通信连接的同时建立与关闭。连接同时建立和同时关闭在什么情况下可以发生？建立与关闭的时序与正常的通信有哪些不同？本文将对同时建立和同时断开的TCP连接进行模拟">
+<meta name="twitter:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://taotao.guru/2016-01-10-tcp-simutaneous-connection/"/>
+
+
+
+
+
+  <title>TCP连接同时建立与关闭 | Mathematic Revisit</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mathematic Revisit</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Trivialities on mathematics and computer science.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://taotao.guru/2016-01-10-tcp-simutaneous-connection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="toto">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mathematic Revisit">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TCP连接同时建立与关闭</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-10T23:29:55+08:00">
+                2016-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络协议/" itemprop="url" rel="index">
+                    <span itemprop="name">网络协议</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>当通信行为发生时，除了通信一端发起通信请求的，另一端被动等待情况外，还有可能存在通信两端同时具有通信意向，两端同时发起连接对端的请求的情形。当通信行为结束时，也存在同样的情况，两端同时没有数据发送给对方，而在同一时刻结束通信。TCP协议支持这种通信连接的同时建立与关闭。连接同时建立和同时关闭在什么情况下可以发生？建立与关闭的时序与正常的通信有哪些不同？本文将对同时建立和同时断开的TCP连接进行模拟重现并详细分析分段的交互过程。<br><a id="more"></a></p>
+<p>#连接同时建立</p>
+<p>绝大多数TCP的通信模式，都是一个进程被动监听TCP端口，等待客户端进程主动发送连接请求，并为客户端进程提供服务。如果有两个进程同时向对方发起TCP连接请求呢？既然两端都有意向连接对端，TCP层作为传输层没有理由阻止两端连接。两端同时发起请求时，TCP协议支持连接建立，此时这两个进程既是客户端，又是服务端。注意，两端同时建立连接与两台主机上运行的两个客户端交叉连接两台主机上运行的两个服务器的情况是完全不同的。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection1.png" alt="连接同时建立与两端同时建立两个不同连接的区别"></p>
+<p>##连接建立时序<br>当两个进程同时建立TCP连接时，连接建立过程与客户端和服务端建立连接的三次握手不同。同时建立连接过程的时序如下，这里不区分客户端和服务端。与普通连接建立的三次握手不同点在于，同时建立连接的两端在期待收到对[1.SYN]的ACK确认时，收到的却是正在请求连接端<strong>[IP地址，TCP端口号]</strong>发来的SYN请求。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection2v1.png" alt="同时建立连接时序"></p>
+<p>##连接同时建立的一个例子<br>有很多方法实现一个同时建立的连接，实现核心思路就是确保TCP通信两端的SYN分段发出后，收到的不是ACK分段或RST分段(<a href="">参考文章</a>)，而是来自正在连接端的SYN分段。</p>
+<p>###准备代码<br>首先，两端可以沿用客户端代码，添加指定客户端口号和服务端口号的部分即可。修改如下，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;lib/unp.h&quot;</span><br><span class="line"></span><br><span class="line">int main(int argc, char **argv)</span><br><span class="line">&#123;</span><br><span class="line">    //初始化工作</span><br><span class="line">    int sockfd = 0;                                //Client进程的Socket文件描述符</span><br><span class="line">    int dstport = 0;                               //Server进程监听TCP端口号</span><br><span class="line">    int srcport = 0;                               //Client进程指定本地TCP端口号</span><br><span class="line">    char response[MAXLINE + 1];                    //Server进程返回的响应内容</span><br><span class="line">    char request[] = &quot;request,hostname\r\n&quot;;       //Client进程发出的请求消息</span><br><span class="line">    struct sockaddr_in servaddr;                   //用于存储Server进程所在主机的IP地址及TCP端口号</span><br><span class="line">   </span><br><span class="line">    bzero(&amp;servaddr, sizeof(servaddr));</span><br><span class="line">    bzero(response, MAXLINE + 1);</span><br><span class="line"></span><br><span class="line">    //设置将要连接服务器进程的IP地址和TCP端口号</span><br><span class="line">    sscanf(argv[3], &quot;%d&quot;, &amp;dstport);                                       </span><br><span class="line">    servaddr.sin_family = AF_INET;                        </span><br><span class="line">    Inet_pton(AF_INET, argv[2], &amp;servaddr.sin_addr);      </span><br><span class="line">    servaddr.sin_port = htons((uint16_t) dstport);        </span><br><span class="line"></span><br><span class="line">    //创建sockfd，AF_INET表示IPv4，SOCK_STREAM表示TCP</span><br><span class="line">    sockfd = Socket(AF_INET, SOCK_STREAM, 0);</span><br><span class="line"></span><br><span class="line">    //强制绑定客户端端口号到sockfd</span><br><span class="line">    sscanf(argv[1], &quot;%d&quot;, &amp;srcport);   </span><br><span class="line">    struct sockaddr_in clientaddr;</span><br><span class="line">    bzero(&amp;clientaddr, sizeof(clientaddr));</span><br><span class="line">    clientaddr.sin_family = AF_INET;                      </span><br><span class="line">    clientaddr.sin_port = htons((uint16_t)srcport);       </span><br><span class="line">    Bind(sockfd, (SA *) &amp;clientaddr, sizeof(clientaddr));</span><br><span class="line"></span><br><span class="line">    //发起连接请求, 关联sockfd和Server进程的IP地址，TCP端口号</span><br><span class="line">    Connect(sockfd, (SA *) &amp;servaddr, sizeof(servaddr));</span><br><span class="line"></span><br><span class="line">    //发送请求消息</span><br><span class="line">    Write(sockfd, (char*) request, strlen(request));</span><br><span class="line"></span><br><span class="line">    //等待响应消息</span><br><span class="line">    Readline(sockfd, response, sizeof(response));</span><br><span class="line">    printf(&quot;%s\n&quot;, response);</span><br><span class="line"></span><br><span class="line">    //关闭sockfd,通知服务进程通信结束</span><br><span class="line">    Close(sockfd);</span><br><span class="line"></span><br><span class="line">    //进程结束</span><br><span class="line">    exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>###情景重现</p>
+<p>其次，需要制造两端TCP分段SYN同时到达对端的情景，</p>
+<p>步骤1，选择一个网络拓扑（此处使用GNS3模拟），网络中所有设备上电。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection3v1.png" alt="GNS3网络拓扑"></p>
+<p>步骤2，从主机10.22.5.3/24到主机10.16.56.2/24进行Ping操作结果OK，确保两台主机ARP缓存列表包含到路由器接口表项。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">toto@guru:~$ ping 10.16.56.2 -c 3</span><br><span class="line">PING 10.16.56.2 (10.16.56.2) 56(84) bytes of data.</span><br><span class="line">64 bytes from 10.16.56.2: icmp_seq=1 ttl=63 time=15.2 ms</span><br><span class="line">64 bytes from 10.16.56.2: icmp_seq=2 ttl=63 time=10.4 ms</span><br><span class="line">64 bytes from 10.16.56.2: icmp_seq=3 ttl=63 time=14.9 ms</span><br><span class="line"></span><br><span class="line">--- 10.16.56.2 ping statistics ---</span><br><span class="line">3 packets transmitted, 3 received, 0% packet loss, time 2002ms</span><br><span class="line">rtt min/avg/max/mdev = 10.445/13.535/15.200/2.187 ms</span><br></pre></td></tr></table></figure></p>
+<p>步骤3，暂停路由器Router工作（GNS3功能），IP包转发停止，各接口接收的数据包被缓存。</p>
+<p>步骤4，分别在主机10.22.5.3和10.16.56.2使用gdb执行client进程。两端使用Wireshark抓包，观察到两端SYN段已经发出并且处于重传状态。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#主机10.22.5.3，client进程从44444端口到10.15.56.2:55555端口建立TCP连接</span><br><span class="line">toto@guru:~$ client 44444 10.16.56.2 55555</span><br><span class="line">～</span><br><span class="line">#主机10.16.56.2，client进程从55555端口到10.22.5.3:44444端口建立TCP连接</span><br><span class="line">toto@client:~$ client 55555 10.16.56.2 44444</span><br><span class="line">～</span><br></pre></td></tr></table></figure></p>
+<p>步骤5，解锁路由器Router工作（GNS3功能），缓存在路由器的IP包立即被转发。</p>
+<p>步骤6，两端此时同时收到SYN段连接建立请求，连接建立完成。查看TCP连接状态为，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#主机10.22.5.3，查看连接状态</span><br><span class="line">toto@guru:~$ netstat -ant | grep 55555</span><br><span class="line">tcp        0      0 10.22.5.3:44444         10.16.56.2:55555        ESTABLISHED</span><br><span class="line"></span><br><span class="line">#主机10.22.5.3，gdb继续执行输出为</span><br><span class="line">toto@guru:~$ client 44444 10.16.56.2 55555</span><br><span class="line">request,hostname</span><br><span class="line"></span><br><span class="line">#主机10.16.56.2，gdb继续执行输出为</span><br><span class="line">toto@client:~$ client 55555 10.16.56.2 44444</span><br><span class="line">request,hostname</span><br></pre></td></tr></table></figure></p>
+<p>##连接同时建立的TCP分段数据</p>
+<p>实例运行时，使用Wireshark获取TCP段数据 [1.SYN n]，[1.SYN k]，[2.SYN k，ACK n+1]，[2.SYN n，ACK k+1] 的细节如下，</p>
+<p>从10.22.5.3:44444到10.16.56.2:55555发起SYN连接请求。ISN为4240815619。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection4.png" alt="1.SYN n"><br>从10.16.56.2:55555到10.22.5.3:44444发起SYN连接请求。ISN为2140328405。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection5.png" alt="1.SYN k"><br>从10.22.5.3:44444到10.16.56.2:55555发送ACK应答，ACK为2140328406。再次强调SYN仍然为4240815619。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection6.png" alt="2.ACK n+1"><br>从10.16.56.2:55555到10.22.5.3:44444发送ACK应答，ACK为4240815620。再次强调SYN仍然为2140328405。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection7.png" alt="2.ACK k+1"></p>
+<p>#连接同时断开</p>
+<p>与同时建立连接类似，TCP连接也可以同时断开。这里所说的连接断开是指TCP使用FIN分段来正常切断一个已经建立的连接。无论连接是客户端-服务端模型，还是连接同时建立的模型，只要是已经建立完成的连接，都可以同时断开。也就是说，同时断开连接与连接是怎么建立的形式无关，参考文章<a href="http://taotao.guru/2016/01/06/2016-01-06-tcp-connection-status-transit/">《TCP协议连接状态迁移》</a>查看更多细节。</p>
+<p>##连接断开时序</p>
+<p>由于断开双向通信管道一定会需要四次挥手，所以挥手的次数不发生变化。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection8.png" alt="当FIN和ACK分别发送时的时序"></p>
+<p>FIN段和ACK段经常也可能会绑定在一起发送，所以会出现如下情形。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection9.png" alt="当FIN和ACK绑定发送时的时序"></p>
+<p>##连接同时断开的一个例子</p>
+<p>使用客户端/服务端结构。客户端与服务端代码稍作修改。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//server.c</span><br><span class="line">//连接建立后等待1秒，立即请求断开连接</span><br><span class="line">connectfd = Accept(listenfd, (SA *) &amp;clntaddr, &amp;sock_length);</span><br><span class="line">sleep(1);</span><br><span class="line">Shutdown(connectfd,SHUT_WR);</span><br><span class="line"></span><br><span class="line">//client.c</span><br><span class="line">//连接建立后等待1秒，立即请求断开连接</span><br><span class="line">Connect(sockfd, (SA *) &amp;servaddr, sizeof(servaddr));</span><br><span class="line">sleep(1);</span><br><span class="line">Shutdown(sockfd,SHUT_WR);</span><br></pre></td></tr></table></figure>
+<p>为了证明这是同时断开的情景，查看最后两端TCP状态都是TIME_WAIT状态，可以确定这是同时发起的断连流程。参考文章<a href="http://taotao.guru/2016/01/06/2016-01-06-tcp-connection-status-transit/">《TCP协议连接状态迁移》</a>查看更多细节。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//服务端</span><br><span class="line">toto@guru:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 0.0.0.0:1982            0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0      0 10.22.5.3:1982          10.16.56.2:55555        TIME_WAIT</span><br><span class="line"></span><br><span class="line">//客户端</span><br><span class="line">toto@ClientOS:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 10.16.56.2:55555        10.22.5.3:1982          TIME_WAIT</span><br></pre></td></tr></table></figure>
+<p>##连接同时断开的TCP分段数据</p>
+<p>实例运行时，使用Wireshark获取TCP段数据 [1.FIN n]，[1.FIN k]，[2.ACK n+1]，[2.ACK k+1] 的细节如下，</p>
+<p>从10.22.5.3:1982到10.16.56.2:55555发起FIN。Seq为3717319262。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection10.png" alt="1.SYN n"><br>从10.16.56.2:55555到10.22.5.3:1982发起FIN。Seq为731343897。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection11.png" alt="1.SYN k"><br>ACK 731343898。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection12.png" alt="2.ACK n+1"><br>ACK 3717319263。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPSimutaneousConnection13.png" alt="2.ACK k+1"></p>
+<p>#小结</p>
+<p>同时建立连接要求两端同时发送SYN，所以这种情形不发生在服务端-客户端模型TCP通信中，一般在点对点通信中会经常遇到，连接同时建立的关键在于发出的TCP分段SYN到达对端之前，对端已经发出了SYN，否则对端会回复RST分段终止连接。同时断开连接时，导致TCP两端都进入TIME_WAIT状态，而TIME_WAIT状态所带来的问题会影响到两端，所以在一些疑难问题分析时，要针对此类细节多加注意。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/深入浅出TCP/" rel="tag"># 深入浅出TCP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016-01-04-tcp-connection-management/" rel="next" title="TCP协议连接管理">
+                <i class="fa fa-chevron-left"></i> TCP协议连接管理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016-01-11-tcp-self-connection/" rel="prev" title="TCP自连接问题">
+                TCP自连接问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="toto" />
+            
+              <p class="site-author-name" itemprop="name">toto</p>
+              <p class="site-description motion-element" itemprop="description">About Math, About CS.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:toto.zhang@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="skype:tao.zhang@ericsson.com?call|chat" target="_blank" title="Skype">
+                      
+                        <i class="fa fa-fw fa-skype"></i>Skype</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Copyright by toto.zhang@gmail.com</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

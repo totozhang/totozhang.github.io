@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="深入浅出TCP," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Mathematic Revisit" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="对于任何一类事物的具体对象实例来说，在某一个特定时间段，实例自身都会处于某种状态，比如，手机状态可以分为空闲等待状态，来电振铃状态，通话接续状态等。再比如，一个进程状态可以分为创建，就绪，阻塞，运行和死亡等几种状态。当有某一特定事件发生时，事物的状态可能会随之发生改变。另外对于一类事物，其状态的维度可能有很多，比如一个人的状态可以分为情绪高涨，情绪低谷，情绪冷淡状态，或者也可以分为工作状态，空闲状">
+<meta name="keywords" content="深入浅出TCP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP协议连接状态迁移">
+<meta property="og:url" content="http://taotao.guru/2016-01-23-tcp-connection-status-transit/index.html">
+<meta property="og:site_name" content="Mathematic Revisit">
+<meta property="og:description" content="对于任何一类事物的具体对象实例来说，在某一个特定时间段，实例自身都会处于某种状态，比如，手机状态可以分为空闲等待状态，来电振铃状态，通话接续状态等。再比如，一个进程状态可以分为创建，就绪，阻塞，运行和死亡等几种状态。当有某一特定事件发生时，事物的状态可能会随之发生改变。另外对于一类事物，其状态的维度可能有很多，比如一个人的状态可以分为情绪高涨，情绪低谷，情绪冷淡状态，或者也可以分为工作状态，空闲状">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState1.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState2v5.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState3v1.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState4.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState5.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState6v1.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState7.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState8.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState9.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState10.png">
+<meta property="og:updated_time" content="2016-02-18T15:47:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TCP协议连接状态迁移">
+<meta name="twitter:description" content="对于任何一类事物的具体对象实例来说，在某一个特定时间段，实例自身都会处于某种状态，比如，手机状态可以分为空闲等待状态，来电振铃状态，通话接续状态等。再比如，一个进程状态可以分为创建，就绪，阻塞，运行和死亡等几种状态。当有某一特定事件发生时，事物的状态可能会随之发生改变。另外对于一类事物，其状态的维度可能有很多，比如一个人的状态可以分为情绪高涨，情绪低谷，情绪冷淡状态，或者也可以分为工作状态，空闲状">
+<meta name="twitter:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://taotao.guru/2016-01-23-tcp-connection-status-transit/"/>
+
+
+
+
+
+  <title>TCP协议连接状态迁移 | Mathematic Revisit</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mathematic Revisit</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Trivialities on mathematics and computer science.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://taotao.guru/2016-01-23-tcp-connection-status-transit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="toto">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mathematic Revisit">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TCP协议连接状态迁移</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-23T23:29:55+08:00">
+                2016-01-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络协议/" itemprop="url" rel="index">
+                    <span itemprop="name">网络协议</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>对于任何一类事物的具体对象实例来说，在某一个特定时间段，实例自身都会处于某种状态，比如，手机状态可以分为空闲等待状态，来电振铃状态，通话接续状态等。再比如，一个进程状态可以分为创建，就绪，阻塞，运行和死亡等几种状态。当有某一特定事件发生时，事物的状态可能会随之发生改变。另外对于一类事物，其状态的维度可能有很多，比如一个人的状态可以分为情绪高涨，情绪低谷，情绪冷淡状态，或者也可以分为工作状态，空闲状态，学习状态等。状态维度的选择由谁来决定的？在软件实现中，哪个维度被软件的设计者关注则选择这个维度。在TCP协议中，连接端作为一个对象实例，也会有状态的变化，TCP通信过程中，双端都经历了多个时间阶段，在这些时间阶段里，客户端与服务端各自的状态都经历了哪些变化，这些变化又是由哪些事件触发的？</p>
+<a id="more"></a>
+<h1 id="状态迁移图"><a href="#状态迁移图" class="headerlink" title="状态迁移图"></a>状态迁移图</h1><p>一般用状态迁移图来描述一个事物状态的变迁，也称为有限状态机或有穷自动机。在绘制一个状态迁移图之前，必须明确三点，首先明确要描述哪一个对象，其次明确描述的对象有哪些状态，最后明确状态迁移的条件。我继续以手机来举例，绘制一个手机的状态迁移图。明确描述对象为手机，对象状态规定为，初始状态，空闲等待状态，来电振铃状态，通话接续状态四个状态，状态迁移条件请参考图中箭头标记部分。</p>
+<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState1.png" alt="状态迁移图基本示例"></p>
+<p>#TCP双端普通状态迁移<br>TCP协议描述端到端通信，所以TCP的状态迁移图的描述对象是两个端，这里的端就是系统内核中Transmission Control Block数据结构，从应用层来看，可以简单理解为Socket套接字本身的状态。回顾TCP一次完整通信过程中分段数据的收发情况，TCP连接建立阶段3个分段数据，数据交互阶段分段数取决于应用层数据，连接切断阶段4个分段数据。TCP任意一端随着关键TCP分段的收发，其状态也随之发生变化。在没有异常发生的情况下，两端的状态变化如下，以虚线标识每个状态的起始。</p>
+<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState2v5.png" alt="TCP双端普通状态迁移"></p>
+<p>TCP服务端和客户端初始状态都是CLOSED状态。服务端调用函数Accept()后，由CLOSED状态迁移到LISTEN状态，服务端等待客户端连接请求SYN到达。客户端发出[1.SYN]请求连接，客户端状态有CLOSED状态迁移到SYN_SENT状态，客户端在此状态等待三次握手结束。服务端收到[1.SYN]后，立即由LISTEN状态迁移到SYN_RECEIVED状态，发出第二次握手的数据[2.SYN，ACK]。服务端继续等待第三次握手数据[3.ACK]。客户发送第三次握手数据[3.ACK]，进入ESTABLISHED状态，服务端收到[3.ACK]后进入ESTABLISHED状态，连接建立，双端开始收发数据。客户端首先发起断开连接[8.FIN]请求（也可由服务端发起），此请求发出后客户端状态也随之迁移到FIN_WAIT_1状态，等待着对端确认[8.FIN]。服务端收到[8.FIN]后，得知客户端已经没有更多数据发送，服务端回复[9.ACK]，并迁移到CLOSE_WAIT状态，继续等待将本端应用层数据发往客户端。而客户端从服务端收到[9.ACK]时，客户端由FIN_WAIT_1状态迁移到FIN_WAIT_2状态，在FIN_WAIT_2状态中，客户端只接收服务端的数据，不发送数据，直到服务端发来FIN明确通知客户端没有更多数据发送。服务端一旦发出最后一个[10.FIN]，服务端便迁移到LAST_ACK状态以等待客户端对[10.FIN]确认。客户端确认后，进入TIME_WAIT状态，以防这个确认[11.ACK]丢失。收到确认后，服务端直接迁移到CLOSED状态。TIME_WAIT状态超时后，客户端进入CLOSED状态。</p>
+<p>由于两端的状态变化互相关联，所以可以将二者合并，得到RFC793里所描述的状态迁移图的雏形。</p>
+<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState3v1.png" alt="TCP双端正常通信状态迁移图"></p>
+<p>#TCP双端异常通信状态迁移</p>
+<p>异常TCP通信主要是指存在RST分段数据参与的TCP通信，比如客户端主动连接服务器端口遇到服务器没有进程监听对应端口，服务器回复RST分段拒绝客户端的连接请求。RST分段会导致TCP端直接迁移到CLOSED状态，如果服务端循环调用函数Accept()，也可以认为服务端迁移到LISTEN状态。下图增加了两个异常状态的迁移作为例子。</p>
+<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState4.png" alt="TCP双端异常通信状态迁移"></p>
+<p>#TCP双端同时建立连接状态迁移</p>
+<p>当两个进程同时建立TCP连接时，连接建立过程与客户端和服务端建立连接的三次握手不同。同时建立连接过程的时序如下，这里不区分客户端和服务端。</p>
+<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState5.png" alt="连接同时建立时序"></p>
+<p>根据同时建立连接的时序，来完善状态迁移图。由于两端的状态迁移相同，合并后的结果如下。</p>
+<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState6v1.png" alt="连接同时建立状态迁移"></p>
+<p>#TCP双端同时断开连接状态迁移</p>
+<p>同时断开双向通信管道仍然需要四次挥手。</p>
+<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState7.png" alt="当FIN和ACK分别发送时的时序"></p>
+<p>FIN段和ACK段经常可能会绑定在一起发送，所以同时断开连接时的状态迁移过程中在这种情况下不经历CLOSING状态而直接进入TIME_WAIT。</p>
+<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState8.png" alt="当FIN和ACK绑定发送时的时序"></p>
+<p>合并有CLOSING状态和没有CLOSING状态的两种情况。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState9.png" alt="同时关闭状态迁移"></p>
+<p>#TCP完整状态迁移图<br>将以上叙述的全部状态迁移整理合并，得到RFC793的状态迁移图，分解整理状态迁移的过程，更加有利于对于此状态迁移图中每个细节的深入理解。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState10.png" alt="图22，完整的TCP状态迁移图"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/深入浅出TCP/" rel="tag"># 深入浅出TCP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016-01-16-linux-zombieprocess/" rel="next" title="LINUX僵尸进程">
+                <i class="fa fa-chevron-left"></i> LINUX僵尸进程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016-01-31-tcp-timewait-status/" rel="prev" title="TIME_WAIT状态">
+                TIME_WAIT状态 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="toto" />
+            
+              <p class="site-author-name" itemprop="name">toto</p>
+              <p class="site-description motion-element" itemprop="description">About Math, About CS.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:toto.zhang@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="skype:tao.zhang@ericsson.com?call|chat" target="_blank" title="Skype">
+                      
+                        <i class="fa fa-fw fa-skype"></i>Skype</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#状态迁移图"><span class="nav-number">1.</span> <span class="nav-text">状态迁移图</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Copyright by toto.zhang@gmail.com</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

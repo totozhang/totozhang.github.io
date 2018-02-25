@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="深入浅出TCP," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Mathematic Revisit" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="TIME_WAIT状态是TCP状态迁移中令人疑惑的一个状态，粗略看来其存在的必要性令人怀疑。有很多的方案针对TIME_WAIT状态进行优化甚至规避掉TIME_WAIT状态，但需要注意的是，既然Robert Kahn和Vint Cerf在设计TCP时引入了TIME_WAIT状态，既然TIME_WAIT状态已经在应用如此广泛的TCP协议中稳定存在了数十个年头，就必然有其存在的道理，至少进行操作之前，应">
+<meta name="keywords" content="深入浅出TCP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TIME_WAIT状态">
+<meta property="og:url" content="http://taotao.guru/2016-01-31-tcp-timewait-status/index.html">
+<meta property="og:site_name" content="Mathematic Revisit">
+<meta property="og:description" content="TIME_WAIT状态是TCP状态迁移中令人疑惑的一个状态，粗略看来其存在的必要性令人怀疑。有很多的方案针对TIME_WAIT状态进行优化甚至规避掉TIME_WAIT状态，但需要注意的是，既然Robert Kahn和Vint Cerf在设计TCP时引入了TIME_WAIT状态，既然TIME_WAIT状态已经在应用如此广泛的TCP协议中稳定存在了数十个年头，就必然有其存在的道理，至少进行操作之前，应">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait1.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait2.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait3.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait4.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait5.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait6.png">
+<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait7.png">
+<meta property="og:updated_time" content="2016-02-21T10:21:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TIME_WAIT状态">
+<meta name="twitter:description" content="TIME_WAIT状态是TCP状态迁移中令人疑惑的一个状态，粗略看来其存在的必要性令人怀疑。有很多的方案针对TIME_WAIT状态进行优化甚至规避掉TIME_WAIT状态，但需要注意的是，既然Robert Kahn和Vint Cerf在设计TCP时引入了TIME_WAIT状态，既然TIME_WAIT状态已经在应用如此广泛的TCP协议中稳定存在了数十个年头，就必然有其存在的道理，至少进行操作之前，应">
+<meta name="twitter:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://taotao.guru/2016-01-31-tcp-timewait-status/"/>
+
+
+
+
+
+  <title>TIME_WAIT状态 | Mathematic Revisit</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mathematic Revisit</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Trivialities on mathematics and computer science.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://taotao.guru/2016-01-31-tcp-timewait-status/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="toto">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mathematic Revisit">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TIME_WAIT状态</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-31T23:29:55+08:00">
+                2016-01-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络协议/" itemprop="url" rel="index">
+                    <span itemprop="name">网络协议</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>TIME_WAIT状态是TCP状态迁移中令人疑惑的一个状态，粗略看来其存在的必要性令人怀疑。有很多的方案针对TIME_WAIT状态进行优化甚至规避掉TIME_WAIT状态，但需要注意的是，既然Robert Kahn和Vint Cerf在设计TCP时引入了TIME_WAIT状态，既然TIME_WAIT状态已经在应用如此广泛的TCP协议中稳定存在了数十个年头，就必然有其存在的道理，至少进行操作之前，应该把握清楚TIME_WAIT的来龙去脉。正如Richard Stevens在他的书里写的一段话，“Instead of trying to avoid the state, we should understand it”。</p>
+<p>那么，处于TIME_WAIT状态的TCP端在等待什么呢？TCP端为什么进入这个状态呢？这个状态引发了哪些问题呢？有什么方法来规避这些问题呢？</p>
+<a id="more"></a>
+<p>#TIME_WAIT等待时长</p>
+<p>TCP协议中规定，处在TIME_WAIT状态的TCP端，必须等待一定时长（协议建议2MSL），尽量确保TCP远端能够收到最后一次FIN分段的ACK确认。处于TIME_WAIT状态的TCP端，不能重建以同一四元组标识的TCP替身连接。</p>
+<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait1.png" alt="处于TIME_WAIT状态的TCP端口"></p>
+<p>2MSL表示[Maximum Segment Lifetime] × 2，TCP分段在网络中最大生存时长的二倍，大部分Linux发行版使用的MSL为30秒，所以2MSL为1分钟。众所周知，IP包在网络中最大生存期用TTL表示，但是TTL表示的是IP包在网络中的最大跳数，所以MSL跟TTL没有直接关系。Linux内核中，这个数值不是可配置的而是硬编码到内核代码中，设定为1分钟。有些操作系统是可配置的。（<a href="http://lxr.free-electrons.com/source/include/net/tcp.h" target="_blank" rel="noopener">Linux内核代码中定义TIME_WAIT头文件参考链接</a>）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//Linux内核代码 include/net/tcp.h</span><br><span class="line">#define TCP_TIMEWAIT_LEN (60*HZ) /* how long to wait to destroy TIME-WAIT state, about 60 seconds */</span><br></pre></td></tr></table></figure></p>
+<p>#进入TIME_WAIT状态<br>根据TCP状态迁移图，首先发起FIN断连请求的TCP端，进入TIME_WAIT状态。也就是说无论客户端与服务端，只要首先请求TCP连接切断，就会进入TIME_WAIT状态。而客户端与服务端在通信中扮演着不同的角色，所以进入TIME_WAIT状态后，会对通信产生不同的影响。下面分别讨论各种进入TIME_WAIT状态的场景及其影响。其中场景1～3为客户端主动断连，场景4～5为服务端主动断连。</p>
+<h2 id="客户端主动断连"><a href="#客户端主动断连" class="headerlink" title="客户端主动断连"></a>客户端主动断连</h2><p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait2.png" alt="客户端主动断连"></p>
+<h3 id="场景1，客户端主动断连"><a href="#场景1，客户端主动断连" class="headerlink" title="场景1，客户端主动断连"></a>场景1，客户端主动断连</h3><p>客户端首先发起断开连接请求的场景。首先启动服务进程，运行客户进程连接服务进程，重复操作两次请求主机名，客户端主动发起两次断连请求。执行完毕后观察TCP连接状态情况，执行过程如下，</p>
+<p>服务端输出为，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#服务端启动后TCP端口状态</span><br><span class="line">toto@guru:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 0.0.0.0:1982            0.0.0.0:*               LISTEN</span><br><span class="line"></span><br><span class="line">#客户端发起两次通信后的服务端输出</span><br><span class="line">toto@guru:~$ server </span><br><span class="line">Receive message from client process on 10.16.56.2: request,hostname</span><br><span class="line">Receive message from client process on 10.16.56.2: request,hostname</span><br><span class="line"></span><br><span class="line">#客户端发起两次通信后TCP端口状态</span><br><span class="line">toto@guru:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 0.0.0.0:1982            0.0.0.0:*               LISTEN</span><br></pre></td></tr></table></figure></p>
+<p>客户端输出为，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#客户端连续执行两次</span><br><span class="line">toto@ClientOS:~$ client 10.22.5.3 1982</span><br><span class="line">response,guru</span><br><span class="line">toto@ClientOS:~$ client 10.22.5.3 1982</span><br><span class="line">response,guru</span><br><span class="line"></span><br><span class="line">#客户端执行两次后的TCP连接状态</span><br><span class="line">toto@ClientOS:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 10.16.56.2:55725         10.22.5.3:1982          TIME_WAIT</span><br><span class="line">tcp        0      0 10.16.56.2:55726         10.22.5.3:1982          TIME_WAIT</span><br></pre></td></tr></table></figure></p>
+<p>客户端进程主动发起两次TCP连接的切断请求，在第二次执行客户端进程连接服务端进程过程中，没有遇到错误提示或连接等待的情形。这是由于虽然客户端的TCP端口号55725处于TIME_WAIT状态，随后执行客户端建立连接时，客户端操作系统为新TCP连接再次重新指派临时TCP端口号（ephemeral port），所以每一次客户端发起TCP连接请求，客户端口号都发生了变化。临时端口号的选择范围在操作系统中是可配置的，比如Linux系统下，具体查看和修改文件位置如下。在上述连接中，客户端操作系统内核为进程指定了55725，55726两个端口。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">toto@guru:~$ cat /proc/sys/net/ipv4/ip_local_port_range </span><br><span class="line">32768	61000</span><br></pre></td></tr></table></figure></p>
+<p>此场景说明如果一个TCP连接由客户端一侧来切断，并不会对服务端产生任何影响，也不会对客户端本身产生严重影响。但是在通信系统设计中，如果需要短时间内频繁的建立TCP连接，并主动切断TCP连接，就有可能耗尽这个临时端口范围内的全部端口，从而导致连接建立失败，所以如果发生这种情况，需要考虑使用TCP长连接，TCP连接池或者使用其他切断连接的方法（如发送RST强切等）。</p>
+<h3 id="场景2，绑定本地端口的客户端主动断连"><a href="#场景2，绑定本地端口的客户端主动断连" class="headerlink" title="场景2，绑定本地端口的客户端主动断连"></a>场景2，绑定本地端口的客户端主动断连</h3><p>客户端绑定到固定端口号，方法如下，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//强制绑定客户端端口号到sockfd</span><br><span class="line">sscanf(argv[1], &quot;%d&quot;, &amp;srcport);</span><br><span class="line">struct sockaddr_in clientaddr;</span><br><span class="line">bzero(&amp;clientaddr, sizeof(clientaddr));</span><br><span class="line">clientaddr.sin_family = AF_INET;</span><br><span class="line">clientaddr.sin_port = htons((uint16_t)srcport);</span><br><span class="line">Bind(sockfd, (SA *) &amp;clientaddr, sizeof(clientaddr));</span><br></pre></td></tr></table></figure>
+<p>将代码修改后，重新编译并运行客户端进程两次，</p>
+<p>服务端输出，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#服务端连接状态为，</span><br><span class="line">toto@guru:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 0.0.0.0:1982            0.0.0.0:*               LISTEN</span><br><span class="line"></span><br><span class="line">toto@guru:~$ server </span><br><span class="line">Receive message from client process on 10.16.56.2: request,hostname</span><br></pre></td></tr></table></figure></p>
+<p>客户端输出，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">toto@ClientOS:~$ client 55555 10.22.5.3 1982</span><br><span class="line">response,guru</span><br><span class="line">toto@ClientOS:~$ client 55555 10.22.5.3 1982</span><br><span class="line">bind error: Address already in use</span><br><span class="line"></span><br><span class="line">#客户端连接状态为，</span><br><span class="line">toto@ClientOS:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 10.16.56.2:55555         10.22.5.3:1982          TIME_WAIT</span><br></pre></td></tr></table></figure></p>
+<p>此场景再次说明，在TIME_WAIT状态下的TCP连接不能再次进行创建。</p>
+<h3 id="场景3，绑定本地端口的客户端主动断连后，客户端又分别向位于不同主机服务进程发起连接"><a href="#场景3，绑定本地端口的客户端主动断连后，客户端又分别向位于不同主机服务进程发起连接" class="headerlink" title="场景3，绑定本地端口的客户端主动断连后，客户端又分别向位于不同主机服务进程发起连接"></a>场景3，绑定本地端口的客户端主动断连后，客户端又分别向位于不同主机服务进程发起连接</h3><p>运行两个服务端进程，第一个运行在主机10.22.5.3，第二个运行在主机10.16.56.2，在主机10.16.56.2连续两次运行客户端进程，期待建立两个TCP连接，第一个TCP连接标识为四元组{10.16.56.2，55555，10.22.5.3，1982}，第二个TCP连接标识为四元组{10.16.56.2，55555，10.16.56.2，1982}，注意下图是<strong>假设两次连接建立成功的情形</strong>，Ubuntu系统实际运行输出结果不同。</p>
+<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait3.png" alt="理想情况下，同端口客户端连接两个处于不同主机服务端"></p>
+<p>客户端输出，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#两次连接</span><br><span class="line">toto@ClientOS:~$ client 55555 10.22.5.3 1982</span><br><span class="line">response,guru</span><br><span class="line">toto@ClientOS:~$ client 55555 10.16.56.2 1982</span><br><span class="line">bind error: Address already in use</span><br><span class="line"></span><br><span class="line">#客户端连接状态为，</span><br><span class="line">toto@ClientOS:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 10.16.56.2:55555         10.22.5.3:1982          TIME_WAIT</span><br></pre></td></tr></table></figure></p>
+<p>这两次建立的TCP连接，明显是不同的连接，Ubuntu Linux系统的处理直接禁止了使用端口“55555”主动对外发起的所有连接，而不是根据四元组区分新建连接是否受限，这样处理实际上是不合理的。等待TIME_WAIT状态结束后，再次连续运行客户端两次，第一次先连接本系统服务进程，第二次连接远端服务进程，得到了相同结果。</p>
+<p>客户端实际输出为，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#两次连接</span><br><span class="line">toto@ClientOS:~$ client 55555 10.16.56.2 1982</span><br><span class="line">response,ClientOS</span><br><span class="line">toto@ClientOS:~$ client 55555 10.22.5.3 1982</span><br><span class="line">bind error: Address already in use</span><br><span class="line"></span><br><span class="line">#客户端连接状态为，</span><br><span class="line">toto@ClientOS:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 10.16.56.2:55555         10.16.56.2:1982          TIME_WAIT</span><br></pre></td></tr></table></figure></p>
+<h2 id="服务端主动断连"><a href="#服务端主动断连" class="headerlink" title="服务端主动断连"></a>服务端主动断连</h2><p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait4.png" alt="服务端主动断连"></p>
+<h3 id="场景4，服务端主动断连，立即重启服务进程"><a href="#场景4，服务端主动断连，立即重启服务进程" class="headerlink" title="场景4，服务端主动断连，立即重启服务进程"></a>场景4，服务端主动断连，立即重启服务进程</h3><p>服务端涉及到TIME_WAIT的问题多种多样，影响范围比客户端要广，对于通信软件架构设计师或通信系统运维工程师，服务端的TIME_WAIT是否会引发的问题都是需要优先考虑的。 </p>
+<p>启动服务端，使用客户端进程连接两次连接服务端进程，两次连接可以正常建立，查看两端状态，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#服务端</span><br><span class="line">toto@guru:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 0.0.0.0:1982            0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0      0 10.22.5.3:1982          10.16.56.2:55555        TIME_WAIT  </span><br><span class="line">tcp        0      0 10.22.5.3:1982          10.16.56.2:55556        TIME_WAIT</span><br><span class="line"></span><br><span class="line">#客户端</span><br><span class="line">toto@ClientOS:~$ netstat -ant | grep 1982</span><br><span class="line">～输出为空</span><br></pre></td></tr></table></figure></p>
+<p>此时如果结束服务端进程，尝试再次启动服务进程，启动失败，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#服务端，重启server进程</span><br><span class="line">toto@guru:~$ server </span><br><span class="line">bind error: Address already in use</span><br></pre></td></tr></table></figure></p>
+<p>当服务端主动切断连接时，这个连接在服务端进入TIME_WAIT状态。当大量的客户端并发连接存在时，如果服务端主动切断连接，会导致服务端的TIME_WAIT连接数累积，最终可能导致服务端的资源耗尽。</p>
+<h3 id="场景5，服务端主动断连，从绑定本地端口客户端进程再次发起连接请求"><a href="#场景5，服务端主动断连，从绑定本地端口客户端进程再次发起连接请求" class="headerlink" title="场景5，服务端主动断连，从绑定本地端口客户端进程再次发起连接请求"></a>场景5，服务端主动断连，从绑定本地端口客户端进程再次发起连接请求</h3><p>客户端进程绑定TCP端口55555，使用客户端迅速连接服务端两次，查看两端的输出及状态，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#客户端输出</span><br><span class="line">toto@ClientOS:~$ client 55555 10.22.5.3 1982</span><br><span class="line">response,guru</span><br><span class="line">toto@ClientOS:~$ client 55555 10.22.5.3 1982</span><br><span class="line">response,guru</span><br><span class="line"></span><br><span class="line">#客户端状态</span><br><span class="line">toto@ClientOS:~$ netstat -ant | grep 1982</span><br><span class="line">～输出为空</span><br><span class="line"></span><br><span class="line">#服务端输出</span><br><span class="line">toto@guru:~$ server </span><br><span class="line">Receive message from client process on 10.16.56.2: request,hostname</span><br><span class="line">Receive message from client process on 10.16.56.2: request,hostname</span><br><span class="line"></span><br><span class="line">#服务端状态</span><br><span class="line">toto@guru:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 0.0.0.0:1982            0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0      0 10.22.5.3:1982          10.16.56.2:55555        TIME_WAIT</span><br></pre></td></tr></table></figure></p>
+<p>观察两端的数据收发情况，注意第2次建立TCP连接时的SYN分段，Wireshark自动将其标记为黑色并写明TCP Port Number Reused。说明服务端的TIME_WAIT状态并没有影响到外部客户端向服务端发起连接请求，TIME_WAIT的端口在这种状态下可以重用。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait5.png" alt="服务端主动断开连接，客户端指定端口的数据交互"></p>
+<p>#TIME_WAIT状态存在原因</p>
+<p>为什么要设定这个2MSL时间限制呢？我们可以假设没有TIME_WAIT的时间限制，来看一下会是怎样的情景呢。</p>
+<h2 id="情景1"><a href="#情景1" class="headerlink" title="情景1"></a>情景1</h2><p>假设短时间内允许连续两次建立相同四元组定义的TCP连接，后建立的连接作为先建立连接的替身连接（incarnation）。如果第1次通信过程中的IP数据包在网络中某个节点发生延迟，并且延迟持续到替身建立时才送达对端，由于两次连接建立之间的等待时间间隔不足1MSL，导致了第1次通信中的数据实际在第2次通信过程中才到达接收端，导致莫名其妙的错误产生。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait6.png" alt="两次使用相同四元组的TCP通信"></p>
+<p>这种错误是小概率事件，首先，三次握手建立连接时，ISN初始序列号随机生成机制的作用就是为了避免网络延迟数据包被接收端错误接收。其次，客户端实现绑定端口号，操作系统内核为其分配临时端口号(ephemeral port)，临时端口号在每次创建新的连接时都会发生变化，每次建立连接使用的四元组标识是不一样的，所以建立一个替身需要的客户端端口号不会很快被重用。但小概率不等于0概率，尤其在大吞吐量高速网络中。如果事情有变坏的可能，不管这种可能性有多小，它总是会发生。TIME_WAIT的存在，可以确保2MSL时间内，替身连接不会重建，而延迟与网络中的TCP分段在MSL时间内确保已经死亡。</p>
+<h2 id="情景2"><a href="#情景2" class="headerlink" title="情景2"></a>情景2</h2><p>假设一个TCP连接在挥手切断的过程中，第3次挥手的FIN段或者第4次的ACK段丢失在网络中，后续会发生什么事情呢？参见下图，数据段“11.ACK”丢失导致服务端认为客户端没有收到“10.FIN”，超时重传“10.FIN”段。重传时，由于客户端没有等待2MSL时长，而提前终止了连接。TCP层在这种情况下，收到数据段会发送RST重置对端。收到RST的一端会向应用层报错，而应用层数据已经正常收发完成，也许对于应用层进程来说这种报错不需要处理，但是如果这个进程性命攸关呢？当客户端处于TIME_WAIT状态，会再次确认延迟到达的FIN。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait7.png" alt="重发最后的FIN段"></p>
+<p>以上两种情况的存在，促使TCP的设计者在TCP的状态中设计了TIME_WAIT状态。</p>
+<p>#TIME_WAIT状态引发问题对策</p>
+<p>需要针对TIME_WAIT状态引发的问题进行优化之前，需要充分评估风险并进行严格的后期和线上测试。不要过早优化，过早优化是万恶之源。</p>
+<p>##对策1，缩短TIME_WAIT的等待时长</p>
+<p>修改TIME_WAIT的时间长度与具体系统有关，在Ubuntu Linux没有此参数设置的位置，如果实在要改就重新编译内核代码。其他系统诸如Windows，有注册表项与这个参数配置对应。</p>
+<p>##对策2，使用SO_REUSEADDR参数</p>
+<p>创建Socket之后，立即设置SO_REUSEADDR，此时，进程运行完全忽视TIME_WAIT状态的存在。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">int Socket(int family, int type, int protocol)</span><br><span class="line">&#123;</span><br><span class="line">    int sockfd = 0;</span><br><span class="line">    int optval = 1;</span><br><span class="line"></span><br><span class="line">    // Get a socket</span><br><span class="line">    if ((sockfd = socket(family, type, protocol)) &lt; 0)&#123;</span><br><span class="line">        err_sys(&quot;socket error&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">        </span><br><span class="line">    // Eliminates TIME_WAIT status</span><br><span class="line">    if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (const void *) &amp;optval, sizeof(int)) &lt; 0)&#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return sockfd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>##对策3，客户端主动断连</p>
+<p>由于哪一端发起断连请求FIN，哪一端进入TIME_WAIT状态，而进入TIME_WAIT状态端口过多主要是消耗资源，服务器与客户端相比较来说，资源更加宝贵，所以一般情况服务器不发送断连请求。但是这种情况下，如果客户端比较贪婪怎么办？你不发断连请求，老子就赖着不走。这时使用”对策4“，不想有尊严的走，那你就滚。</p>
+<p>##对策4，RST分段强制切断连接</p>
+<p>无论是客户端或者服务端都可以使用RST段强制断掉TCP连接，任何一方不进入TIME_WAIT状态，TCP发送接收队列的数据立即清空。这样就规避了TIME_WAIT的问题。但是客户端与服务端怎么确认两侧的数据交互已经完成了呢？可以使用应用层消息中确认，比如在应用层发送端增加一个”Message Sent Over”消息，接收端回答“Copy That”，然后发送端发送RST段强切TCP连接。</p>
+<p>##对策5，修改参数tcp_tw_reuse，tcp_tw_recycle</p>
+<p>看了一些文章说这两个参数会引入很多问题，并违背了<a href="http://tools.ietf.org/html/rfc1122" target="_blank" rel="noopener">RFC1122</a>，这个RFC我还没读，具体的内容也没深入研究，不敢发表太多的见解，暂且留下这两个参数相关的内核代码连接。留个坑待有时间补充这部分内容。<a href="http://lxr.free-electrons.com/ident?i=tcp_twsk_unique" target="_blank" rel="noopener">tcp_tw_reuse源码</a>，<a href="http://lxr.free-electrons.com/ident?i=tcp_timewait_state_process" target="_blank" rel="noopener">tcp_tw_recycle源码</a>。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/深入浅出TCP/" rel="tag"># 深入浅出TCP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016-01-23-tcp-connection-status-transit/" rel="next" title="TCP协议连接状态迁移">
+                <i class="fa fa-chevron-left"></i> TCP协议连接状态迁移
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016-02-07-tcp-abnormal-connection/" rel="prev" title="TCP连接异常终止">
+                TCP连接异常终止 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="toto" />
+            
+              <p class="site-author-name" itemprop="name">toto</p>
+              <p class="site-description motion-element" itemprop="description">About Math, About CS.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:toto.zhang@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="skype:tao.zhang@ericsson.com?call|chat" target="_blank" title="Skype">
+                      
+                        <i class="fa fa-fw fa-skype"></i>Skype</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端主动断连"><span class="nav-number">1.</span> <span class="nav-text">客户端主动断连</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#场景1，客户端主动断连"><span class="nav-number">1.1.</span> <span class="nav-text">场景1，客户端主动断连</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#场景2，绑定本地端口的客户端主动断连"><span class="nav-number">1.2.</span> <span class="nav-text">场景2，绑定本地端口的客户端主动断连</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#场景3，绑定本地端口的客户端主动断连后，客户端又分别向位于不同主机服务进程发起连接"><span class="nav-number">1.3.</span> <span class="nav-text">场景3，绑定本地端口的客户端主动断连后，客户端又分别向位于不同主机服务进程发起连接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端主动断连"><span class="nav-number">2.</span> <span class="nav-text">服务端主动断连</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#场景4，服务端主动断连，立即重启服务进程"><span class="nav-number">2.1.</span> <span class="nav-text">场景4，服务端主动断连，立即重启服务进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#场景5，服务端主动断连，从绑定本地端口客户端进程再次发起连接请求"><span class="nav-number">2.2.</span> <span class="nav-text">场景5，服务端主动断连，从绑定本地端口客户端进程再次发起连接请求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#情景1"><span class="nav-number">3.</span> <span class="nav-text">情景1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#情景2"><span class="nav-number">4.</span> <span class="nav-text">情景2</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Copyright by toto.zhang@gmail.com</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
