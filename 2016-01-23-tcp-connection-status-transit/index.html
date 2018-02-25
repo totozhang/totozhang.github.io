@@ -7,7 +7,7 @@
 
 <html class="theme-next muse use-motion" lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -139,7 +139,7 @@
 
 
 
-  <title>TCP协议连接状态迁移 | Mathematic Revisit</title>
+  <title>TCP协议连接状态迁移 | Mathematic Revisit</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -158,7 +158,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -347,28 +347,55 @@
       
         <p>对于任何一类事物的具体对象实例来说，在某一个特定时间段，实例自身都会处于某种状态，比如，手机状态可以分为空闲等待状态，来电振铃状态，通话接续状态等。再比如，一个进程状态可以分为创建，就绪，阻塞，运行和死亡等几种状态。当有某一特定事件发生时，事物的状态可能会随之发生改变。另外对于一类事物，其状态的维度可能有很多，比如一个人的状态可以分为情绪高涨，情绪低谷，情绪冷淡状态，或者也可以分为工作状态，空闲状态，学习状态等。状态维度的选择由谁来决定的？在软件实现中，哪个维度被软件的设计者关注则选择这个维度。在TCP协议中，连接端作为一个对象实例，也会有状态的变化，TCP通信过程中，双端都经历了多个时间阶段，在这些时间阶段里，客户端与服务端各自的状态都经历了哪些变化，这些变化又是由哪些事件触发的？</p>
 <a id="more"></a>
-<h1 id="状态迁移图"><a href="#状态迁移图" class="headerlink" title="状态迁移图"></a>状态迁移图</h1><p>一般用状态迁移图来描述一个事物状态的变迁，也称为有限状态机或有穷自动机。在绘制一个状态迁移图之前，必须明确三点，首先明确要描述哪一个对象，其次明确描述的对象有哪些状态，最后明确状态迁移的条件。我继续以手机来举例，绘制一个手机的状态迁移图。明确描述对象为手机，对象状态规定为，初始状态，空闲等待状态，来电振铃状态，通话接续状态四个状态，状态迁移条件请参考图中箭头标记部分。</p>
-<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState1.png" alt="状态迁移图基本示例"></p>
-<p>#TCP双端普通状态迁移<br>TCP协议描述端到端通信，所以TCP的状态迁移图的描述对象是两个端，这里的端就是系统内核中Transmission Control Block数据结构，从应用层来看，可以简单理解为Socket套接字本身的状态。回顾TCP一次完整通信过程中分段数据的收发情况，TCP连接建立阶段3个分段数据，数据交互阶段分段数取决于应用层数据，连接切断阶段4个分段数据。TCP任意一端随着关键TCP分段的收发，其状态也随之发生变化。在没有异常发生的情况下，两端的状态变化如下，以虚线标识每个状态的起始。</p>
-<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState2v5.png" alt="TCP双端普通状态迁移"></p>
+<h1 id="状态迁移图">状态迁移图</h1>
+<p>一般用状态迁移图来描述一个事物状态的变迁，也称为有限状态机或有穷自动机。在绘制一个状态迁移图之前，必须明确三点，首先明确要描述哪一个对象，其次明确描述的对象有哪些状态，最后明确状态迁移的条件。我继续以手机来举例，绘制一个手机的状态迁移图。明确描述对象为手机，对象状态规定为，初始状态，空闲等待状态，来电振铃状态，通话接续状态四个状态，状态迁移条件请参考图中箭头标记部分。</p>
+<div class="figure">
+<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState1.png" alt="状态迁移图基本示例">
+<p class="caption">状态迁移图基本示例</p>
+</div>
+<h1 id="tcp双端普通状态迁移">TCP双端普通状态迁移</h1>
+<p>TCP协议描述端到端通信，所以TCP的状态迁移图的描述对象是两个端，这里的端就是系统内核中Transmission Control Block数据结构，从应用层来看，可以简单理解为Socket套接字本身的状态。回顾TCP一次完整通信过程中分段数据的收发情况，TCP连接建立阶段3个分段数据，数据交互阶段分段数取决于应用层数据，连接切断阶段4个分段数据。TCP任意一端随着关键TCP分段的收发，其状态也随之发生变化。在没有异常发生的情况下，两端的状态变化如下，以虚线标识每个状态的起始。</p>
+<div class="figure">
+<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState2v5.png" alt="TCP双端普通状态迁移">
+<p class="caption">TCP双端普通状态迁移</p>
+</div>
 <p>TCP服务端和客户端初始状态都是CLOSED状态。服务端调用函数Accept()后，由CLOSED状态迁移到LISTEN状态，服务端等待客户端连接请求SYN到达。客户端发出[1.SYN]请求连接，客户端状态有CLOSED状态迁移到SYN_SENT状态，客户端在此状态等待三次握手结束。服务端收到[1.SYN]后，立即由LISTEN状态迁移到SYN_RECEIVED状态，发出第二次握手的数据[2.SYN，ACK]。服务端继续等待第三次握手数据[3.ACK]。客户发送第三次握手数据[3.ACK]，进入ESTABLISHED状态，服务端收到[3.ACK]后进入ESTABLISHED状态，连接建立，双端开始收发数据。客户端首先发起断开连接[8.FIN]请求（也可由服务端发起），此请求发出后客户端状态也随之迁移到FIN_WAIT_1状态，等待着对端确认[8.FIN]。服务端收到[8.FIN]后，得知客户端已经没有更多数据发送，服务端回复[9.ACK]，并迁移到CLOSE_WAIT状态，继续等待将本端应用层数据发往客户端。而客户端从服务端收到[9.ACK]时，客户端由FIN_WAIT_1状态迁移到FIN_WAIT_2状态，在FIN_WAIT_2状态中，客户端只接收服务端的数据，不发送数据，直到服务端发来FIN明确通知客户端没有更多数据发送。服务端一旦发出最后一个[10.FIN]，服务端便迁移到LAST_ACK状态以等待客户端对[10.FIN]确认。客户端确认后，进入TIME_WAIT状态，以防这个确认[11.ACK]丢失。收到确认后，服务端直接迁移到CLOSED状态。TIME_WAIT状态超时后，客户端进入CLOSED状态。</p>
 <p>由于两端的状态变化互相关联，所以可以将二者合并，得到RFC793里所描述的状态迁移图的雏形。</p>
-<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState3v1.png" alt="TCP双端正常通信状态迁移图"></p>
-<p>#TCP双端异常通信状态迁移</p>
+<div class="figure">
+<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState3v1.png" alt="TCP双端正常通信状态迁移图">
+<p class="caption">TCP双端正常通信状态迁移图</p>
+</div>
+<h1 id="tcp双端异常通信状态迁移">TCP双端异常通信状态迁移</h1>
 <p>异常TCP通信主要是指存在RST分段数据参与的TCP通信，比如客户端主动连接服务器端口遇到服务器没有进程监听对应端口，服务器回复RST分段拒绝客户端的连接请求。RST分段会导致TCP端直接迁移到CLOSED状态，如果服务端循环调用函数Accept()，也可以认为服务端迁移到LISTEN状态。下图增加了两个异常状态的迁移作为例子。</p>
-<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState4.png" alt="TCP双端异常通信状态迁移"></p>
-<p>#TCP双端同时建立连接状态迁移</p>
+<div class="figure">
+<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState4.png" alt="TCP双端异常通信状态迁移">
+<p class="caption">TCP双端异常通信状态迁移</p>
+</div>
+<h1 id="tcp双端同时建立连接状态迁移">TCP双端同时建立连接状态迁移</h1>
 <p>当两个进程同时建立TCP连接时，连接建立过程与客户端和服务端建立连接的三次握手不同。同时建立连接过程的时序如下，这里不区分客户端和服务端。</p>
-<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState5.png" alt="连接同时建立时序"></p>
+<div class="figure">
+<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState5.png" alt="连接同时建立时序">
+<p class="caption">连接同时建立时序</p>
+</div>
 <p>根据同时建立连接的时序，来完善状态迁移图。由于两端的状态迁移相同，合并后的结果如下。</p>
-<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState6v1.png" alt="连接同时建立状态迁移"></p>
-<p>#TCP双端同时断开连接状态迁移</p>
+<div class="figure">
+<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState6v1.png" alt="连接同时建立状态迁移">
+<p class="caption">连接同时建立状态迁移</p>
+</div>
+<h1 id="tcp双端同时断开连接状态迁移">TCP双端同时断开连接状态迁移</h1>
 <p>同时断开双向通信管道仍然需要四次挥手。</p>
-<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState7.png" alt="当FIN和ACK分别发送时的时序"></p>
+<div class="figure">
+<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState7.png" alt="当FIN和ACK分别发送时的时序">
+<p class="caption">当FIN和ACK分别发送时的时序</p>
+</div>
 <p>FIN段和ACK段经常可能会绑定在一起发送，所以同时断开连接时的状态迁移过程中在这种情况下不经历CLOSING状态而直接进入TIME_WAIT。</p>
-<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState8.png" alt="当FIN和ACK绑定发送时的时序"></p>
-<p>合并有CLOSING状态和没有CLOSING状态的两种情况。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState9.png" alt="同时关闭状态迁移"></p>
-<p>#TCP完整状态迁移图<br>将以上叙述的全部状态迁移整理合并，得到RFC793的状态迁移图，分解整理状态迁移的过程，更加有利于对于此状态迁移图中每个细节的深入理解。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState10.png" alt="图22，完整的TCP状态迁移图"></p>
+<div class="figure">
+<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState8.png" alt="当FIN和ACK绑定发送时的时序">
+<p class="caption">当FIN和ACK绑定发送时的时序</p>
+</div>
+<p>合并有CLOSING状态和没有CLOSING状态的两种情况。 <img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState9.png" alt="同时关闭状态迁移"></p>
+<h1 id="tcp完整状态迁移图">TCP完整状态迁移图</h1>
+<p>将以上叙述的全部状态迁移整理合并，得到RFC793的状态迁移图，分解整理状态迁移的过程，更加有利于对于此状态迁移图中每个细节的深入理解。 <img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPState10.png" alt="图22，完整的TCP状态迁移图"></p>
 
       
     </div>
@@ -570,7 +597,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#状态迁移图"><span class="nav-number">1.</span> <span class="nav-text">状态迁移图</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#状态迁移图"><span class="nav-number">1.</span> <span class="nav-text">状态迁移图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp双端普通状态迁移"><span class="nav-number">2.</span> <span class="nav-text">TCP双端普通状态迁移</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp双端异常通信状态迁移"><span class="nav-number">3.</span> <span class="nav-text">TCP双端异常通信状态迁移</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp双端同时建立连接状态迁移"><span class="nav-number">4.</span> <span class="nav-text">TCP双端同时建立连接状态迁移</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp双端同时断开连接状态迁移"><span class="nav-number">5.</span> <span class="nav-text">TCP双端同时断开连接状态迁移</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp完整状态迁移图"><span class="nav-number">6.</span> <span class="nav-text">TCP完整状态迁移图</span></a></li></ol></div>
             
 
           </div>
@@ -770,6 +797,45 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
 
   
 

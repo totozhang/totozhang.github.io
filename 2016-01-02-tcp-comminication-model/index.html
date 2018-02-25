@@ -7,7 +7,7 @@
 
 <html class="theme-next muse use-motion" lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -132,7 +132,7 @@
 
 
 
-  <title>TCP/IP网络通信模型 | Mathematic Revisit</title>
+  <title>TCP/IP网络通信模型 | Mathematic Revisit</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -151,7 +151,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -338,49 +338,62 @@
       
 
       
-        <p>TCP/IP网络应用之间通信本质都是进程间通信，网络协议栈的分层结构只是解耦了应用层实现通信的复杂度，应用层实现时不需考虑通信过程中的数据丢失，数据重复和传输时效性等问题，此类问题由传输层进行解决，应用层只关注本层消息及处理逻辑。因此，一般传输层模块都工作在系统内核中，以便于为系统中所有的进程提供同样的服务。操作系统封装了传输层和其他底层协议，并为应用层提供统一访问接口。本文主要说明TCP传输层如何为应用层提供抽象服务，并尝试实现一个基于TCP的极简应用层协议，从应用层角度观察TCP协议。<br><a id="more"></a></p>
-<h1 id="TCP应用通信模型"><a href="#TCP应用通信模型" class="headerlink" title="TCP应用通信模型"></a>TCP应用通信模型</h1><p>TCP为应用层提供端到端的连接服务，端与端之间可以全双工通信，通信数据以可靠的字节流的形式收发。由于UNIX系统一切皆文件的设计理念，网络设备同样被抽象成了文件，因此可以使用通用UNIX系统IO访问网络设备。引用TCP协议栈通信的进程只了解这些内容。至于如何保证数据传输可靠性，传输数据流量的控制，发现网络拥塞时数据传输控制对进程都是不可见的。这里，</p>
-<p>##端到端的连接<br>是指TCP只支持网络中的两个进程之间通信，并且进程通信前需要建立连接。<strong>一般情况下</strong>，两个进程为客户端和服务端的关系。进程收发数据时，只不过是从一个绑定到网络的文件描述符读取和写入数据。对于系统内核而言，建立连接的文件描述符绑定为一个四元组集合 {客户端IP，客户端TCP端口号，服务端IP，服务端TCP端口号}，这个四元组集合可以唯一确定一个TCP连接。</p>
-<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPAppLayer1.png" alt="图1，端到端的连接"></p>
-<p>##全双工通信<br>是指参与通信的进程可以同时发送和接收数据。</p>
-<p>##字节流<br>通信数据是可靠的字节流，是指进程通信数据是按照排序的字节进行逐字节的发送和接收。因此，应用层消息具体的解析分割需要应用层完成。</p>
-<h1 id="通信时序"><a href="#通信时序" class="headerlink" title="通信时序"></a>通信时序</h1><p>进程通过调用Socket API函数集合实现网络通信。通信过程大概分为四个阶段，通信准备阶段，TCP连接建立阶段，数据交互阶段，TCP连接释放（断开）阶段。</p>
-<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPAppLayer2.png" alt="图2，Client进程与Server进程的处理流程"></p>
-<h2 id="通信准备阶段"><a href="#通信准备阶段" class="headerlink" title="通信准备阶段"></a>通信准备阶段</h2><ul>
-<li><p>客户端主要调用函数socket()申请文件描述符sockfd，如果客户端不调用函数bind()绑定本端TCP端口号，则操作系统自动为其分配临时端口号。所以此时sockfd对应的是{客户端IP，客户端临时TCP端口号}。</p>
-</li>
-<li><p>服务端主要调用函数socket()申请文件描述符listenfd，listenfd用于接收从未知客户端过来的连接请求，服务端必须调用函数bind()来绑定其所要监听的TCP端口号，也就是服务器进程的Well-Known端口号。调用函数listen()通知系统内核，listenfd只用于等待未知客户端的连接请求。</p>
-</li>
+        <p>TCP/IP网络应用之间通信本质都是进程间通信，网络协议栈的分层结构只是解耦了应用层实现通信的复杂度，应用层实现时不需考虑通信过程中的数据丢失，数据重复和传输时效性等问题，此类问题由传输层进行解决，应用层只关注本层消息及处理逻辑。因此，一般传输层模块都工作在系统内核中，以便于为系统中所有的进程提供同样的服务。操作系统封装了传输层和其他底层协议，并为应用层提供统一访问接口。本文主要说明TCP传输层如何为应用层提供抽象服务，并尝试实现一个基于TCP的极简应用层协议，从应用层角度观察TCP协议。 <a id="more"></a></p>
+<h1 id="tcp应用通信模型">TCP应用通信模型</h1>
+<p>TCP为应用层提供端到端的连接服务，端与端之间可以全双工通信，通信数据以可靠的字节流的形式收发。由于UNIX系统一切皆文件的设计理念，网络设备同样被抽象成了文件，因此可以使用通用UNIX系统IO访问网络设备。引用TCP协议栈通信的进程只了解这些内容。至于如何保证数据传输可靠性，传输数据流量的控制，发现网络拥塞时数据传输控制对进程都是不可见的。这里，</p>
+<h2 id="端到端的连接">端到端的连接</h2>
+<p>是指TCP只支持网络中的两个进程之间通信，并且进程通信前需要建立连接。<strong>一般情况下</strong>，两个进程为客户端和服务端的关系。进程收发数据时，只不过是从一个绑定到网络的文件描述符读取和写入数据。对于系统内核而言，建立连接的文件描述符绑定为一个四元组集合 {客户端IP，客户端TCP端口号，服务端IP，服务端TCP端口号}，这个四元组集合可以唯一确定一个TCP连接。</p>
+<div class="figure">
+<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPAppLayer1.png" alt="图1，端到端的连接">
+<p class="caption">图1，端到端的连接</p>
+</div>
+<h2 id="全双工通信">全双工通信</h2>
+<p>是指参与通信的进程可以同时发送和接收数据。</p>
+<h2 id="字节流">字节流</h2>
+<p>通信数据是可靠的字节流，是指进程通信数据是按照排序的字节进行逐字节的发送和接收。因此，应用层消息具体的解析分割需要应用层完成。</p>
+<h1 id="通信时序">通信时序</h1>
+<p>进程通过调用Socket API函数集合实现网络通信。通信过程大概分为四个阶段，通信准备阶段，TCP连接建立阶段，数据交互阶段，TCP连接释放（断开）阶段。</p>
+<div class="figure">
+<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPAppLayer2.png" alt="图2，Client进程与Server进程的处理流程">
+<p class="caption">图2，Client进程与Server进程的处理流程</p>
+</div>
+<h2 id="通信准备阶段">通信准备阶段</h2>
+<ul>
+<li><p>客户端主要调用函数socket()申请文件描述符sockfd，如果客户端不调用函数bind()绑定本端TCP端口号，则操作系统自动为其分配临时端口号。所以此时sockfd对应的是{客户端IP，客户端临时TCP端口号}。</p></li>
+<li><p>服务端主要调用函数socket()申请文件描述符listenfd，listenfd用于接收从未知客户端过来的连接请求，服务端必须调用函数bind()来绑定其所要监听的TCP端口号，也就是服务器进程的Well-Known端口号。调用函数listen()通知系统内核，listenfd只用于等待未知客户端的连接请求。</p></li>
 </ul>
-<h2 id="TCP连接建立阶段"><a href="#TCP连接建立阶段" class="headerlink" title="TCP连接建立阶段"></a>TCP连接建立阶段</h2><ul>
-<li><p>客户端调用函数connect(),主动发起到服务端的连接建立请求。如果TCP连接建立成功，此时文件描述符sockfd绑定的内容为四元组{服务端IP，服务端TCP端口号，客户端IP，客户端临时TCP端口号}。</p>
-</li>
-<li><p>服务端调用函数accept()，阻塞等待未知客户端的TCP连接请求，如果accept()成功返回，其返回值为文件描述符connectfd，connectfd绑定的内容为四元组{服务端IP，服务端TCP端口号，客户端IP，客户端临时TCP端口号}。</p>
-</li>
+<h2 id="tcp连接建立阶段">TCP连接建立阶段</h2>
+<ul>
+<li><p>客户端调用函数connect(),主动发起到服务端的连接建立请求。如果TCP连接建立成功，此时文件描述符sockfd绑定的内容为四元组{服务端IP，服务端TCP端口号，客户端IP，客户端临时TCP端口号}。</p></li>
+<li><p>服务端调用函数accept()，阻塞等待未知客户端的TCP连接请求，如果accept()成功返回，其返回值为文件描述符connectfd，connectfd绑定的内容为四元组{服务端IP，服务端TCP端口号，客户端IP，客户端临时TCP端口号}。</p></li>
 </ul>
-<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPAppLayer3.png" alt="图3，应用层角度观察连接建立的过程"></p>
-<h2 id="数据交互阶段"><a href="#数据交互阶段" class="headerlink" title="数据交互阶段"></a>数据交互阶段</h2><ul>
+<div class="figure">
+<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPAppLayer3.png" alt="图3，应用层角度观察连接建立的过程">
+<p class="caption">图3，应用层角度观察连接建立的过程</p>
+</div>
+<h2 id="数据交互阶段">数据交互阶段</h2>
+<ul>
 <li>此时两端可以使用UNIX标准IO函数read()和write()或使用Socket函数族中的send()和recv()进行数据收发，客户端读写对象为sockfd，服务端读写对象为connectfd。</li>
 </ul>
-<h2 id="TCP连接释放阶段"><a href="#TCP连接释放阶段" class="headerlink" title="TCP连接释放阶段"></a>TCP连接释放阶段</h2><ul>
+<h2 id="tcp连接释放阶段">TCP连接释放阶段</h2>
+<ul>
 <li>当两端中的某一端完成数据发送或接收时，可以使用函数shutdown()关闭对文件描述符的“读”，“写”或“读写“的操作，或者使用函数close()直接关闭对文件描述符的”读写“。</li>
 </ul>
-<h1 id="通信实例"><a href="#通信实例" class="headerlink" title="通信实例"></a>通信实例</h1><p>以下使用c语言实现之前提到的简单应用层通信协议，为了简化代码中的错误处理，代码中使用了<a href="http://unpbook.com/src.html" target="_blank" rel="noopener">UNPv3</a>中的包裹函数（”lib/unp.h”）。</p>
+<h1 id="通信实例">通信实例</h1>
+<p>以下使用c语言实现之前提到的简单应用层通信协议，为了简化代码中的错误处理，代码中使用了<a href="http://unpbook.com/src.html" target="_blank" rel="noopener">UNPv3</a>中的包裹函数（&quot;lib/unp.h&quot;）。</p>
 <blockquote>
-<p>服务端：主机S中运行的一个“Server”进程<br>客户端：主机C中运行的一个“Client”进程<br>客户端发送请求消息内容为字符串，“request,hostname”，请求服务端的主机名称。<br>服务端收到请求消息后，获得自己的主机名称，然后回复应答消息内容为字符串“response,&lt;获取到的主机名称&gt;”</p>
+<p>服务端：主机S中运行的一个“Server”进程 客户端：主机C中运行的一个“Client”进程 客户端发送请求消息内容为字符串，“request,hostname”，请求服务端的主机名称。 服务端收到请求消息后，获得自己的主机名称，然后回复应答消息内容为字符串“response,<获取到的主机名称>”</获取到的主机名称></p>
 </blockquote>
-<h2 id="客户端实现"><a href="#客户端实现" class="headerlink" title="客户端实现"></a>客户端实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;lib/unp.h&quot;</span><br><span class="line"></span><br><span class="line">int main(int argc, char **argv)</span><br><span class="line">&#123;</span><br><span class="line">    //一些初始化工作</span><br><span class="line">    int sockfd = 0;</span><br><span class="line">    char response[MAXLINE + 1];</span><br><span class="line">    char request[] = &quot;request,hostname\r\n&quot;;</span><br><span class="line">    struct sockaddr_in servaddr;</span><br><span class="line">    bzero(&amp;servaddr, sizeof(servaddr));</span><br><span class="line">    bzero(response, MAXLINE + 1);</span><br><span class="line"></span><br><span class="line">    //设置将要连接服务器进程的IP地址和TCP端口号</span><br><span class="line">    servaddr.sin_family = AF_INET;</span><br><span class="line">    servaddr.sin_port = htons(1982);</span><br><span class="line">    Inet_pton(AF_INET, argv[1], &amp;servaddr.sin_addr);</span><br><span class="line"></span><br><span class="line">    //创建Socket，AF_INET表示IPv4，SOCK_STREAM表示TCP</span><br><span class="line">    sockfd = Socket(AF_INET, SOCK_STREAM, 0);</span><br><span class="line"></span><br><span class="line">    //发起连接请求, sockfd和Server进程的IP地址，TCP端口号绑定</span><br><span class="line">    Connect(sockfd, (SA *) &amp;servaddr, sizeof(servaddr));</span><br><span class="line"></span><br><span class="line">    //发送请求消息</span><br><span class="line">    Write(sockfd, (char*) request, strlen(request));</span><br><span class="line"></span><br><span class="line">    //等待从Server进程接收响应消息</span><br><span class="line">    Readline(sockfd, response, MAXLINE);</span><br><span class="line"></span><br><span class="line">    //将结果输出到标准输出</span><br><span class="line">    printf(&quot;%s&quot;, response);</span><br><span class="line"></span><br><span class="line">    //关闭Socket,通知服务进程通信结束</span><br><span class="line">    Close(sockfd);</span><br><span class="line"></span><br><span class="line">    //进程结束</span><br><span class="line">    exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="服务端实现"><a href="#服务端实现" class="headerlink" title="服务端实现"></a>服务端实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;lib/unp.h&quot;</span><br><span class="line"></span><br><span class="line">int main(int argc, char** argv)</span><br><span class="line">&#123;</span><br><span class="line">    //一些初始化工作</span><br><span class="line">    int listenfd = 0;                                      //Server进程监听文件描述符</span><br><span class="line">    int connectfd = 0;                                     //Server进程连接文件描述符</span><br><span class="line">    int length = 0;                                        //Server进程接收到请求长度</span><br><span class="line">    char responsbuf[MAXLINE] = &#123; 0 &#125;;                      //Server响应消息缓存</span><br><span class="line">    char requestbuf[MAXLINE] = &#123; 0 &#125;;                      //Client请求消息缓存</span><br><span class="line">    char response_prefix[] = &quot;response,&quot;;                  //响应消息前缀</span><br><span class="line">    char response_suffix[] = &quot;\r\n&quot;;                       //响应消息后缀</span><br><span class="line"></span><br><span class="line">    //连接Server进程的Client进程的地址信息</span><br><span class="line">    struct sockaddr_in clntaddr;</span><br><span class="line">    bzero(&amp;clntaddr, sizeof(clntaddr));</span><br><span class="line">    socklen_t sock_length = sizeof(struct sockaddr_in);</span><br><span class="line"></span><br><span class="line">    //Server进程所在的IP地址和监听端口号1982</span><br><span class="line">    struct sockaddr_in servaddr;</span><br><span class="line">    bzero(&amp;servaddr, sizeof(servaddr));</span><br><span class="line">    servaddr.sin_family = AF_INET;                         //使用IPv4，实际上也可以使用IPv6</span><br><span class="line">    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);          //监听各个网络接口</span><br><span class="line">    servaddr.sin_port = htons(1982);                       //监听端口号1982</span><br><span class="line"></span><br><span class="line">    //创建Socket，AF_INET表示IPv4，SOCK_STREAM表示TCP</span><br><span class="line">    listenfd = Socket(AF_INET, SOCK_STREAM, 0);</span><br><span class="line"></span><br><span class="line">    //将服务器的地址，端口号绑定到新创立的socket文件描述符listenfd</span><br><span class="line">    Bind(listenfd, (SA *) &amp;servaddr, sizeof(servaddr));</span><br><span class="line"></span><br><span class="line">    //通知OS Kernel，新创建的socket文件描述符用于服务器进程</span><br><span class="line">    Listen(listenfd, LISTENQ);</span><br><span class="line"></span><br><span class="line">    //开始处理来自Client进程的请求</span><br><span class="line">    while (1)</span><br><span class="line">    &#123;</span><br><span class="line">        //接受来自Client进程的连接请求，后两个参数保存正在发起连接请求的Client进程信息</span><br><span class="line">        connectfd = Accept(listenfd, (SA *) &amp;clntaddr, &amp;sock_length);</span><br><span class="line"></span><br><span class="line">        //接收Client进程的消息</span><br><span class="line">        bzero(requestbuf, sizeof(requestbuf));</span><br><span class="line"></span><br><span class="line">        Readline(connectfd, requestbuf, sizeof(requestbuf));</span><br><span class="line"></span><br><span class="line">        printf(&quot;Receive message from client process on %s: %s\n&quot;,</span><br><span class="line">                inet_ntoa(clntaddr.sin_addr), requestbuf);</span><br><span class="line"></span><br><span class="line">        //Server进程返回响应消息给Client进程，消息格式为&quot;response, &lt;hostname&gt;\r\n&quot;</span><br><span class="line">        bzero(responsbuf, sizeof(requestbuf));</span><br><span class="line">        strncpy(responsbuf, response_prefix, strlen(response_prefix));</span><br><span class="line">        gethostname(responsbuf + strlen(response_prefix), MAXLINE);</span><br><span class="line">        strncat(responsbuf, response_suffix, strlen(response_suffix));</span><br><span class="line">        Write(connectfd, responsbuf, strlen(responsbuf));</span><br><span class="line"></span><br><span class="line">        //再次阻塞等待Client进程的消息，这次等到的是EOF，收到EOF后阻塞态结束，Readline返回</span><br><span class="line">        Readline(connectfd, requestbuf, sizeof(requestbuf));</span><br><span class="line"></span><br><span class="line">        //结束与Client进程通信</span><br><span class="line">        Close(connectfd);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><p>服务器首先运行，之后客户端发起连接，运行客户端两次，</p>
-<p>Server进程输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">toto@ServerOS:~$ server </span><br><span class="line">Receive message from client process on 10.16.56.2: request,hostname</span><br><span class="line">Receive message from client process on 10.16.56.2: request,hostname</span><br><span class="line">～阻塞等待</span><br></pre></td></tr></table></figure></p>
-<p>Client进程输入和输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">toto@ClientOS:~$ client 10.22.5.3</span><br><span class="line">response,guru</span><br><span class="line">toto@ClientOS:~$ client 10.22.5.3</span><br><span class="line">response,guru</span><br></pre></td></tr></table></figure></p>
-<h1 id="深入研究"><a href="#深入研究" class="headerlink" title="深入研究"></a>深入研究</h1><p>这部分举了简单的例子，来说明使用TCP协议的网络进程通信模型。实际上，健壮可用应用层协议的设计与实现是比较困难的，以下是关于应用层协议设计的规范和书籍。</p>
-<ul>
-<li>RFC2616，“Hypertext Transfer Protocol/1.1”和《HTTP The Definitive Guide》</li>
-<li>RFC3117，“On the Design of Application Protocols”</li>
-<li>RFC3205，“On the use of HTTP as a Substrate” </li>
-<li>RFC5321，“Simple Mail Transfer Protocol”</li>
-</ul>
+<h2 id="客户端实现">客户端实现</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;lib/unp.h&quot;</span><br><span class="line"></span><br><span class="line">int main(int argc, char **argv)</span><br><span class="line">&#123;</span><br><span class="line">    //一些初始化工作</span><br><span class="line">    int sockfd = 0;</span><br><span class="line">    char response[MAXLINE + 1];</span><br><span class="line">    char request[] = &quot;request,hostname\r\n&quot;;</span><br><span class="line">    struct sockaddr_in servaddr;</span><br><span class="line">    bzero(&amp;servaddr, sizeof(servaddr));</span><br><span class="line">    bzero(response, MAXLINE + 1);</span><br><span class="line"></span><br><span class="line">    //设置将要连接服务器进程的IP地址和TCP端口号</span><br><span class="line">    servaddr.sin_family = AF_INET;</span><br><span class="line">    servaddr.sin_port = htons(1982);</span><br><span class="line">    Inet_pton(AF_INET, argv[1], &amp;servaddr.sin_addr);</span><br><span class="line"></span><br><span class="line">    //创建Socket，AF_INET表示IPv4，SOCK_STREAM表示TCP</span><br><span class="line">    sockfd = Socket(AF_INET, SOCK_STREAM, 0);</span><br><span class="line"></span><br><span class="line">    //发起连接请求, sockfd和Server进程的IP地址，TCP端口号绑定</span><br><span class="line">    Connect(sockfd, (SA *) &amp;servaddr, sizeof(servaddr));</span><br><span class="line"></span><br><span class="line">    //发送请求消息</span><br><span class="line">    Write(sockfd, (char*) request, strlen(request));</span><br><span class="line"></span><br><span class="line">    //等待从Server进程接收响应消息</span><br><span class="line">    Readline(sockfd, response, MAXLINE);</span><br><span class="line"></span><br><span class="line">    //将结果输出到标准输出</span><br><span class="line">    printf(&quot;%s&quot;, response);</span><br><span class="line"></span><br><span class="line">    //关闭Socket,通知服务进程通信结束</span><br><span class="line">    Close(sockfd);</span><br><span class="line"></span><br><span class="line">    //进程结束</span><br><span class="line">    exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="服务端实现">服务端实现</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;lib/unp.h&quot;</span><br><span class="line"></span><br><span class="line">int main(int argc, char** argv)</span><br><span class="line">&#123;</span><br><span class="line">    //一些初始化工作</span><br><span class="line">    int listenfd = 0;                                      //Server进程监听文件描述符</span><br><span class="line">    int connectfd = 0;                                     //Server进程连接文件描述符</span><br><span class="line">    int length = 0;                                        //Server进程接收到请求长度</span><br><span class="line">    char responsbuf[MAXLINE] = &#123; 0 &#125;;                      //Server响应消息缓存</span><br><span class="line">    char requestbuf[MAXLINE] = &#123; 0 &#125;;                      //Client请求消息缓存</span><br><span class="line">    char response_prefix[] = &quot;response,&quot;;                  //响应消息前缀</span><br><span class="line">    char response_suffix[] = &quot;\r\n&quot;;                       //响应消息后缀</span><br><span class="line"></span><br><span class="line">    //连接Server进程的Client进程的地址信息</span><br><span class="line">    struct sockaddr_in clntaddr;</span><br><span class="line">    bzero(&amp;clntaddr, sizeof(clntaddr));</span><br><span class="line">    socklen_t sock_length = sizeof(struct sockaddr_in);</span><br><span class="line"></span><br><span class="line">    //Server进程所在的IP地址和监听端口号1982</span><br><span class="line">    struct sockaddr_in servaddr;</span><br><span class="line">    bzero(&amp;servaddr, sizeof(servaddr));</span><br><span class="line">    servaddr.sin_family = AF_INET;                         //使用IPv4，实际上也可以使用IPv6</span><br><span class="line">    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);          //监听各个网络接口</span><br><span class="line">    servaddr.sin_port = htons(1982);                       //监听端口号1982</span><br><span class="line"></span><br><span class="line">    //创建Socket，AF_INET表示IPv4，SOCK_STREAM表示TCP</span><br><span class="line">    listenfd = Socket(AF_INET, SOCK_STREAM, 0);</span><br><span class="line"></span><br><span class="line">    //将服务器的地址，端口号绑定到新创立的socket文件描述符listenfd</span><br><span class="line">    Bind(listenfd, (SA *) &amp;servaddr, sizeof(servaddr));</span><br><span class="line"></span><br><span class="line">    //通知OS Kernel，新创建的socket文件描述符用于服务器进程</span><br><span class="line">    Listen(listenfd, LISTENQ);</span><br><span class="line"></span><br><span class="line">    //开始处理来自Client进程的请求</span><br><span class="line">    while (1)</span><br><span class="line">    &#123;</span><br><span class="line">        //接受来自Client进程的连接请求，后两个参数保存正在发起连接请求的Client进程信息</span><br><span class="line">        connectfd = Accept(listenfd, (SA *) &amp;clntaddr, &amp;sock_length);</span><br><span class="line"></span><br><span class="line">        //接收Client进程的消息</span><br><span class="line">        bzero(requestbuf, sizeof(requestbuf));</span><br><span class="line"></span><br><span class="line">        Readline(connectfd, requestbuf, sizeof(requestbuf));</span><br><span class="line"></span><br><span class="line">        printf(&quot;Receive message from client process on %s: %s\n&quot;,</span><br><span class="line">                inet_ntoa(clntaddr.sin_addr), requestbuf);</span><br><span class="line"></span><br><span class="line">        //Server进程返回响应消息给Client进程，消息格式为&quot;response, &lt;hostname&gt;\r\n&quot;</span><br><span class="line">        bzero(responsbuf, sizeof(requestbuf));</span><br><span class="line">        strncpy(responsbuf, response_prefix, strlen(response_prefix));</span><br><span class="line">        gethostname(responsbuf + strlen(response_prefix), MAXLINE);</span><br><span class="line">        strncat(responsbuf, response_suffix, strlen(response_suffix));</span><br><span class="line">        Write(connectfd, responsbuf, strlen(responsbuf));</span><br><span class="line"></span><br><span class="line">        //再次阻塞等待Client进程的消息，这次等到的是EOF，收到EOF后阻塞态结束，Readline返回</span><br><span class="line">        Readline(connectfd, requestbuf, sizeof(requestbuf));</span><br><span class="line"></span><br><span class="line">        //结束与Client进程通信</span><br><span class="line">        Close(connectfd);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="运行">运行</h2>
+<p>服务器首先运行，之后客户端发起连接，运行客户端两次，</p>
+<p>Server进程输出为： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">toto@ServerOS:~$ server </span><br><span class="line">Receive message from client process on 10.16.56.2: request,hostname</span><br><span class="line">Receive message from client process on 10.16.56.2: request,hostname</span><br><span class="line">～阻塞等待</span><br></pre></td></tr></table></figure></p>
+<p>Client进程输入和输出为： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">toto@ClientOS:~$ client 10.22.5.3</span><br><span class="line">response,guru</span><br><span class="line">toto@ClientOS:~$ client 10.22.5.3</span><br><span class="line">response,guru</span><br></pre></td></tr></table></figure></p>
+<h1 id="深入研究">深入研究</h1>
+<p>这部分举了简单的例子，来说明使用TCP协议的网络进程通信模型。实际上，健壮可用应用层协议的设计与实现是比较困难的，以下是关于应用层协议设计的规范和书籍。 - RFC2616，“Hypertext Transfer Protocol/1.1”和《HTTP The Definitive Guide》 - RFC3117，“On the Design of Application Protocols” - RFC3205，“On the use of HTTP as a Substrate” - RFC5321，“Simple Mail Transfer Protocol”</p>
 <p>深入TCP这个系列写完之后，我计划找机会以一个专题的形式聊聊应用层协议的设计，并且动手实现一个有实际用途的应用层协议。</p>
 
       
@@ -583,7 +596,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP应用通信模型"><span class="nav-number">1.</span> <span class="nav-text">TCP应用通信模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通信时序"><span class="nav-number">2.</span> <span class="nav-text">通信时序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#通信准备阶段"><span class="nav-number">2.1.</span> <span class="nav-text">通信准备阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP连接建立阶段"><span class="nav-number">2.2.</span> <span class="nav-text">TCP连接建立阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据交互阶段"><span class="nav-number">2.3.</span> <span class="nav-text">数据交互阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP连接释放阶段"><span class="nav-number">2.4.</span> <span class="nav-text">TCP连接释放阶段</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通信实例"><span class="nav-number">3.</span> <span class="nav-text">通信实例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端实现"><span class="nav-number">3.1.</span> <span class="nav-text">客户端实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端实现"><span class="nav-number">3.2.</span> <span class="nav-text">服务端实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行"><span class="nav-number">3.3.</span> <span class="nav-text">运行</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深入研究"><span class="nav-number">4.</span> <span class="nav-text">深入研究</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp应用通信模型"><span class="nav-number">1.</span> <span class="nav-text">TCP应用通信模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#端到端的连接"><span class="nav-number">1.1.</span> <span class="nav-text">端到端的连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全双工通信"><span class="nav-number">1.2.</span> <span class="nav-text">全双工通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字节流"><span class="nav-number">1.3.</span> <span class="nav-text">字节流</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通信时序"><span class="nav-number">2.</span> <span class="nav-text">通信时序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#通信准备阶段"><span class="nav-number">2.1.</span> <span class="nav-text">通信准备阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tcp连接建立阶段"><span class="nav-number">2.2.</span> <span class="nav-text">TCP连接建立阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据交互阶段"><span class="nav-number">2.3.</span> <span class="nav-text">数据交互阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tcp连接释放阶段"><span class="nav-number">2.4.</span> <span class="nav-text">TCP连接释放阶段</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通信实例"><span class="nav-number">3.</span> <span class="nav-text">通信实例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端实现"><span class="nav-number">3.1.</span> <span class="nav-text">客户端实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端实现"><span class="nav-number">3.2.</span> <span class="nav-text">服务端实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行"><span class="nav-number">3.3.</span> <span class="nav-text">运行</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深入研究"><span class="nav-number">4.</span> <span class="nav-text">深入研究</span></a></li></ol></div>
             
 
           </div>
@@ -783,6 +796,45 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
 
   
 

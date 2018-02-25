@@ -7,7 +7,7 @@
 
 <html class="theme-next muse use-motion" lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -132,7 +132,7 @@
 
 
 
-  <title>TCP协议可靠性 | Mathematic Revisit</title>
+  <title>TCP协议可靠性 | Mathematic Revisit</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -151,7 +151,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -338,24 +338,38 @@
       
 
       
-        <p>TCP协议为应用层提供可靠的字节流数据传输服务，同时，TCP却构建在IP层之上。在转发数据包时，IP层设备只是简单的将IP包发往下一跳，尽量的向前转发IP包，当IP包在传输过程中被路由器或接收端抛弃时，其携带的用户数据就会永久丢失，IP层对于数据的丢失没有任何补救措施。另外，IP层的数据包的尺寸上限取决于数据链路层的能力，所以IP包尺寸会有大小的限制，也就是说，当应用层的字节流到达IP层时，数据量超过一定数值时，会被分成多个IP数据封包传输，每一个IP封包到达对端的顺序不一定会按顺序到达，可能会出现重复的IP封包。构建在不可信赖的IP网络之上的TCP协议是如何确保应用层的可靠字节流的传输呢？<br><a id="more"></a></p>
-<p>#IP层的不可靠性</p>
+        <p>TCP协议为应用层提供可靠的字节流数据传输服务，同时，TCP却构建在IP层之上。在转发数据包时，IP层设备只是简单的将IP包发往下一跳，尽量的向前转发IP包，当IP包在传输过程中被路由器或接收端抛弃时，其携带的用户数据就会永久丢失，IP层对于数据的丢失没有任何补救措施。另外，IP层的数据包的尺寸上限取决于数据链路层的能力，所以IP包尺寸会有大小的限制，也就是说，当应用层的字节流到达IP层时，数据量超过一定数值时，会被分成多个IP数据封包传输，每一个IP封包到达对端的顺序不一定会按顺序到达，可能会出现重复的IP封包。构建在不可信赖的IP网络之上的TCP协议是如何确保应用层的可靠字节流的传输呢？ <a id="more"></a></p>
+<h1 id="ip层的不可靠性">IP层的不可靠性</h1>
 <p>IP层存在于网络中的意义就是寻找互联网络中的主机，将连接在不同的数据链路层中的主机统一编址，使各类数据链路层中的主机能够按照IP寻址这一统一规则互相通信。IP层不负责缓存数据，当一个IP包发送到网络中以后，IP层不对其进行追踪。所以发送给IP层的数据可能会出现丢失，或被网络中路由设备丢弃。由于IP网络设备的多变性，比如路由器重启，宕机或者线路负荷分担等，导致设备路由表发生变化，而导致IP到达目的主机的顺序与IP包出发时不同。IP包在网络中还可能出现被复制的情况，可能导致相同的IP包同时到达目标主机多次，造成数据冗余。</p>
 <p>网络中，IP层出现上述，丢包，弃包，乱序，冗余数据的情况是非常常见的。所以IP层在数据传输过程中是不可靠的，实现依附IP层的可靠数据传输，需要传输层的复杂控制机制。</p>
-<p>#接收端的不可靠性</p>
+<h1 id="接收端的不可靠性">接收端的不可靠性</h1>
 <p>数据可靠传输不仅取决于网络，接收端的工作状态也对数据的可靠传输产生影响。比如当接收端负荷非常高，接收端的数据缓存被占满时，接收端会直接忽略掉已经被送达的数据。所以接收端的状态也是TCP控制数据传输过程中需要考虑的重要环节。</p>
-<p>#TCP层如何确保可靠字节流</p>
+<h1 id="tcp层如何确保可靠字节流">TCP层如何确保可靠字节流</h1>
 <p>TCP层通过复杂机制实现了在不可靠的IP网络中进行可靠数据传输的手段。包括数据的排序，去冗余，丢包重传，数据校验，以及考虑接收端工作情况的流量控制和考虑中间路由器工作情况的拥塞控制。</p>
-<h2 id="数据排序"><a href="#数据排序" class="headerlink" title="数据排序"></a>数据排序</h2><p>当一端发送一串字节流数据到达对端，对端如何知道中间的数据有没有丢失或者重复呢？很简单，就是对字节流中的每一个字节流进行编号。当有TCP段在传输过程中丢失，接收端就会根据序号得知丢失的TCP段的Sequence number是多少，同样也可以根据序号丢弃重复的数据。下图为了说明数据的排序，字节编号从1开始，实际使用时，字节的初始编号并非从1开始，而是由系统按照一定算法生成的数值。这个数值称为ISN（Initial Sequence Number）。ISN的取值范围为[0, 2^32-1]，当取值超过2^32-1后，再次回到0开始计数。当TCP层对应用层字节流数据进行分段时，一般不会只在一个分段里放置3个字节，而是根据具体不同的情形进行分段，字节流分段的最大值称为MSS（Max Size Segment）。</p>
-<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPReliable1v1.png" alt="图1，数据排序"></p>
-<h2 id="数据校验"><a href="#数据校验" class="headerlink" title="数据校验"></a>数据校验</h2><p>当字节流的每一个字节按顺序到达接收端时，由于传输环节中不可预知的意外，可能会导致接收端数据与发送端数据内容不一致。所以TCP层提供了发送前后数据校验处理。当TCP的分段数据发送前，TCP模块将分段数据临时添加上源IP地址，目的IP地址，TCP协议类型，计算TCP分段的长度，将这几个元素追加到即将发送的TCP分段前，组成一个临时数据结构，并针对其计算校验和Checksum，将计算结果添加到TCP分段数据中。如下图，</p>
-<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPReliable2.png" alt="图2，数据校验"></p>
+<h2 id="数据排序">数据排序</h2>
+<p>当一端发送一串字节流数据到达对端，对端如何知道中间的数据有没有丢失或者重复呢？很简单，就是对字节流中的每一个字节流进行编号。当有TCP段在传输过程中丢失，接收端就会根据序号得知丢失的TCP段的Sequence number是多少，同样也可以根据序号丢弃重复的数据。下图为了说明数据的排序，字节编号从1开始，实际使用时，字节的初始编号并非从1开始，而是由系统按照一定算法生成的数值。这个数值称为ISN（Initial Sequence Number）。ISN的取值范围为[0, 2^32-1]，当取值超过2^32-1后，再次回到0开始计数。当TCP层对应用层字节流数据进行分段时，一般不会只在一个分段里放置3个字节，而是根据具体不同的情形进行分段，字节流分段的最大值称为MSS（Max Size Segment）。</p>
+<div class="figure">
+<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPReliable1v1.png" alt="图1，数据排序">
+<p class="caption">图1，数据排序</p>
+</div>
+<h2 id="数据校验">数据校验</h2>
+<p>当字节流的每一个字节按顺序到达接收端时，由于传输环节中不可预知的意外，可能会导致接收端数据与发送端数据内容不一致。所以TCP层提供了发送前后数据校验处理。当TCP的分段数据发送前，TCP模块将分段数据临时添加上源IP地址，目的IP地址，TCP协议类型，计算TCP分段的长度，将这几个元素追加到即将发送的TCP分段前，组成一个临时数据结构，并针对其计算校验和Checksum，将计算结果添加到TCP分段数据中。如下图，</p>
+<div class="figure">
+<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPReliable2.png" alt="图2，数据校验">
+<p class="caption">图2，数据校验</p>
+</div>
 <p>当这段数据到达接收端时，接收端再次实行上述的计算，再次得到校验和Checksum，然后与TCP分段中的Checksum对比，如果一致，说明数据可信。</p>
-<h2 id="确认机制"><a href="#确认机制" class="headerlink" title="确认机制"></a>确认机制</h2><p>对字节流数据进行排序使接收端知道了哪些数据在传输过程中丢失了，但是针对数据丢失，如何进行补救呢？那就需要接收端对接收到的数据进行反馈，TCP协议中，接收端对已经收到数据告知发送端，也就是对已经收到的数据进行确认。当发送端在一定时间内，没有收到接收端针对序号N开始的段数据进行确认时，发送端认为序号N分段数据丢失，发送端重传序号N标记的TCP分段。</p>
+<h2 id="确认机制">确认机制</h2>
+<p>对字节流数据进行排序使接收端知道了哪些数据在传输过程中丢失了，但是针对数据丢失，如何进行补救呢？那就需要接收端对接收到的数据进行反馈，TCP协议中，接收端对已经收到数据告知发送端，也就是对已经收到的数据进行确认。当发送端在一定时间内，没有收到接收端针对序号N开始的段数据进行确认时，发送端认为序号N分段数据丢失，发送端重传序号N标记的TCP分段。</p>
 <p>下图中所示，段数据[DATA: 5,6,7]从客户端发送到服务端，服务端收到[DATA: 5,6,7]后，回复[ACK: 8]，表示收到了第7个字节之前的全部数据，并且期待收到第8个字节开始的数据。段数据[DATA: 8,9,10]从客户端发送到服务端，这段数据并没有到达服务端，而是丢失在网络中，客户端在发出数据时开始计时，当一定时间后，客户端没有收到服务端对这段数据的确认应答，客户端重新发送这段数据。段数据[DATA: 11,12,13]从客户端发送到服务端，服务端收到[DATA: 11,12,13]后，回复[ACK: 14]，回复的段数据丢失在网络中，与上一次相同，客户端在发出数据时开始计时，当一定时间后，客户端没有收到服务端对这段数据的确认应答，客户端重新发送这段数据。</p>
-<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPReliable3v1.png" alt="图3，确认机制"></p>
-<h2 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h2><p>当发送端发送数据的速率超过接收端的处理能力时，接收端通知发送端放慢发送数据的速度。此处内容将在TCP滑动窗口机制说明时详细解释。</p>
-<h2 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h2><p>此部分内容将在TCP拥塞控制说明时详细解释。</p>
+<div class="figure">
+<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPReliable3v1.png" alt="图3，确认机制">
+<p class="caption">图3，确认机制</p>
+</div>
+<h2 id="流量控制">流量控制</h2>
+<p>当发送端发送数据的速率超过接收端的处理能力时，接收端通知发送端放慢发送数据的速度。此处内容将在TCP滑动窗口机制说明时详细解释。</p>
+<h2 id="拥塞控制">拥塞控制</h2>
+<p>此部分内容将在TCP拥塞控制说明时详细解释。</p>
 
       
     </div>
@@ -557,7 +571,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据排序"><span class="nav-number">1.</span> <span class="nav-text">数据排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据校验"><span class="nav-number">2.</span> <span class="nav-text">数据校验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#确认机制"><span class="nav-number">3.</span> <span class="nav-text">确认机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流量控制"><span class="nav-number">4.</span> <span class="nav-text">流量控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拥塞控制"><span class="nav-number">5.</span> <span class="nav-text">拥塞控制</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ip层的不可靠性"><span class="nav-number">1.</span> <span class="nav-text">IP层的不可靠性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#接收端的不可靠性"><span class="nav-number">2.</span> <span class="nav-text">接收端的不可靠性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp层如何确保可靠字节流"><span class="nav-number">3.</span> <span class="nav-text">TCP层如何确保可靠字节流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据排序"><span class="nav-number">3.1.</span> <span class="nav-text">数据排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据校验"><span class="nav-number">3.2.</span> <span class="nav-text">数据校验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#确认机制"><span class="nav-number">3.3.</span> <span class="nav-text">确认机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流量控制"><span class="nav-number">3.4.</span> <span class="nav-text">流量控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拥塞控制"><span class="nav-number">3.5.</span> <span class="nav-text">拥塞控制</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -757,6 +771,45 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
 
   
 
