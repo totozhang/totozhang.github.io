@@ -345,43 +345,51 @@
       
 
       
-        <p>计算机进行网络通信时，实质是跨操作系统的进程间通信。同一个操作系统内部进程间通信时，进程通过管道，FIFO，共享内存等交互数据<a href="https://www.ibm.com/developerworks/cn/linux/l-ipc/" target="_blank" rel="noopener">{1}</a>，数据本身并不会发生变化。网络通信时，由于跨越了操作系统，进程需要借助操作系统提供的网络层和传输层模块帮助定位远端进程。本篇简单说明进程间通信的数据（应用层数据）跨越TCP/IP网络协议栈进行交互时，数据封装，发送与解封装。 <a id="more"></a></p>
-<h2 id="典型tcpip网络">典型TCP/IP网络</h2>
-<p>本文使用“图1”网络拓扑，进行说明。两台以太网交换机（Switch）组成了两个以太局域网网段（LAN A和LAN B），其中网段LAN A为“10.22.5.0/24”与网段LAN B为“10.16.56.0/24”，两个网段被路由器（Router）连接形成一个互联网络（internet）。 <img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack1.png" alt="图1，典型TCP/IP网络拓扑"></p>
-<p>可以使用VirtualBox与GNS3搭建此拓扑，涉及到的操作系统和软件列表为， + 网络A中主机S：Ubuntu14.04 + 网络B中主机C：Ubuntu12.04（运行在Virtualbox） + 路由器Router的OS：Cisco2600（运行在GNS3）</p>
-<h2 id="操作系统tcpip协议栈结构">操作系统TCP/IP协议栈结构</h2>
-<p>TCP/IP网络的协议栈结构作为互联网中应用最广泛的协议栈结构（图2）。协议栈中，每一层都对应着与这一层相关软件及协议。“应用层”代表着用户进程及其所遵守的相关协议，比如使用浏览器浏览网页时，浏览器进程与远端Web服务器进程进行通信，两者都遵守HTTP协议，浏览器发送请求，服务器回送应答。“传输层”代表着操作系统内核（OS Kernel）中实现的如TCP模块，UDP模块等软件模块及其遵守的协议，传输层为上层提供服务，比如应用层需要数据在传输过程中不丢失，不重复，那么应用层就需要引用TCP协议收发数据。“网络层”用来为数据包寻找目的主机，并将数据发送到目的主机。“数据链路层”执行数据实际的收发操作。数据封装都以这个协议栈结构进行。（实际上传输层的实现并不一定限定在系统内核中，目前绝大多数操作系统实现都把传输层协议放在内核中实现） <img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack2.png" alt="图2，TCP/IP协议栈结构"></p>
-<h2 id="来自用户进程的数据应用层消息">来自用户进程的数据，应用层消息</h2>
-<p>正如TCP/IP协议栈结构中指出，应用层协议是互联网络中进程间通信使用的协议。主要用于互连网络中的两个进程或多个进程互相发送数据。在这一层所发送的数据，我们称为消息（Message），进程间所发送的消息，由进程开发者根据其所引用的应用层协议来生成，比如我们常说的HTTP消息，LDAP消息等等。为了清楚的说明问题，我们暂时抛开复杂的已有应用层协议，来设计一个极简的全新应用层协议，协议规定如下， + 在一个互连网络internet中（注意首字母为小写的互联网络，Internet的超集） + 服务端：主机S中运行的一个“Server”进程（主机S在网络中的位置，见图1） + 客户端：主机C中运行的一个“Client”进程（主机C在网络中的位置，见图1） + 客户端发送请求消息内容为字符串，“request,hostname”，请求服务端的主机名称。 + 服务端收到请求消息后，获得自己的主机名称，然后回复应答消息内容为字符串“response,<获取到的主机名称>”。</获取到的主机名称></p>
-<p>根据现代多任务操作系统的实际情况，这个过程可以示意为： <img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack3.png" alt="图3，TCP/IP应用层协议"></p>
+        <p>计算机进行网络通信时，实质是跨操作系统的进程间通信。同一个操作系统内部进程间通信时，进程通过管道，FIFO，共享内存等交互数据<a href="https://www.ibm.com/developerworks/cn/linux/l-ipc/" target="_blank" rel="noopener">{1}</a>，数据本身并不会发生变化。网络通信时，由于跨越了操作系统，进程需要借助操作系统提供的网络层和传输层模块帮助定位远端进程。本篇简单说明进程间通信的数据（应用层数据）跨越TCP/IP网络协议栈进行交互时，数据封装，发送与解封装。<br><a id="more"></a></p>
+<h2 id="典型TCP-IP网络"><a href="#典型TCP-IP网络" class="headerlink" title="典型TCP/IP网络"></a>典型TCP/IP网络</h2><p>本文使用“图1”网络拓扑，进行说明。两台以太网交换机（Switch）组成了两个以太局域网网段（LAN A和LAN B），其中网段LAN A为“10.22.5.0/24”与网段LAN B为“10.16.56.0/24”，两个网段被路由器（Router）连接形成一个互联网络（internet）。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack1.png" alt="图1，典型TCP/IP网络拓扑"></p>
+<p>可以使用VirtualBox与GNS3搭建此拓扑，涉及到的操作系统和软件列表为，</p>
+<ul>
+<li>网络A中主机S：Ubuntu14.04</li>
+<li>网络B中主机C：Ubuntu12.04（运行在Virtualbox）</li>
+<li>路由器Router的OS：Cisco2600（运行在GNS3）</li>
+</ul>
+<h2 id="操作系统TCP-IP协议栈结构"><a href="#操作系统TCP-IP协议栈结构" class="headerlink" title="操作系统TCP/IP协议栈结构"></a>操作系统TCP/IP协议栈结构</h2><p>TCP/IP网络的协议栈结构作为互联网中应用最广泛的协议栈结构（图2）。协议栈中，每一层都对应着与这一层相关软件及协议。“应用层”代表着用户进程及其所遵守的相关协议，比如使用浏览器浏览网页时，浏览器进程与远端Web服务器进程进行通信，两者都遵守HTTP协议，浏览器发送请求，服务器回送应答。“传输层”代表着操作系统内核（OS Kernel）中实现的如TCP模块，UDP模块等软件模块及其遵守的协议，传输层为上层提供服务，比如应用层需要数据在传输过程中不丢失，不重复，那么应用层就需要引用TCP协议收发数据。“网络层”用来为数据包寻找目的主机，并将数据发送到目的主机。“数据链路层”执行数据实际的收发操作。数据封装都以这个协议栈结构进行。（实际上传输层的实现并不一定限定在系统内核中，目前绝大多数操作系统实现都把传输层协议放在内核中实现）<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack2.png" alt="图2，TCP/IP协议栈结构"></p>
+<h2 id="来自用户进程的数据，应用层消息"><a href="#来自用户进程的数据，应用层消息" class="headerlink" title="来自用户进程的数据，应用层消息"></a>来自用户进程的数据，应用层消息</h2><p>正如TCP/IP协议栈结构中指出，应用层协议是互联网络中进程间通信使用的协议。主要用于互连网络中的两个进程或多个进程互相发送数据。在这一层所发送的数据，我们称为消息（Message），进程间所发送的消息，由进程开发者根据其所引用的应用层协议来生成，比如我们常说的HTTP消息，LDAP消息等等。为了清楚的说明问题，我们暂时抛开复杂的已有应用层协议，来设计一个极简的全新应用层协议，协议规定如下，</p>
+<ul>
+<li>在一个互连网络internet中（注意首字母为小写的互联网络，Internet的超集）</li>
+<li>服务端：主机S中运行的一个“Server”进程（主机S在网络中的位置，见图1）</li>
+<li>客户端：主机C中运行的一个“Client”进程（主机C在网络中的位置，见图1）</li>
+<li>客户端发送请求消息内容为字符串，“request,hostname”，请求服务端的主机名称。</li>
+<li>服务端收到请求消息后，获得自己的主机名称，然后回复应答消息内容为字符串“response,&lt;获取到的主机名称&gt;”。</li>
+</ul>
+<p>根据现代多任务操作系统的实际情况，这个过程可以示意为：<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack3.png" alt="图3，TCP/IP应用层协议"></p>
 <p>在TCP/IP网络中，进程Client将进程Server的相关信息（IP地址，TCP服务端口号）提供给Client OS。进程Server也会通知自己所在的操作系统Server OS，自己要监听来自于哪一个TCP端口的连接请求。以上内容是应用开发者和应用层协议的相关者（比如网络技术支持，黑帽子，白帽子抓包分析等等）需要关注的内容。</p>
-<h2 id="操作系统传输层对应用层消息的封装">操作系统传输层对应用层消息的封装</h2>
-<p>进程“Client”发送的请求消息“request,hostname”不会凭空送到接收端进程“Server”，它需要在操作系统的协助下，流经“图1”中的网络拓扑送到Server进程。“消息”自身的内容并没有提供足够的信息给客户端操作系统，如何去网络中寻找对端主机，乃至运行在对端主机中的进程Server。所以Client进程需要提供这些信息给操作系统，并由操作系统将这些信息追加到应用层消息数据中，这个信息追加的过程就是所谓的“数据封装”（Data Encapsulation），为了重点说明“数据封装”，传输层的分段处理等细节此处暂时不予说明，后续文章中会专门对这些细节进行说明。</p>
-<p>根据TCP/IP网络协议栈结构，应用层消息“request,hostname”，首先来到操作系统内核（OS Kernel）中的TCP传输层处理模块。TCP处理模块为消息添加__源端口号（source port）__以标识数据自ClientOS的哪个进程发出，这个端口号由操作系统负责临时分配。另外，它还为消息添加了__目的端口号（destination port）__以标识消息送往对端的哪一个接收进程，这个端口号由Client进程通知操作系统内核，大多数情况使用所谓“众所周知的端口号（Well-Known Port）”，当然端口号的选择并不是限定死的，如本例中Client进程使用的目标端口为1982，或者也可以使用80端口开FTP服务。</p>
-<p>接下来，TCP模块为消息添加了一些重要的附加字段，也就是在“图4”中我标识了“misc”的部分，这部分是TCP协议区别于其他传输层协议的一些核心功能数据字段（如UDP，SCTP等）。至此，传输层对应用层消息封装结束，经过传输层封装后的数据，我们一般称为“段”（segment）。 <img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack4.png" alt="图4，TCP层对数据的封装"></p>
-<p>其中Misc部分的详细内容就是TCP的消息头结构中的一部分，细节此处暂时不予说明，后续文章中会专门对这些细节进行说明。 <img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack5.png" alt="图5，TCP层对数据的封装Misc部分的内容"></p>
+<h2 id="操作系统传输层对应用层消息的封装"><a href="#操作系统传输层对应用层消息的封装" class="headerlink" title="操作系统传输层对应用层消息的封装"></a>操作系统传输层对应用层消息的封装</h2><p>进程“Client”发送的请求消息“request,hostname”不会凭空送到接收端进程“Server”，它需要在操作系统的协助下，流经“图1”中的网络拓扑送到Server进程。“消息”自身的内容并没有提供足够的信息给客户端操作系统，如何去网络中寻找对端主机，乃至运行在对端主机中的进程Server。所以Client进程需要提供这些信息给操作系统，并由操作系统将这些信息追加到应用层消息数据中，这个信息追加的过程就是所谓的“数据封装”（Data Encapsulation），为了重点说明“数据封装”，传输层的分段处理等细节此处暂时不予说明，后续文章中会专门对这些细节进行说明。</p>
+<p>根据TCP/IP网络协议栈结构，应用层消息“request,hostname”，首先来到操作系统内核（OS Kernel）中的TCP传输层处理模块。TCP处理模块为消息添加<strong>源端口号（source port）</strong>以标识数据自ClientOS的哪个进程发出，这个端口号由操作系统负责临时分配。另外，它还为消息添加了<strong>目的端口号（destination port）</strong>以标识消息送往对端的哪一个接收进程，这个端口号由Client进程通知操作系统内核，大多数情况使用所谓“众所周知的端口号（Well-Known Port）”，当然端口号的选择并不是限定死的，如本例中Client进程使用的目标端口为1982，或者也可以使用80端口开FTP服务。</p>
+<p>接下来，TCP模块为消息添加了一些重要的附加字段，也就是在“图4”中我标识了“misc”的部分，这部分是TCP协议区别于其他传输层协议的一些核心功能数据字段（如UDP，SCTP等）。至此，传输层对应用层消息封装结束，经过传输层封装后的数据，我们一般称为“段”（segment）。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack4.png" alt="图4，TCP层对数据的封装"></p>
+<p>其中Misc部分的详细内容就是TCP的消息头结构中的一部分，细节此处暂时不予说明，后续文章中会专门对这些细节进行说明。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack5.png" alt="图5，TCP层对数据的封装Misc部分的内容"></p>
 <p>以上内容是传输层协议开发者需要关注的内容，协议为上层提供哪些服务，比如保证应用层数据不丢失的传送出去，或者尽量快速的传送出去都是这层开发者需要关注的内容。</p>
-<h2 id="操作系统网络层对数据的封装">操作系统网络层对数据的封装</h2>
-<p>TCP封装完的段数据来到了网络层。前边提到，网络层的主要作用是主机寻址与路由（Routing），这层的协议也就是在复杂互联网络中找到对端主机的一层协议。既然协议的目的是在网络中寻找主机，那就一定需要接收端主机目的地址，而数据从对端返回时，也需要发送端主机的源地址。也就是目的IP和源IP（IPv4或IPv6皆可，我以IPv4举例）。</p>
+<h2 id="操作系统网络层对数据的封装"><a href="#操作系统网络层对数据的封装" class="headerlink" title="操作系统网络层对数据的封装"></a>操作系统网络层对数据的封装</h2><p>TCP封装完的段数据来到了网络层。前边提到，网络层的主要作用是主机寻址与路由（Routing），这层的协议也就是在复杂互联网络中找到对端主机的一层协议。既然协议的目的是在网络中寻找主机，那就一定需要接收端主机目的地址，而数据从对端返回时，也需要发送端主机的源地址。也就是目的IP和源IP（IPv4或IPv6皆可，我以IPv4举例）。</p>
 <p>接收端主机的IP地址需要由应用层进程Client提供，因为只有Client进程知道自己所发送的数据要去往哪个主机。此处还有一个问题，客户端主机的源地址怎么确定呢？现在大部分计算机都有多个网络适配器，同时接入到多个网络（Multi-Homed），比如WIFI模块，物理网线接口，SIM卡WAN接口，VPN接口，虚拟网卡等等。每一类接口都对应会有一个IP地址。选择哪个IP地址作为源地址呢？</p>
-<p>这是拓扑图中的主机C配置内容， <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ ifconfig</span><br><span class="line">eth0      Link encap:Ethernet  HWaddr 08:00:27:ff:66:a4</span><br><span class="line">          inet addr:10.16.56.2  Bcast:10.16.56.255  Mask:255.255.255.0</span><br><span class="line">lo        Link encap:Local Loopback  </span><br><span class="line">          inet addr:127.0.0.1  Mask:255.0.0.0</span><br><span class="line">wlan0     Link encap:Ethernet  HWaddr 84:3a:4b:1d:c0:c0  </span><br><span class="line">          inet addr:192.168.1.104  Bcast:192.168.1.255  Mask:255.255.255.0</span><br><span class="line">wwan0     Link encap:Ethernet  HWaddr 4a:b6:38:ec:5c:6d  </span><br><span class="line">          inet addr:10.18.150.41  Bcast:10.18.150.47  Mask:255.255.255.248</span><br></pre></td></tr></table></figure></p>
+<p>这是拓扑图中的主机C配置内容，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ ifconfig</span><br><span class="line">eth0      Link encap:Ethernet  HWaddr 08:00:27:ff:66:a4</span><br><span class="line">          inet addr:10.16.56.2  Bcast:10.16.56.255  Mask:255.255.255.0</span><br><span class="line">lo        Link encap:Local Loopback  </span><br><span class="line">          inet addr:127.0.0.1  Mask:255.0.0.0</span><br><span class="line">wlan0     Link encap:Ethernet  HWaddr 84:3a:4b:1d:c0:c0  </span><br><span class="line">          inet addr:192.168.1.104  Bcast:192.168.1.255  Mask:255.255.255.0</span><br><span class="line">wwan0     Link encap:Ethernet  HWaddr 4a:b6:38:ec:5c:6d  </span><br><span class="line">          inet addr:10.18.150.41  Bcast:10.18.150.47  Mask:255.255.255.248</span><br></pre></td></tr></table></figure></p>
 <p>实际上，内核中的IP处理模块，需要参考接收端IP地址来决定选择使用哪一个发送端IP地址。应用进程Client发送数据的目的地为主机S，其IP地址为10.22.5.3，IP处理模块此时需要查看本机路由表，以确认从哪个网络适配器发送数据，从而进一步进行数据的打包封装。进程Client所在主机C的内核路由表如下，参考目的IP地址10.22.5.3，所以需要选择默认路由从eth0发出数据，最终源地址应该选择eth0网络适配器的地址10.16.56.2，此处也解释了为什么主机需要路由表这个问题。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ route -nv</span><br><span class="line">Kernel IP routing table</span><br><span class="line">Destination     Gateway         Genmask         Flags Metric Ref    Use Iface</span><br><span class="line">0.0.0.0         10.16.56.1      0.0.0.0         UG    0      0        0 eth0</span><br><span class="line">10.16.56.0      0.0.0.0         255.255.255.0   U     1      0        0 eth0</span><br><span class="line">10.18.150.40    0.0.0.0         255.255.255.248 U     5      0        0 wwan0</span><br><span class="line">192.168.1.0     0.0.0.0         255.255.255.0   U     9      0        0 wlan0</span><br></pre></td></tr></table></figure>
-<p>确定了源主机IP地址和目的主机IP地址之后，网络层开始对来自传输层的段数据（segment）进行封装。IP层封装之后的段数据，称为IP数据包（IP Packet）。 <img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack6.png" alt="图6，IP层对数据的封装"></p>
+<p>确定了源主机IP地址和目的主机IP地址之后，网络层开始对来自传输层的段数据（segment）进行封装。IP层封装之后的段数据，称为IP数据包（IP Packet）。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack6.png" alt="图6，IP层对数据的封装"></p>
 <p>到此为止，数据在操作系统内核阶段的打包封装就完成了。</p>
-<h2 id="数据包离开主机进入网络">数据包离开主机，进入网络</h2>
-<p>现在IP数据包就可以向外发送了。如同发送快递时需要快递员将货物包裹携带到下一站，发送IP包时，我们还需要链路层（包括物理层）的帮助将IP包携带到下一个路由器中转。IP包从一个含有IP处理软件模块的主机到另一个含有IP软件处理模块的主机的过程，称为IP包经过了一跳（Hop）。IP包经过这样一跳一跳的最终到达目的地。这里以“图1”的以太网拓扑为例，主机C发出的数据包到主机S的出口为网络适配器eth0，所以增加eth0的MAC地址作为源MAC地址，通过ARP协议获得路由器的目的MAC地址，根据获得的MAC地址将数据发出到下一跳。</p>
-<p>ARP协议相当于网络适配器主机C在自己所在的子网中发送广播询问，“网络中的哪一台主机IP地址是10.16.56.1，请提供MAC地址到08:00:27:ff:66:a4”。获取MAC地址后，就会将目的MAC地址保存在内核的ARP缓存列表，之后将IP包发送给路由器。这里不必每次使用ARP协议进行询问目的MAC地址，而是_周期性进行更新_。 <img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack7.png" alt="图7，目的MAC地址的获取"></p>
-<p>获得目的MAC地址以后，链路层软件继续对来自网络层的数据进行封装，经过链路层封装以后的数据，一般称为“帧”（Frame）。 <img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack8.png" alt="图8，数据链路层的封装"> 此时帧数据可以送到物理网卡发出了，物理网卡通过网线将这个数据帧以高低电平的形式（1001010101010...）发送出去。这个数据帧首先到达网络中的交换机（Switch），交换机在ARP请求目的MAC地址的时候，已经记录了源MAC地址和目的MAC地址对应自己的哪两个物理端口。使用物理层的光或电信号，交换机根据目的MAC地址将这个数据帧发送到路由器。</p>
-<h2 id="数据包去向何方路由器登场">数据包去向何方，路由器登场</h2>
-<p>数据帧到达路由器后，路由器首先去掉所有链路层的地址信息，然后读取IP层的目的IP地址，并且使用目的IP地址对照自己的路由表，来分析这个网络封包要去往自己的哪一个接口所连接的网络，路由器重复链路层的处理，根据所连数据链路的类型，重新给IP包安装数据链路层的地址，路由器在重新封装IP包为链路层数据帧之前，同样使用ARP请求来获取下一跳的链路层MAC地址，数据前往下一跳。最终到达目的主机。 <img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack9.png" alt="图9，路由器对数据的处理"></p>
+<h2 id="数据包离开主机，进入网络"><a href="#数据包离开主机，进入网络" class="headerlink" title="数据包离开主机，进入网络"></a>数据包离开主机，进入网络</h2><p>现在IP数据包就可以向外发送了。如同发送快递时需要快递员将货物包裹携带到下一站，发送IP包时，我们还需要链路层（包括物理层）的帮助将IP包携带到下一个路由器中转。IP包从一个含有IP处理软件模块的主机到另一个含有IP软件处理模块的主机的过程，称为IP包经过了一跳（Hop）。IP包经过这样一跳一跳的最终到达目的地。这里以“图1”的以太网拓扑为例，主机C发出的数据包到主机S的出口为网络适配器eth0，所以增加eth0的MAC地址作为源MAC地址，通过ARP协议获得路由器的目的MAC地址，根据获得的MAC地址将数据发出到下一跳。</p>
+<p>ARP协议相当于网络适配器主机C在自己所在的子网中发送广播询问，“网络中的哪一台主机IP地址是10.16.56.1，请提供MAC地址到08:00:27:ff:66:a4”。获取MAC地址后，就会将目的MAC地址保存在内核的ARP缓存列表，之后将IP包发送给路由器。这里不必每次使用ARP协议进行询问目的MAC地址，而是<em>周期性进行更新</em>。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack7.png" alt="图7，目的MAC地址的获取"></p>
+<p>获得目的MAC地址以后，链路层软件继续对来自网络层的数据进行封装，经过链路层封装以后的数据，一般称为“帧”（Frame）。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack8.png" alt="图8，数据链路层的封装"><br>此时帧数据可以送到物理网卡发出了，物理网卡通过网线将这个数据帧以高低电平的形式（1001010101010…）发送出去。这个数据帧首先到达网络中的交换机（Switch），交换机在ARP请求目的MAC地址的时候，已经记录了源MAC地址和目的MAC地址对应自己的哪两个物理端口。使用物理层的光或电信号，交换机根据目的MAC地址将这个数据帧发送到路由器。</p>
+<h2 id="数据包去向何方，路由器登场"><a href="#数据包去向何方，路由器登场" class="headerlink" title="数据包去向何方，路由器登场"></a>数据包去向何方，路由器登场</h2><p>数据帧到达路由器后，路由器首先去掉所有链路层的地址信息，然后读取IP层的目的IP地址，并且使用目的IP地址对照自己的路由表，来分析这个网络封包要去往自己的哪一个接口所连接的网络，路由器重复链路层的处理，根据所连数据链路的类型，重新给IP包安装数据链路层的地址，路由器在重新封装IP包为链路层数据帧之前，同样使用ARP请求来获取下一跳的链路层MAC地址，数据前往下一跳。最终到达目的主机。<br><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack9.png" alt="图9，路由器对数据的处理"></p>
 <p>如果数据包经过多个路由器，处理过程也是一样，区别不过在于路由器的路由表更新方式和IP包跳数的变化而已。以上部分就是路由器厂商关注的内容，比如Cisco，爱立信，华为等等，还有IP认证学习的内容，包括CCIE，CCNP，CCNA认证之流。当然也有不要脸的厂商偷偷的窃取用户的数据，一般也在这里悄悄完成。</p>
-<h2 id="数据包到达目的主机解封装">数据包到达目的主机，解封装</h2>
-<p>到达目的主机后，数据开始进行解封装（Decapsulation）， - 目标主机的链路层去掉链路层的相关字段，根据类型字段将数据发往IP层处理模块。 - IP层去掉网络层相关字段，根据类型字段将数据发往TCP处理模块。 - TCP层获得段数据，去掉本层的字段，根据目的端口号，将应用消息数据发往对应的进程Server。 - 最终，Server进程获取到“图3”中的数据“request,hostname”。 - 在整个的封装过程与解封装过程中，我省略了数据的校验过程，实际上，数据校验过程发生在各层处理过程中。</p>
-<div class="figure">
-<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack10.png" alt="图10，目的主机数据解封装过程">
-<p class="caption">图10，目的主机数据解封装过程</p>
-</div>
+<h2 id="数据包到达目的主机，解封装"><a href="#数据包到达目的主机，解封装" class="headerlink" title="数据包到达目的主机，解封装"></a>数据包到达目的主机，解封装</h2><p>到达目的主机后，数据开始进行解封装（Decapsulation），</p>
+<ul>
+<li>目标主机的链路层去掉链路层的相关字段，根据类型字段将数据发往IP层处理模块。</li>
+<li>IP层去掉网络层相关字段，根据类型字段将数据发往TCP处理模块。</li>
+<li>TCP层获得段数据，去掉本层的字段，根据目的端口号，将应用消息数据发往对应的进程Server。</li>
+<li>最终，Server进程获取到“图3”中的数据“request,hostname”。</li>
+<li>在整个的封装过程与解封装过程中，我省略了数据的校验过程，实际上，数据校验过程发生在各层处理过程中。</li>
+</ul>
+<p><img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPStack10.png" alt="图10，目的主机数据解封装过程"></p>
 <p>当服务进程Server获取自己的主机名称，对Client进程进行响应时，Server重复上述封装，发送，解封装的过程将数据返回到Client进程。</p>
 
       
@@ -584,7 +592,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#典型tcpip网络"><span class="nav-number">1.</span> <span class="nav-text">典型TCP/IP网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统tcpip协议栈结构"><span class="nav-number">2.</span> <span class="nav-text">操作系统TCP/IP协议栈结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#来自用户进程的数据应用层消息"><span class="nav-number">3.</span> <span class="nav-text">来自用户进程的数据，应用层消息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统传输层对应用层消息的封装"><span class="nav-number">4.</span> <span class="nav-text">操作系统传输层对应用层消息的封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统网络层对数据的封装"><span class="nav-number">5.</span> <span class="nav-text">操作系统网络层对数据的封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包离开主机进入网络"><span class="nav-number">6.</span> <span class="nav-text">数据包离开主机，进入网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包去向何方路由器登场"><span class="nav-number">7.</span> <span class="nav-text">数据包去向何方，路由器登场</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包到达目的主机解封装"><span class="nav-number">8.</span> <span class="nav-text">数据包到达目的主机，解封装</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#典型TCP-IP网络"><span class="nav-number">1.</span> <span class="nav-text">典型TCP/IP网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统TCP-IP协议栈结构"><span class="nav-number">2.</span> <span class="nav-text">操作系统TCP/IP协议栈结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#来自用户进程的数据，应用层消息"><span class="nav-number">3.</span> <span class="nav-text">来自用户进程的数据，应用层消息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统传输层对应用层消息的封装"><span class="nav-number">4.</span> <span class="nav-text">操作系统传输层对应用层消息的封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统网络层对数据的封装"><span class="nav-number">5.</span> <span class="nav-text">操作系统网络层对数据的封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包离开主机，进入网络"><span class="nav-number">6.</span> <span class="nav-text">数据包离开主机，进入网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包去向何方，路由器登场"><span class="nav-number">7.</span> <span class="nav-text">数据包去向何方，路由器登场</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包到达目的主机，解封装"><span class="nav-number">8.</span> <span class="nav-text">数据包到达目的主机，解封装</span></a></li></ol></div>
             
 
           </div>

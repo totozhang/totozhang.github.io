@@ -244,7 +244,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://taotao.guru/2018-02-13-root-of-equation/">
+    <link itemprop="mainEntityOfPage" href="http://taotao.guru/2018-02-13-approximation-solution-of-equations/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="toto">
@@ -263,7 +263,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018-02-13-root-of-equation/" itemprop="url">Approximation solutions of equation</a></h1>
+                <a class="post-title-link" href="/2018-02-13-approximation-solution-of-equations/" itemprop="url">Approximation solutions of equation</a></h1>
         
 
         <div class="post-meta">
@@ -343,7 +343,7 @@ x^3-3x-5=0
 <p>It's hard to remember the formula of the root for this kind of equation. To some other kind equation, there's even no formula at all. So we must find alternative way to get the proper approximate value.</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018-02-13-root-of-equation/#more" rel="contents">
+            <a class="btn" href="/2018-02-13-approximation-solution-of-equations/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -486,7 +486,7 @@ x^3-3x-5=0
 
       
         
-          <p>终止TCP连接有两种方法，正常流程使用FIN分段四次挥手正常终止一个TCP连接，也可以使用RST分段迅速重置一个TCP连接。前者由TCP层确保应用层数据可靠传输，后者导致TCP层数据结构立即释放，切断连接，而且不确保应用层数据传输完成。除了通信架构设计中故意引入了RST的情况外，当网络中发现了RST时，说明网络中可能存在问题。RST分段究竟会产生于何种情形呢？另外还有哪些导致TCP通信异常终止的情形呢？RST分段在这些情况下的发送时机是什么呢？
+          <p>终止TCP连接有两种方法，正常流程使用FIN分段四次挥手正常终止一个TCP连接，也可以使用RST分段迅速重置一个TCP连接。前者由TCP层确保应用层数据可靠传输，后者导致TCP层数据结构立即释放，切断连接，而且不确保应用层数据传输完成。除了通信架构设计中故意引入了RST的情况外，当网络中发现了RST时，说明网络中可能存在问题。RST分段究竟会产生于何种情形呢？另外还有哪些导致TCP通信异常终止的情形呢？RST分段在这些情况下的发送时机是什么呢？<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016-02-07-tcp-abnormal-connection/#more" rel="contents">
@@ -1071,7 +1071,7 @@ x^3-3x-5=0
 
       
         
-          <p>TCP连接可以由两端同时向对方发起的SYN分段建立，同时建立的连接发生必须满足一个条件，两个TCP端发出SYN连接请求后，收到的仍然是一个SYN连接请求，而收到的SYN，恰好来自发出SYN去请求连接的一端。那么会不会有这样一种情况呢？一个TCP端发出一个SYN分段给自己，这个SYN分段所请求的连接正是这个TCP端自身，这样就符合了条件“发出SYN请求的同时收到了SYN请求，而收到的SYN恰好来自请求连接的一端”。这种情况是实际存在的，被称为TCP自连接。自连接的存在经常引发一些莫名其妙的问题和难以复现的故障和软件BUG。
+          <p>TCP连接可以由两端同时向对方发起的SYN分段建立，同时建立的连接发生必须满足一个条件，两个TCP端发出SYN连接请求后，收到的仍然是一个SYN连接请求，而收到的SYN，恰好来自发出SYN去请求连接的一端。那么会不会有这样一种情况呢？一个TCP端发出一个SYN分段给自己，这个SYN分段所请求的连接正是这个TCP端自身，这样就符合了条件“发出SYN请求的同时收到了SYN请求，而收到的SYN恰好来自请求连接的一端”。这种情况是实际存在的，被称为TCP自连接。自连接的存在经常引发一些莫名其妙的问题和难以复现的故障和软件BUG。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016-01-11-tcp-self-connection/#more" rel="contents">
@@ -1217,7 +1217,7 @@ x^3-3x-5=0
 
       
         
-          <p>当通信行为发生时，除了通信一端发起通信请求的，另一端被动等待情况外，还有可能存在通信两端同时具有通信意向，两端同时发起连接对端的请求的情形。当通信行为结束时，也存在同样的情况，两端同时没有数据发送给对方，而在同一时刻结束通信。TCP协议支持这种通信连接的同时建立与关闭。连接同时建立和同时关闭在什么情况下可以发生？建立与关闭的时序与正常的通信有哪些不同？本文将对同时建立和同时断开的TCP连接进行模拟重现并详细分析分段的交互过程。
+          <p>当通信行为发生时，除了通信一端发起通信请求的，另一端被动等待情况外，还有可能存在通信两端同时具有通信意向，两端同时发起连接对端的请求的情形。当通信行为结束时，也存在同样的情况，两端同时没有数据发送给对方，而在同一时刻结束通信。TCP协议支持这种通信连接的同时建立与关闭。连接同时建立和同时关闭在什么情况下可以发生？建立与关闭的时序与正常的通信有哪些不同？本文将对同时建立和同时断开的TCP连接进行模拟重现并详细分析分段的交互过程。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016-01-10-tcp-simutaneous-connection/#more" rel="contents">
@@ -1363,7 +1363,7 @@ x^3-3x-5=0
 
       
         
-          <p>任何通信发生时，至少存在一个参与通信的对象发起通信请求，以判断对端是否可以进行通信。在TCP协议中同样如此，这个发起请求的过程称为同步（Synchronization），由于TCP确保为应用层提供可靠的字节流数据传输，会对所有应用层通信数据进行字节编号，这个编号的第一个数值ISN（Initial Sequence Number）并不是从0或1开始的数值，而是由特定算法生成，ISN的取值范围为[0, 2^32-1]。TCP通信的两端需要互换彼此的ISN数值，从而控制字节流的传输。互换ISN的过程称为TCP建立连接的过程，也被称为建立虚连接或虚电路的过程。当通信结束时，两端也需要有特定的交互过程释放连接。建立连接为什么需要互换ISN？为什么ISN不是从0或1开始？全双工的TCP通信怎么控制断开连接的过程？这部分主要说说TCP连接管理的内容。
+          <p>任何通信发生时，至少存在一个参与通信的对象发起通信请求，以判断对端是否可以进行通信。在TCP协议中同样如此，这个发起请求的过程称为同步（Synchronization），由于TCP确保为应用层提供可靠的字节流数据传输，会对所有应用层通信数据进行字节编号，这个编号的第一个数值ISN（Initial Sequence Number）并不是从0或1开始的数值，而是由特定算法生成，ISN的取值范围为[0, 2^32-1]。TCP通信的两端需要互换彼此的ISN数值，从而控制字节流的传输。互换ISN的过程称为TCP建立连接的过程，也被称为建立虚连接或虚电路的过程。当通信结束时，两端也需要有特定的交互过程释放连接。建立连接为什么需要互换ISN？为什么ISN不是从0或1开始？全双工的TCP通信怎么控制断开连接的过程？这部分主要说说TCP连接管理的内容。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016-01-04-tcp-connection-management/#more" rel="contents">
@@ -1509,7 +1509,7 @@ x^3-3x-5=0
 
       
         
-          <p>TCP协议为应用层提供可靠的字节流数据传输服务，同时，TCP却构建在IP层之上。在转发数据包时，IP层设备只是简单的将IP包发往下一跳，尽量的向前转发IP包，当IP包在传输过程中被路由器或接收端抛弃时，其携带的用户数据就会永久丢失，IP层对于数据的丢失没有任何补救措施。另外，IP层的数据包的尺寸上限取决于数据链路层的能力，所以IP包尺寸会有大小的限制，也就是说，当应用层的字节流到达IP层时，数据量超过一定数值时，会被分成多个IP数据封包传输，每一个IP封包到达对端的顺序不一定会按顺序到达，可能会出现重复的IP封包。构建在不可信赖的IP网络之上的TCP协议是如何确保应用层的可靠字节流的传输呢？
+          <p>TCP协议为应用层提供可靠的字节流数据传输服务，同时，TCP却构建在IP层之上。在转发数据包时，IP层设备只是简单的将IP包发往下一跳，尽量的向前转发IP包，当IP包在传输过程中被路由器或接收端抛弃时，其携带的用户数据就会永久丢失，IP层对于数据的丢失没有任何补救措施。另外，IP层的数据包的尺寸上限取决于数据链路层的能力，所以IP包尺寸会有大小的限制，也就是说，当应用层的字节流到达IP层时，数据量超过一定数值时，会被分成多个IP数据封包传输，每一个IP封包到达对端的顺序不一定会按顺序到达，可能会出现重复的IP封包。构建在不可信赖的IP网络之上的TCP协议是如何确保应用层的可靠字节流的传输呢？<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016-01-03-tcp-reliable-communication/#more" rel="contents">
@@ -1655,7 +1655,7 @@ x^3-3x-5=0
 
       
         
-          <p>TCP/IP网络应用之间通信本质都是进程间通信，网络协议栈的分层结构只是解耦了应用层实现通信的复杂度，应用层实现时不需考虑通信过程中的数据丢失，数据重复和传输时效性等问题，此类问题由传输层进行解决，应用层只关注本层消息及处理逻辑。因此，一般传输层模块都工作在系统内核中，以便于为系统中所有的进程提供同样的服务。操作系统封装了传输层和其他底层协议，并为应用层提供统一访问接口。本文主要说明TCP传输层如何为应用层提供抽象服务，并尝试实现一个基于TCP的极简应用层协议，从应用层角度观察TCP协议。
+          <p>TCP/IP网络应用之间通信本质都是进程间通信，网络协议栈的分层结构只是解耦了应用层实现通信的复杂度，应用层实现时不需考虑通信过程中的数据丢失，数据重复和传输时效性等问题，此类问题由传输层进行解决，应用层只关注本层消息及处理逻辑。因此，一般传输层模块都工作在系统内核中，以便于为系统中所有的进程提供同样的服务。操作系统封装了传输层和其他底层协议，并为应用层提供统一访问接口。本文主要说明TCP传输层如何为应用层提供抽象服务，并尝试实现一个基于TCP的极简应用层协议，从应用层角度观察TCP协议。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016-01-02-tcp-comminication-model/#more" rel="contents">
