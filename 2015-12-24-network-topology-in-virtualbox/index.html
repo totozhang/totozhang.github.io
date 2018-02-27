@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="VirtualBox is a powerful x86 and AMD64/Intel64 virtualization software (VBox for short), which can be used to construct kinds of debug or test network environments, to capture or analyse the packets i">
+<meta name="description" content="VirtualBox is a powerful x86 and AMD64/Intel64 virtualization software(VBox for short), which can be used to construct kinds of debug or test network environments, to capture or analyse the packets in">
 <meta name="keywords" content="virtualbox simulator network">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VirtualBox Network Configuration">
 <meta property="og:url" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/index.html">
 <meta property="og:site_name" content="Mathematic Revisit">
-<meta property="og:description" content="VirtualBox is a powerful x86 and AMD64/Intel64 virtualization software (VBox for short), which can be used to construct kinds of debug or test network environments, to capture or analyse the packets i">
+<meta property="og:description" content="VirtualBox is a powerful x86 and AMD64/Intel64 virtualization software(VBox for short), which can be used to construct kinds of debug or test network environments, to capture or analyse the packets in">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox1.jpg">
 <meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox2.png">
@@ -95,10 +95,10 @@
 <meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox4.png">
 <meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox5.png">
 <meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox6.png">
-<meta property="og:updated_time" content="2018-02-27T02:12:31.000Z">
+<meta property="og:updated_time" content="2018-02-27T08:08:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="VirtualBox Network Configuration">
-<meta name="twitter:description" content="VirtualBox is a powerful x86 and AMD64/Intel64 virtualization software (VBox for short), which can be used to construct kinds of debug or test network environments, to capture or analyse the packets i">
+<meta name="twitter:description" content="VirtualBox is a powerful x86 and AMD64/Intel64 virtualization software(VBox for short), which can be used to construct kinds of debug or test network environments, to capture or analyse the packets in">
 <meta name="twitter:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox1.jpg">
 
 
@@ -341,27 +341,27 @@
       
 
       
-        <p>VirtualBox is a powerful x86 and AMD64/Intel64 virtualization software (VBox for short), which can be used to construct kinds of debug or test network environments, to capture or analyse the packets in the test network. Sometimes, for the sake of security, some virtual hosts run parallely on the same physical platform to isolate each other, decrease complexity. Sometimes, Vbox is used as hack tools to hide from tracking. All these usages are based on the network configuration of Vbox itself. This article is about the network configurations and the topology of each configuration.<a id="more"></a> 既然涉及到网络，那就应该从VBox为用户提供的硬件资源开始说起。</p>
+        <p>VirtualBox is a powerful x86 and AMD64/Intel64 virtualization software(VBox for short), which can be used to construct kinds of debug or test network environments, to capture or analyse the packets in the test network. Sometimes, for the sake of security, some virtual hosts run parallely on the same physical platform to isolate each other, decrease complexity. Sometimes, Vbox is used as hack tools to hide from tracking. All these usages are based on the network configuration of Vbox itself. This article is about the network configurations and the topology of each configuration.<a id="more"></a> As usual, we start talking about network from the Physical layer.</p>
 <div class="figure">
 <img src="/2015-12-24-network-topology-in-virtualbox/VBox1.jpg">
 
 </div>
-<h1 id="网络适配器">网络适配器</h1>
-<p>VBox为<strong>每台客户机提供8块PCI以太网卡</strong>，其中，4块通过GUI配置，4块需要通过命令行进行配置（实际上，8块网卡都能通过命令行进行配置）。</p>
-<p>对于每块网卡都有如下6种可选类型：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">AMD PCNet PCI II (Am79C970A)</span><br><span class="line">AMD PCNet FAST III (Am79C973)</span><br><span class="line">Intel PRO/1000 MT Desktop (82540EM)</span><br><span class="line">Intel PRO/1000 T Server (82543GC)</span><br><span class="line">Intel PRO/1000 MT Server (82545EM)</span><br><span class="line">Paravirtualized network adapter (virtio-net，KVM开源项目相关，具体参考用户手册)</span><br></pre></td></tr></table></figure>
-<p>注意，客户机所安装操作系统必须已经提供了对应的硬件驱动程序(前5类网卡类型多数操作系统都有驱动)。</p>
-<h1 id="网络选项">网络选项</h1>
-<p>VBox一共提供了7种可选网络类型以满足各种不同的使用需求。下面详细说明VBox提供的各类可选择的网络类型。</p>
-<h2 id="类型1-not-attached">类型1: Not attached</h2>
-<p>在Not attached情况下，客户机操作系统认为计算机中有网卡存在，但是网卡中没有插入网线。如果在使用过程中需要对客户机进行插拔网线的测试操作，可以选用此选项。实际上在Advanced设置里边，有个选项叫做Cable Connected，更适合做插拔网线的操作。</p>
-<h2 id="类型2-network-address-translation-nat">类型2: Network Address Translation (NAT)</h2>
-<p>NAT选项为VBox默认的网络类型选项。使用NAT选项时，VBox为<strong>每台客户机单独提供</strong>一个NAT路由器，客户机和宿主机拓扑为, <img src="/2015-12-24-network-topology-in-virtualbox/VBox2.png" alt="NAT选项网络拓扑"></p>
-<p>VBox为每个客户机提供DHCP服务，这里假设用户选择配置一块网卡，那么客户机默认被分配到的私网IP地址为 10.0.2.15，客户机出口网关为 10.0.2.2。默认网段 10.0.2/24 可以通过如下指令进行更改：</p>
+<h1 id="network-adapter">Network Adapter</h1>
+<p>VBox provide <strong>8 PCI network adapter for each client</strong>, only 4 of them can be configured with GUI, and all 8 adapters can be configured through command line interface.</p>
+<p>Optional categaries:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">AMD PCNet PCI II(Am79C970A)</span><br><span class="line">AMD PCNet FAST III(Am79C973)</span><br><span class="line">Intel PRO/1000 MT Desktop(82540EM)</span><br><span class="line">Intel PRO/1000 T Server(82543GC)</span><br><span class="line">Intel PRO/1000 MT Server(82545EM)</span><br><span class="line">Paravirtualized network adapter(virtio-net, KVM project related)</span><br></pre></td></tr></table></figure>
+<p>Remark, all the client OS must contain the specific driver for the specific adapter.(Most of modern OS have the drivers.)</p>
+<h1 id="network-types">Network Types</h1>
+<p>VBox provides us 7 options to fullfill kinds of requirements.</p>
+<h2 id="option-1-not-attached">Option 1: Not attached</h2>
+<p>With 'Not attached', the client machine runs as a standalone computer that has a network adapter without network cable plugging in.</p>
+<h2 id="option-2-network-address-translationnat">Option 2: Network Address Translation(NAT)</h2>
+<p>'NAT' is a default option when VBox is installed. VBox provide a NAT router for every clientos and DHCP service. <img src="/2015-12-24-network-topology-in-virtualbox/VBox2.png" alt="NAT选项网络拓扑"></p>
+<p>e.g. we config 3 clientos at the same time, the 10.0.2.15 is assigned to all the 3 clientos, the default gateway IP address is 10.0.2.2. The default segment is 10.0.2/24. Of course, the default information can be changed with the command:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vboxmanage modifyvm &lt;vmname&gt; --natnet1 &quot;192.168/16&quot;</span><br></pre></td></tr></table></figure>
 <p>如果宿主机接入了Internet，那么客户机可以访问Internet，进行网页浏览，邮件收发等。从物理网络看来，来自各个客户机的数据包全部来自VBox进程。同时也说明了NAT网络可嵌套使用，我个人认为这使得IPv6的推进更加艰难。</p>
 <p>此时，如果用户需要从物理网络访问VBox中的某一台客户机，则需要进行Port forwarding配置。</p>
-<h2 id="类型3-nat-network-实验阶段">类型3: NAT Network (实验阶段)</h2>
+<h2 id="类型3-nat-network实验阶段">类型3: NAT Network(实验阶段)</h2>
 <p>2015-12-24-network-topology-in-virtualbox/VBox3.png VBox为客户机上设置为NAT Network选项的网络适配器提供<strong>同一NAT路由器</strong>。使用这个选项时，宿主机和客户机类似家用NAT路由器的拓扑关系。 <img src="/2015-12-24-network-topology-in-virtualbox/VBox3.png" alt="NAT Network模式网络拓扑"></p>
 <p>NAT Network跟NAT选项区别在于，在NAT Network中，客户机在同一个私有局域网内，共用同一个出口网关。</p>
 <h2 id="类型4-bridged-networking">类型4: Bridged Networking</h2>
@@ -587,7 +587,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#网络适配器"><span class="nav-number">1.</span> <span class="nav-text">网络适配器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络选项"><span class="nav-number">2.</span> <span class="nav-text">网络选项</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#类型1-not-attached"><span class="nav-number">2.1.</span> <span class="nav-text">类型1: Not attached</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型2-network-address-translation-nat"><span class="nav-number">2.2.</span> <span class="nav-text">类型2: Network Address Translation (NAT)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型3-nat-network-实验阶段"><span class="nav-number">2.3.</span> <span class="nav-text">类型3: NAT Network (实验阶段)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型4-bridged-networking"><span class="nav-number">2.4.</span> <span class="nav-text">类型4: Bridged Networking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型5-internal-networking"><span class="nav-number">2.5.</span> <span class="nav-text">类型5: Internal Networking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型6-host-only-networking"><span class="nav-number">2.6.</span> <span class="nav-text">类型6: Host-only Networking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型7"><span class="nav-number">2.7.</span> <span class="nav-text">类型7</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vbox内置的网络抓包功能"><span class="nav-number">3.</span> <span class="nav-text">VBox内置的网络抓包功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文中涉及的测试环境"><span class="nav-number">4.</span> <span class="nav-text">文中涉及的测试环境</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#network-adapter"><span class="nav-number">1.</span> <span class="nav-text">Network Adapter</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#network-types"><span class="nav-number">2.</span> <span class="nav-text">Network Types</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#option-1-not-attached"><span class="nav-number">2.1.</span> <span class="nav-text">Option 1: Not attached</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#option-2-network-address-translationnat"><span class="nav-number">2.2.</span> <span class="nav-text">Option 2: Network Address Translation(NAT)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型3-nat-network实验阶段"><span class="nav-number">2.3.</span> <span class="nav-text">类型3: NAT Network(实验阶段)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型4-bridged-networking"><span class="nav-number">2.4.</span> <span class="nav-text">类型4: Bridged Networking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型5-internal-networking"><span class="nav-number">2.5.</span> <span class="nav-text">类型5: Internal Networking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型6-host-only-networking"><span class="nav-number">2.6.</span> <span class="nav-text">类型6: Host-only Networking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型7"><span class="nav-number">2.7.</span> <span class="nav-text">类型7</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vbox内置的网络抓包功能"><span class="nav-number">3.</span> <span class="nav-text">VBox内置的网络抓包功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文中涉及的测试环境"><span class="nav-number">4.</span> <span class="nav-text">文中涉及的测试环境</span></a></li></ol></div>
             
 
           </div>
