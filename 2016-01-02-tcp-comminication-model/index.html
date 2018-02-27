@@ -89,14 +89,14 @@
 <meta property="og:site_name" content="Mathematic Revisit">
 <meta property="og:description" content="TCP/IP网络应用之间通信本质都是进程间通信，网络协议栈的分层结构只是解耦了应用层实现通信的复杂度，应用层实现时不需考虑通信过程中的数据丢失，数据重复和传输时效性等问题，此类问题由传输层进行解决，应用层只关注本层消息及处理逻辑。因此，一般传输层模块都工作在系统内核中，以便于为系统中所有的进程提供同样的服务。操作系统封装了传输层和其他底层协议，并为应用层提供统一访问接口。本文主要说明TCP传输层如">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPAppLayer1.png">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPAppLayer2.png">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPAppLayer3.png">
-<meta property="og:updated_time" content="2016-02-12T00:41:52.000Z">
+<meta property="og:image" content="http://taotao.guru/2016-01-02-tcp-comminication-model/TCPAppLayer1.png">
+<meta property="og:image" content="http://taotao.guru/2016-01-02-tcp-comminication-model/TCPAppLayer2.png">
+<meta property="og:image" content="http://taotao.guru/2016-01-02-tcp-comminication-model/TCPAppLayer3.png">
+<meta property="og:updated_time" content="2018-02-27T01:33:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP&#x2F;IP网络通信模型">
 <meta name="twitter:description" content="TCP/IP网络应用之间通信本质都是进程间通信，网络协议栈的分层结构只是解耦了应用层实现通信的复杂度，应用层实现时不需考虑通信过程中的数据丢失，数据重复和传输时效性等问题，此类问题由传输层进行解决，应用层只关注本层消息及处理逻辑。因此，一般传输层模块都工作在系统内核中，以便于为系统中所有的进程提供同样的服务。操作系统封装了传输层和其他底层协议，并为应用层提供统一访问接口。本文主要说明TCP传输层如">
-<meta name="twitter:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPAppLayer1.png">
+<meta name="twitter:image" content="http://taotao.guru/2016-01-02-tcp-comminication-model/TCPAppLayer1.png">
 
 
 
@@ -344,7 +344,7 @@
 <h2 id="端到端的连接">端到端的连接</h2>
 <p>是指TCP只支持网络中的两个进程之间通信，并且进程通信前需要建立连接。<strong>一般情况下</strong>，两个进程为客户端和服务端的关系。进程收发数据时，只不过是从一个绑定到网络的文件描述符读取和写入数据。对于系统内核而言，建立连接的文件描述符绑定为一个四元组集合 {客户端IP，客户端TCP端口号，服务端IP，服务端TCP端口号}，这个四元组集合可以唯一确定一个TCP连接。</p>
 <div class="figure">
-<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPAppLayer1.png" alt="图1，端到端的连接">
+<img src="/2016-01-02-tcp-comminication-model/TCPAppLayer1.png" alt="图1，端到端的连接">
 <p class="caption">图1，端到端的连接</p>
 </div>
 <h2 id="全双工通信">全双工通信</h2>
@@ -354,7 +354,7 @@
 <h1 id="通信时序">通信时序</h1>
 <p>进程通过调用Socket API函数集合实现网络通信。通信过程大概分为四个阶段，通信准备阶段，TCP连接建立阶段，数据交互阶段，TCP连接释放（断开）阶段。</p>
 <div class="figure">
-<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPAppLayer2.png" alt="图2，Client进程与Server进程的处理流程">
+<img src="/2016-01-02-tcp-comminication-model/TCPAppLayer2.png" alt="图2，Client进程与Server进程的处理流程">
 <p class="caption">图2，Client进程与Server进程的处理流程</p>
 </div>
 <h2 id="通信准备阶段">通信准备阶段</h2>
@@ -368,7 +368,7 @@
 <li><p>服务端调用函数accept()，阻塞等待未知客户端的TCP连接请求，如果accept()成功返回，其返回值为文件描述符connectfd，connectfd绑定的内容为四元组{服务端IP，服务端TCP端口号，客户端IP，客户端临时TCP端口号}。</p></li>
 </ul>
 <div class="figure">
-<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPAppLayer3.png" alt="图3，应用层角度观察连接建立的过程">
+<img src="/2016-01-02-tcp-comminication-model/TCPAppLayer3.png" alt="图3，应用层角度观察连接建立的过程">
 <p class="caption">图3，应用层角度观察连接建立的过程</p>
 </div>
 <h2 id="数据交互阶段">数据交互阶段</h2>
@@ -394,7 +394,6 @@
 <p>Client进程输入和输出为： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">toto@ClientOS:~$ client 10.22.5.3</span><br><span class="line">response,guru</span><br><span class="line">toto@ClientOS:~$ client 10.22.5.3</span><br><span class="line">response,guru</span><br></pre></td></tr></table></figure></p>
 <h1 id="深入研究">深入研究</h1>
 <p>这部分举了简单的例子，来说明使用TCP协议的网络进程通信模型。实际上，健壮可用应用层协议的设计与实现是比较困难的，以下是关于应用层协议设计的规范和书籍。 - RFC2616，“Hypertext Transfer Protocol/1.1”和《HTTP The Definitive Guide》 - RFC3117，“On the Design of Application Protocols” - RFC3205，“On the use of HTTP as a Substrate” - RFC5321，“Simple Mail Transfer Protocol”</p>
-<p>深入TCP这个系列写完之后，我计划找机会以一个专题的形式聊聊应用层协议的设计，并且动手实现一个有实际用途的应用层协议。</p>
 
       
     </div>

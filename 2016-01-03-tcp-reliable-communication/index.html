@@ -89,14 +89,14 @@
 <meta property="og:site_name" content="Mathematic Revisit">
 <meta property="og:description" content="TCP协议为应用层提供可靠的字节流数据传输服务，同时，TCP却构建在IP层之上。在转发数据包时，IP层设备只是简单的将IP包发往下一跳，尽量的向前转发IP包，当IP包在传输过程中被路由器或接收端抛弃时，其携带的用户数据就会永久丢失，IP层对于数据的丢失没有任何补救措施。另外，IP层的数据包的尺寸上限取决于数据链路层的能力，所以IP包尺寸会有大小的限制，也就是说，当应用层的字节流到达IP层时，数据量">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPReliable1v1.png">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPReliable2.png">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPReliable3v1.png">
-<meta property="og:updated_time" content="2016-02-11T12:17:29.000Z">
+<meta property="og:image" content="http://taotao.guru/2016-01-03-tcp-reliable-communication/TCPReliable1.png">
+<meta property="og:image" content="http://taotao.guru/2016-01-03-tcp-reliable-communication/TCPReliable2.png">
+<meta property="og:image" content="http://taotao.guru/2016-01-03-tcp-reliable-communication/TCPReliable3.png">
+<meta property="og:updated_time" content="2018-02-27T01:34:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP协议可靠性">
 <meta name="twitter:description" content="TCP协议为应用层提供可靠的字节流数据传输服务，同时，TCP却构建在IP层之上。在转发数据包时，IP层设备只是简单的将IP包发往下一跳，尽量的向前转发IP包，当IP包在传输过程中被路由器或接收端抛弃时，其携带的用户数据就会永久丢失，IP层对于数据的丢失没有任何补救措施。另外，IP层的数据包的尺寸上限取决于数据链路层的能力，所以IP包尺寸会有大小的限制，也就是说，当应用层的字节流到达IP层时，数据量">
-<meta name="twitter:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPReliable1v1.png">
+<meta name="twitter:image" content="http://taotao.guru/2016-01-03-tcp-reliable-communication/TCPReliable1.png">
 
 
 
@@ -349,13 +349,13 @@
 <h2 id="数据排序">数据排序</h2>
 <p>当一端发送一串字节流数据到达对端，对端如何知道中间的数据有没有丢失或者重复呢？很简单，就是对字节流中的每一个字节流进行编号。当有TCP段在传输过程中丢失，接收端就会根据序号得知丢失的TCP段的Sequence number是多少，同样也可以根据序号丢弃重复的数据。下图为了说明数据的排序，字节编号从1开始，实际使用时，字节的初始编号并非从1开始，而是由系统按照一定算法生成的数值。这个数值称为ISN（Initial Sequence Number）。ISN的取值范围为[0, 2^32-1]，当取值超过2^32-1后，再次回到0开始计数。当TCP层对应用层字节流数据进行分段时，一般不会只在一个分段里放置3个字节，而是根据具体不同的情形进行分段，字节流分段的最大值称为MSS（Max Size Segment）。</p>
 <div class="figure">
-<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPReliable1v1.png" alt="图1，数据排序">
+<img src="/2016-01-03-tcp-reliable-communication/TCPReliable1.png" alt="图1，数据排序">
 <p class="caption">图1，数据排序</p>
 </div>
 <h2 id="数据校验">数据校验</h2>
 <p>当字节流的每一个字节按顺序到达接收端时，由于传输环节中不可预知的意外，可能会导致接收端数据与发送端数据内容不一致。所以TCP层提供了发送前后数据校验处理。当TCP的分段数据发送前，TCP模块将分段数据临时添加上源IP地址，目的IP地址，TCP协议类型，计算TCP分段的长度，将这几个元素追加到即将发送的TCP分段前，组成一个临时数据结构，并针对其计算校验和Checksum，将计算结果添加到TCP分段数据中。如下图，</p>
 <div class="figure">
-<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPReliable2.png" alt="图2，数据校验">
+<img src="/2016-01-03-tcp-reliable-communication/TCPReliable2.png" alt="图2，数据校验">
 <p class="caption">图2，数据校验</p>
 </div>
 <p>当这段数据到达接收端时，接收端再次实行上述的计算，再次得到校验和Checksum，然后与TCP分段中的Checksum对比，如果一致，说明数据可信。</p>
@@ -363,7 +363,7 @@
 <p>对字节流数据进行排序使接收端知道了哪些数据在传输过程中丢失了，但是针对数据丢失，如何进行补救呢？那就需要接收端对接收到的数据进行反馈，TCP协议中，接收端对已经收到数据告知发送端，也就是对已经收到的数据进行确认。当发送端在一定时间内，没有收到接收端针对序号N开始的段数据进行确认时，发送端认为序号N分段数据丢失，发送端重传序号N标记的TCP分段。</p>
 <p>下图中所示，段数据[DATA: 5,6,7]从客户端发送到服务端，服务端收到[DATA: 5,6,7]后，回复[ACK: 8]，表示收到了第7个字节之前的全部数据，并且期待收到第8个字节开始的数据。段数据[DATA: 8,9,10]从客户端发送到服务端，这段数据并没有到达服务端，而是丢失在网络中，客户端在发出数据时开始计时，当一定时间后，客户端没有收到服务端对这段数据的确认应答，客户端重新发送这段数据。段数据[DATA: 11,12,13]从客户端发送到服务端，服务端收到[DATA: 11,12,13]后，回复[ACK: 14]，回复的段数据丢失在网络中，与上一次相同，客户端在发出数据时开始计时，当一定时间后，客户端没有收到服务端对这段数据的确认应答，客户端重新发送这段数据。</p>
 <div class="figure">
-<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPReliable3v1.png" alt="图3，确认机制">
+<img src="/2016-01-03-tcp-reliable-communication/TCPReliable3.png" alt="图3，确认机制">
 <p class="caption">图3，确认机制</p>
 </div>
 <h2 id="流量控制">流量控制</h2>

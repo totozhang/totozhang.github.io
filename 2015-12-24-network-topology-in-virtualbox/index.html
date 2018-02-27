@@ -89,17 +89,17 @@
 <meta property="og:site_name" content="Mathematic Revisit">
 <meta property="og:description" content="VirtualBox作为著名的开源虚拟机软件（以下简称VBox），可以用来根据各种需求搭建调试或测试用网络环境，分析和调测网络数据收发。也可以用来在单台主机中运行多台虚拟机服务器，提高服务器的安全性，降低服务器耦合性。大幅降低成本的同时，将硬件系统性能发挥到极致。有时甚至VBox还被用来逃避追踪，销毁证据。无论涉及上述哪一种用途，都离不开VBox的相对复杂的网络配置。本文主要说明Vbox各网络选项">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/VBox1.jpg">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/VBox2.png">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/VBox3.png">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/VBox4.png">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/VBox5.png">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/VBox6.png">
-<meta property="og:updated_time" content="2016-02-19T00:29:34.000Z">
+<meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox1.jpg">
+<meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox2.png">
+<meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox3.png">
+<meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox4.png">
+<meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox5.png">
+<meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox6.png">
+<meta property="og:updated_time" content="2018-02-27T01:22:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="解析VirtualBox网络配置">
 <meta name="twitter:description" content="VirtualBox作为著名的开源虚拟机软件（以下简称VBox），可以用来根据各种需求搭建调试或测试用网络环境，分析和调测网络数据收发。也可以用来在单台主机中运行多台虚拟机服务器，提高服务器的安全性，降低服务器耦合性。大幅降低成本的同时，将硬件系统性能发挥到极致。有时甚至VBox还被用来逃避追踪，销毁证据。无论涉及上述哪一种用途，都离不开VBox的相对复杂的网络配置。本文主要说明Vbox各网络选项">
-<meta name="twitter:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/VBox1.jpg">
+<meta name="twitter:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox1.jpg">
 
 
 
@@ -343,7 +343,7 @@
       
         <p>VirtualBox作为著名的开源虚拟机软件（以下简称VBox），可以用来根据各种需求搭建调试或测试用网络环境，分析和调测网络数据收发。也可以用来在单台主机中运行多台虚拟机服务器，提高服务器的安全性，降低服务器耦合性。大幅降低成本的同时，将硬件系统性能发挥到极致。有时甚至VBox还被用来逃避追踪，销毁证据。无论涉及上述哪一种用途，都离不开VBox的相对复杂的网络配置。本文主要说明Vbox各网络选项的含义，适用场景，及对应的网络拓扑。<a id="more"></a> 既然涉及到网络，那就应该从VBox为用户提供的硬件资源开始说起。</p>
 <div class="figure">
-<img src="http://7xiqxj.com1.z0.glb.clouddn.com/VBox1.jpg">
+<img src="/2015-12-24-network-topology-in-virtualbox/VBox1.jpg">
 
 </div>
 <h1 id="网络适配器">网络适配器</h1>
@@ -356,28 +356,28 @@
 <h2 id="类型1-not-attached">类型1: Not attached</h2>
 <p>在Not attached情况下，客户机操作系统认为计算机中有网卡存在，但是网卡中没有插入网线。如果在使用过程中需要对客户机进行插拔网线的测试操作，可以选用此选项。实际上在Advanced设置里边，有个选项叫做Cable Connected，更适合做插拔网线的操作。</p>
 <h2 id="类型2-network-address-translation-nat">类型2: Network Address Translation (NAT)</h2>
-<p>NAT选项为VBox默认的网络类型选项。使用NAT选项时，VBox为<strong>每台客户机单独提供</strong>一个NAT路由器，客户机和宿主机拓扑为, <img src="http://7xiqxj.com1.z0.glb.clouddn.com/VBox2.png" alt="NAT选项网络拓扑"></p>
+<p>NAT选项为VBox默认的网络类型选项。使用NAT选项时，VBox为<strong>每台客户机单独提供</strong>一个NAT路由器，客户机和宿主机拓扑为, <img src="/2015-12-24-network-topology-in-virtualbox/VBox2.png" alt="NAT选项网络拓扑"></p>
 <p>VBox为每个客户机提供DHCP服务，这里假设用户选择配置一块网卡，那么客户机默认被分配到的私网IP地址为 10.0.2.15，客户机出口网关为 10.0.2.2。默认网段 10.0.2/24 可以通过如下指令进行更改：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vboxmanage modifyvm &lt;vmname&gt; --natnet1 &quot;192.168/16&quot;</span><br></pre></td></tr></table></figure>
 <p>如果宿主机接入了Internet，那么客户机可以访问Internet，进行网页浏览，邮件收发等。从物理网络看来，来自各个客户机的数据包全部来自VBox进程。同时也说明了NAT网络可嵌套使用，我个人认为这使得IPv6的推进更加艰难。</p>
 <p>此时，如果用户需要从物理网络访问VBox中的某一台客户机，则需要进行Port forwarding配置。</p>
 <h2 id="类型3-nat-network-实验阶段">类型3: NAT Network (实验阶段)</h2>
-<p>http://7xiqxj.com1.z0.glb.clouddn.com/VBox3.png VBox为客户机上设置为NAT Network选项的网络适配器提供<strong>同一NAT路由器</strong>。使用这个选项时，宿主机和客户机类似家用NAT路由器的拓扑关系。 <img src="http://7xiqxj.com1.z0.glb.clouddn.com/VBox3.png" alt="NAT Network模式网络拓扑"></p>
+<p>2015-12-24-network-topology-in-virtualbox/VBox3.png VBox为客户机上设置为NAT Network选项的网络适配器提供<strong>同一NAT路由器</strong>。使用这个选项时，宿主机和客户机类似家用NAT路由器的拓扑关系。 <img src="/2015-12-24-network-topology-in-virtualbox/VBox3.png" alt="NAT Network模式网络拓扑"></p>
 <p>NAT Network跟NAT选项区别在于，在NAT Network中，客户机在同一个私有局域网内，共用同一个出口网关。</p>
 <h2 id="类型4-bridged-networking">类型4: Bridged Networking</h2>
 <p>桥接模式，宿主机和客户机相当于彼此桥接，可以理解为所有主机都在<strong>同一个以太网内</strong>。此时客户机相当于直接接入物理网络的计算机，如果物理网络中有DHCP服务器，客户机也自动获取到IP地址。理论上，在桥接网络中，客户机和VBox本身都可对外提供DHCP服务，但这非常可能与网络中已有的DHCP服务器冲突，所以尽量不要这么做。</p>
 <div class="figure">
-<img src="http://7xiqxj.com1.z0.glb.clouddn.com/VBox4.png" alt="Bridged Networking模式">
+<img src="/2015-12-24-network-topology-in-virtualbox/VBox4.png" alt="Bridged Networking模式">
 <p class="caption">Bridged Networking模式</p>
 </div>
 <p>如果宿主机是Multihomed，桥接的网络适配器需要指定。 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#查看可桥接设备</span><br><span class="line">vboxmanage list bridgedifs</span><br><span class="line">#进行桥接</span><br><span class="line">vboxmanage modifyvm &lt;vmname&gt; --nic&lt;X&gt; bridged --bridgeadapter&lt;X&gt; &lt;bridgedifs&gt;</span><br></pre></td></tr></table></figure></p>
 <p>虽然这种模式下，各网卡适配器都可以做为桥接设备，但是这种模式仅对以太网有效，包括有线和无线以太网(WiFi)。值得注意的是，使用桥接相当于多台计算机同时接入到物理网络中，所以对其可能造成冲击，比如其中一台客户机上运行了DHCP服务。在运维项目中，调试一些云级服务器时，常用这种模式来运行Jump Start服务，同时这种模式也是一些所谓黑客的首选。</p>
 <h2 id="类型5-internal-networking">类型5: Internal Networking</h2>
-<p>在网络应用的开发，调试，或测试过程中，都需要进行网络抓包分析。很多工程师会首选前边介绍的Bridged模式，这种情况下，使用Bridged模式至少带来两个问题，首先，宿主机要接入物理网络，其次，抓包分析过程中，由于物理网络中有其它各类设备，各种无关类型的包在里边穿梭往来，给工程师分析数据带来了不必要的麻烦。这就好像学习驾驶过程中，一般都先在练车场地中练习开车，而不要直接去车辆很多的市区主干道。这种模式中，内部网络与宿主机之间没有任何联系，用户得到的是一个纯净的网络。 <img src="http://7xiqxj.com1.z0.glb.clouddn.com/VBox5.png" alt="Internal Networking模式"></p>
+<p>在网络应用的开发，调试，或测试过程中，都需要进行网络抓包分析。很多工程师会首选前边介绍的Bridged模式，这种情况下，使用Bridged模式至少带来两个问题，首先，宿主机要接入物理网络，其次，抓包分析过程中，由于物理网络中有其它各类设备，各种无关类型的包在里边穿梭往来，给工程师分析数据带来了不必要的麻烦。这就好像学习驾驶过程中，一般都先在练车场地中练习开车，而不要直接去车辆很多的市区主干道。这种模式中，内部网络与宿主机之间没有任何联系，用户得到的是一个纯净的网络。 <img src="/2015-12-24-network-topology-in-virtualbox/VBox5.png" alt="Internal Networking模式"></p>
 <p>在这种模式下，有很多文章说VBox不能提供DHCP服务，这种说法是错误的，可以使用下列指令进行配置。 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 查看现有的Internal Network网络</span><br><span class="line">vboxmanage list intnets</span><br><span class="line"># 修改指定网卡为Internal Networking</span><br><span class="line">vboxmanage modifyvm &lt;vmname&gt; --nic&lt;x&gt; &lt;intnet&gt;</span><br><span class="line"># 为指定的Internal Network网络增加DHCP服务</span><br><span class="line">vboxmanage dhcpserver add --netname &lt;network_name&gt;</span><br><span class="line"># 查看现有的DHCP服务</span><br><span class="line">vboxmanage list dhcpservers</span><br></pre></td></tr></table></figure></p>
 <p>用户也可以自己在其中一台客户机中配置DHCP，或者直接给客户机的网卡设置静态IP地址。另外，Linux系统宿主机下需要使用相同的用户运行VBox，才能建立Internal网络。</p>
 <h2 id="类型6-host-only-networking">类型6: Host-only Networking</h2>
-<p>宿主机调试网络应用程序，难道还非得发到内部网络的某台虚拟机上调试吗？不必，Host-only Networking选项也可以作为一种选择。Host-only模式跟Internal模式基本类似，但是Host-only可以由用户自行建立这个内部网络，并且宿主机自动加入到新建立的内部网络中。在这种模式中，VBox是否提供DHCP服务是可选的。 <img src="http://7xiqxj.com1.z0.glb.clouddn.com/VBox6.png" alt="Host-only模式"></p>
+<p>宿主机调试网络应用程序，难道还非得发到内部网络的某台虚拟机上调试吗？不必，Host-only Networking选项也可以作为一种选择。Host-only模式跟Internal模式基本类似，但是Host-only可以由用户自行建立这个内部网络，并且宿主机自动加入到新建立的内部网络中。在这种模式中，VBox是否提供DHCP服务是可选的。 <img src="/2015-12-24-network-topology-in-virtualbox/VBox6.png" alt="Host-only模式"></p>
 <p>参考配置过程为，</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 将指定客户机的网卡X修改为Host-only模式</span><br><span class="line">vboxmanage modifyvm &lt;vmname&gt; --nic&lt;x&gt; hostonly</span><br><span class="line"># 创建Host-only需要用到的网络</span><br><span class="line">vboxmanage hostonlyif create</span><br><span class="line"># 查看上一步的网络是否创建成功</span><br><span class="line">vboxmanage list hostonlyifs</span><br><span class="line"># 客户机开机，在宿主机上可以看到连接到这个新建网络的接口</span><br><span class="line">ifconfig</span><br><span class="line"># 对新建网络开启VBox提供的DHCP服务</span><br><span class="line">vboxmanage dhcpserver add --netname &lt;network_name&gt;</span><br></pre></td></tr></table></figure>
 <p>DHCP Server开启之后，客户机有时不能正确的获得IP地址，可参考VBox Bug列表项<a href="https://www.VirtualBox.org/ticket/4038" target="_blank" rel="noopener">#4038</a>，尝试关闭所有客户机，在宿主机上杀掉全部关于VBox相关进程，然后重启VBox。</p>

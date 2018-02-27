@@ -89,18 +89,18 @@
 <meta property="og:site_name" content="Mathematic Revisit">
 <meta property="og:description" content="TIME_WAIT状态是TCP状态迁移中令人疑惑的一个状态，粗略看来其存在的必要性令人怀疑。有很多的方案针对TIME_WAIT状态进行优化甚至规避掉TIME_WAIT状态，但需要注意的是，既然Robert Kahn和Vint Cerf在设计TCP时引入了TIME_WAIT状态，既然TIME_WAIT状态已经在应用如此广泛的TCP协议中稳定存在了数十个年头，就必然有其存在的道理，至少进行操作之前，应">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait1.png">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait2.png">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait3.png">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait4.png">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait5.png">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait6.png">
-<meta property="og:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait7.png">
-<meta property="og:updated_time" content="2016-02-21T10:21:59.000Z">
+<meta property="og:image" content="http://taotao.guru/2016-01-31-tcp-timewait-status/TCPTimeWait1.png">
+<meta property="og:image" content="http://taotao.guru/2016-01-31-tcp-timewait-status/TCPTimeWait2.png">
+<meta property="og:image" content="http://taotao.guru/2016-01-31-tcp-timewait-status/TCPTimeWait3.png">
+<meta property="og:image" content="http://taotao.guru/2016-01-31-tcp-timewait-status/TCPTimeWait4.png">
+<meta property="og:image" content="http://taotao.guru/2016-01-31-tcp-timewait-status/TCPTimeWait5.png">
+<meta property="og:image" content="http://taotao.guru/2016-01-31-tcp-timewait-status/TCPTimeWait6.png">
+<meta property="og:image" content="http://taotao.guru/2016-01-31-tcp-timewait-status/TCPTimeWait7.png">
+<meta property="og:updated_time" content="2018-02-27T01:26:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TIME_WAIT状态">
 <meta name="twitter:description" content="TIME_WAIT状态是TCP状态迁移中令人疑惑的一个状态，粗略看来其存在的必要性令人怀疑。有很多的方案针对TIME_WAIT状态进行优化甚至规避掉TIME_WAIT状态，但需要注意的是，既然Robert Kahn和Vint Cerf在设计TCP时引入了TIME_WAIT状态，既然TIME_WAIT状态已经在应用如此广泛的TCP协议中稳定存在了数十个年头，就必然有其存在的道理，至少进行操作之前，应">
-<meta name="twitter:image" content="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait1.png">
+<meta name="twitter:image" content="http://taotao.guru/2016-01-31-tcp-timewait-status/TCPTimeWait1.png">
 
 
 
@@ -348,7 +348,7 @@
 <h1 id="time_wait等待时长">TIME_WAIT等待时长</h1>
 <p>TCP协议中规定，处在TIME_WAIT状态的TCP端，必须等待一定时长（协议建议2MSL），尽量确保TCP远端能够收到最后一次FIN分段的ACK确认。处于TIME_WAIT状态的TCP端，不能重建以同一四元组标识的TCP替身连接。</p>
 <div class="figure">
-<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait1.png" alt="处于TIME_WAIT状态的TCP端口">
+<img src="/2016-01-31-tcp-timewait-status/TCPTimeWait1.png" alt="处于TIME_WAIT状态的TCP端口">
 <p class="caption">处于TIME_WAIT状态的TCP端口</p>
 </div>
 <p>2MSL表示[Maximum Segment Lifetime] × 2，TCP分段在网络中最大生存时长的二倍，大部分Linux发行版使用的MSL为30秒，所以2MSL为1分钟。众所周知，IP包在网络中最大生存期用TTL表示，但是TTL表示的是IP包在网络中的最大跳数，所以MSL跟TTL没有直接关系。Linux内核中，这个数值不是可配置的而是硬编码到内核代码中，设定为1分钟。有些操作系统是可配置的。（<a href="http://lxr.free-electrons.com/source/include/net/tcp.h" target="_blank" rel="noopener">Linux内核代码中定义TIME_WAIT头文件参考链接</a>） <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//Linux内核代码 include/net/tcp.h</span><br><span class="line">#define TCP_TIMEWAIT_LEN (60*HZ) /* how long to wait to destroy TIME-WAIT state, about 60 seconds */</span><br></pre></td></tr></table></figure></p>
@@ -356,7 +356,7 @@
 <p>根据TCP状态迁移图，首先发起FIN断连请求的TCP端，进入TIME_WAIT状态。也就是说无论客户端与服务端，只要首先请求TCP连接切断，就会进入TIME_WAIT状态。而客户端与服务端在通信中扮演着不同的角色，所以进入TIME_WAIT状态后，会对通信产生不同的影响。下面分别讨论各种进入TIME_WAIT状态的场景及其影响。其中场景1～3为客户端主动断连，场景4～5为服务端主动断连。</p>
 <h2 id="客户端主动断连">客户端主动断连</h2>
 <div class="figure">
-<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait2.png" alt="客户端主动断连">
+<img src="/2016-01-31-tcp-timewait-status/TCPTimeWait2.png" alt="客户端主动断连">
 <p class="caption">客户端主动断连</p>
 </div>
 <h3 id="场景1客户端主动断连">场景1，客户端主动断连</h3>
@@ -375,7 +375,7 @@
 <h3 id="场景3绑定本地端口的客户端主动断连后客户端又分别向位于不同主机服务进程发起连接">场景3，绑定本地端口的客户端主动断连后，客户端又分别向位于不同主机服务进程发起连接</h3>
 <p>运行两个服务端进程，第一个运行在主机10.22.5.3，第二个运行在主机10.16.56.2，在主机10.16.56.2连续两次运行客户端进程，期待建立两个TCP连接，第一个TCP连接标识为四元组{10.16.56.2，55555，10.22.5.3，1982}，第二个TCP连接标识为四元组{10.16.56.2，55555，10.16.56.2，1982}，注意下图是<strong>假设两次连接建立成功的情形</strong>，Ubuntu系统实际运行输出结果不同。</p>
 <div class="figure">
-<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait3.png" alt="理想情况下，同端口客户端连接两个处于不同主机服务端">
+<img src="/2016-01-31-tcp-timewait-status/TCPTimeWait3.png" alt="理想情况下，同端口客户端连接两个处于不同主机服务端">
 <p class="caption">理想情况下，同端口客户端连接两个处于不同主机服务端</p>
 </div>
 <p>客户端输出， <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#两次连接</span><br><span class="line">toto@ClientOS:~$ client 55555 10.22.5.3 1982</span><br><span class="line">response,guru</span><br><span class="line">toto@ClientOS:~$ client 55555 10.16.56.2 1982</span><br><span class="line">bind error: Address already in use</span><br><span class="line"></span><br><span class="line">#客户端连接状态为，</span><br><span class="line">toto@ClientOS:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 10.16.56.2:55555         10.22.5.3:1982          TIME_WAIT</span><br></pre></td></tr></table></figure></p>
@@ -383,7 +383,7 @@
 <p>客户端实际输出为， <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#两次连接</span><br><span class="line">toto@ClientOS:~$ client 55555 10.16.56.2 1982</span><br><span class="line">response,ClientOS</span><br><span class="line">toto@ClientOS:~$ client 55555 10.22.5.3 1982</span><br><span class="line">bind error: Address already in use</span><br><span class="line"></span><br><span class="line">#客户端连接状态为，</span><br><span class="line">toto@ClientOS:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 10.16.56.2:55555         10.16.56.2:1982          TIME_WAIT</span><br></pre></td></tr></table></figure></p>
 <h2 id="服务端主动断连">服务端主动断连</h2>
 <div class="figure">
-<img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait4.png" alt="服务端主动断连">
+<img src="/2016-01-31-tcp-timewait-status/TCPTimeWait4.png" alt="服务端主动断连">
 <p class="caption">服务端主动断连</p>
 </div>
 <h3 id="场景4服务端主动断连立即重启服务进程">场景4，服务端主动断连，立即重启服务进程</h3>
@@ -393,14 +393,14 @@
 <p>当服务端主动切断连接时，这个连接在服务端进入TIME_WAIT状态。当大量的客户端并发连接存在时，如果服务端主动切断连接，会导致服务端的TIME_WAIT连接数累积，最终可能导致服务端的资源耗尽。</p>
 <h3 id="场景5服务端主动断连从绑定本地端口客户端进程再次发起连接请求">场景5，服务端主动断连，从绑定本地端口客户端进程再次发起连接请求</h3>
 <p>客户端进程绑定TCP端口55555，使用客户端迅速连接服务端两次，查看两端的输出及状态， <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#客户端输出</span><br><span class="line">toto@ClientOS:~$ client 55555 10.22.5.3 1982</span><br><span class="line">response,guru</span><br><span class="line">toto@ClientOS:~$ client 55555 10.22.5.3 1982</span><br><span class="line">response,guru</span><br><span class="line"></span><br><span class="line">#客户端状态</span><br><span class="line">toto@ClientOS:~$ netstat -ant | grep 1982</span><br><span class="line">～输出为空</span><br><span class="line"></span><br><span class="line">#服务端输出</span><br><span class="line">toto@guru:~$ server </span><br><span class="line">Receive message from client process on 10.16.56.2: request,hostname</span><br><span class="line">Receive message from client process on 10.16.56.2: request,hostname</span><br><span class="line"></span><br><span class="line">#服务端状态</span><br><span class="line">toto@guru:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 0.0.0.0:1982            0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0      0 10.22.5.3:1982          10.16.56.2:55555        TIME_WAIT</span><br></pre></td></tr></table></figure></p>
-<p>观察两端的数据收发情况，注意第2次建立TCP连接时的SYN分段，Wireshark自动将其标记为黑色并写明TCP Port Number Reused。说明服务端的TIME_WAIT状态并没有影响到外部客户端向服务端发起连接请求，TIME_WAIT的端口在这种状态下可以重用。 <img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait5.png" alt="服务端主动断开连接，客户端指定端口的数据交互"></p>
+<p>观察两端的数据收发情况，注意第2次建立TCP连接时的SYN分段，Wireshark自动将其标记为黑色并写明TCP Port Number Reused。说明服务端的TIME_WAIT状态并没有影响到外部客户端向服务端发起连接请求，TIME_WAIT的端口在这种状态下可以重用。 <img src="/2016-01-31-tcp-timewait-status/TCPTimeWait5.png" alt="服务端主动断开连接，客户端指定端口的数据交互"></p>
 <h1 id="time_wait状态存在原因">TIME_WAIT状态存在原因</h1>
 <p>为什么要设定这个2MSL时间限制呢？我们可以假设没有TIME_WAIT的时间限制，来看一下会是怎样的情景呢。</p>
 <h2 id="情景1">情景1</h2>
-<p>假设短时间内允许连续两次建立相同四元组定义的TCP连接，后建立的连接作为先建立连接的替身连接（incarnation）。如果第1次通信过程中的IP数据包在网络中某个节点发生延迟，并且延迟持续到替身建立时才送达对端，由于两次连接建立之间的等待时间间隔不足1MSL，导致了第1次通信中的数据实际在第2次通信过程中才到达接收端，导致莫名其妙的错误产生。 <img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait6.png" alt="两次使用相同四元组的TCP通信"></p>
+<p>假设短时间内允许连续两次建立相同四元组定义的TCP连接，后建立的连接作为先建立连接的替身连接（incarnation）。如果第1次通信过程中的IP数据包在网络中某个节点发生延迟，并且延迟持续到替身建立时才送达对端，由于两次连接建立之间的等待时间间隔不足1MSL，导致了第1次通信中的数据实际在第2次通信过程中才到达接收端，导致莫名其妙的错误产生。 <img src="/2016-01-31-tcp-timewait-status/TCPTimeWait6.png" alt="两次使用相同四元组的TCP通信"></p>
 <p>这种错误是小概率事件，首先，三次握手建立连接时，ISN初始序列号随机生成机制的作用就是为了避免网络延迟数据包被接收端错误接收。其次，客户端实现绑定端口号，操作系统内核为其分配临时端口号(ephemeral port)，临时端口号在每次创建新的连接时都会发生变化，每次建立连接使用的四元组标识是不一样的，所以建立一个替身需要的客户端端口号不会很快被重用。但小概率不等于0概率，尤其在大吞吐量高速网络中。如果事情有变坏的可能，不管这种可能性有多小，它总是会发生。TIME_WAIT的存在，可以确保2MSL时间内，替身连接不会重建，而延迟与网络中的TCP分段在MSL时间内确保已经死亡。</p>
 <h2 id="情景2">情景2</h2>
-<p>假设一个TCP连接在挥手切断的过程中，第3次挥手的FIN段或者第4次的ACK段丢失在网络中，后续会发生什么事情呢？参见下图，数据段“11.ACK”丢失导致服务端认为客户端没有收到“10.FIN”，超时重传“10.FIN”段。重传时，由于客户端没有等待2MSL时长，而提前终止了连接。TCP层在这种情况下，收到数据段会发送RST重置对端。收到RST的一端会向应用层报错，而应用层数据已经正常收发完成，也许对于应用层进程来说这种报错不需要处理，但是如果这个进程性命攸关呢？当客户端处于TIME_WAIT状态，会再次确认延迟到达的FIN。 <img src="http://7xiqxj.com1.z0.glb.clouddn.com/TCPTimeWait7.png" alt="重发最后的FIN段"></p>
+<p>假设一个TCP连接在挥手切断的过程中，第3次挥手的FIN段或者第4次的ACK段丢失在网络中，后续会发生什么事情呢？参见下图，数据段“11.ACK”丢失导致服务端认为客户端没有收到“10.FIN”，超时重传“10.FIN”段。重传时，由于客户端没有等待2MSL时长，而提前终止了连接。TCP层在这种情况下，收到数据段会发送RST重置对端。收到RST的一端会向应用层报错，而应用层数据已经正常收发完成，也许对于应用层进程来说这种报错不需要处理，但是如果这个进程性命攸关呢？当客户端处于TIME_WAIT状态，会再次确认延迟到达的FIN。 <img src="/2016-01-31-tcp-timewait-status/TCPTimeWait7.png" alt="重发最后的FIN段"></p>
 <p>以上两种情况的存在，促使TCP的设计者在TCP的状态中设计了TIME_WAIT状态。</p>
 <h1 id="time_wait状态引发问题对策">TIME_WAIT状态引发问题对策</h1>
 <p>需要针对TIME_WAIT状态引发的问题进行优化之前，需要充分评估风险并进行严格的后期和线上测试。不要过早优化，过早优化是万恶之源。</p>
