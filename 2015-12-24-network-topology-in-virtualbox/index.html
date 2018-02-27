@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="网络测试环境," />
+  <meta name="keywords" content="virtualbox simulator network," />
 
 
 
@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="VirtualBox作为著名的开源虚拟机软件（以下简称VBox），可以用来根据各种需求搭建调试或测试用网络环境，分析和调测网络数据收发。也可以用来在单台主机中运行多台虚拟机服务器，提高服务器的安全性，降低服务器耦合性。大幅降低成本的同时，将硬件系统性能发挥到极致。有时甚至VBox还被用来逃避追踪，销毁证据。无论涉及上述哪一种用途，都离不开VBox的相对复杂的网络配置。本文主要说明Vbox各网络选项">
-<meta name="keywords" content="网络测试环境">
+<meta name="description" content="VirtualBox is a powerful x86 and AMD64/Intel64 virtualization software (VBox for short), which can be used to construct kinds of debug or test network environments, to capture or analyse the packets i">
+<meta name="keywords" content="virtualbox simulator network">
 <meta property="og:type" content="article">
-<meta property="og:title" content="解析VirtualBox网络配置">
+<meta property="og:title" content="VirtualBox Network Configuration">
 <meta property="og:url" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/index.html">
 <meta property="og:site_name" content="Mathematic Revisit">
-<meta property="og:description" content="VirtualBox作为著名的开源虚拟机软件（以下简称VBox），可以用来根据各种需求搭建调试或测试用网络环境，分析和调测网络数据收发。也可以用来在单台主机中运行多台虚拟机服务器，提高服务器的安全性，降低服务器耦合性。大幅降低成本的同时，将硬件系统性能发挥到极致。有时甚至VBox还被用来逃避追踪，销毁证据。无论涉及上述哪一种用途，都离不开VBox的相对复杂的网络配置。本文主要说明Vbox各网络选项">
+<meta property="og:description" content="VirtualBox is a powerful x86 and AMD64/Intel64 virtualization software (VBox for short), which can be used to construct kinds of debug or test network environments, to capture or analyse the packets i">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox1.jpg">
 <meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox2.png">
@@ -95,10 +95,10 @@
 <meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox4.png">
 <meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox5.png">
 <meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox6.png">
-<meta property="og:updated_time" content="2018-02-27T01:22:37.000Z">
+<meta property="og:updated_time" content="2018-02-27T02:12:31.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="解析VirtualBox网络配置">
-<meta name="twitter:description" content="VirtualBox作为著名的开源虚拟机软件（以下简称VBox），可以用来根据各种需求搭建调试或测试用网络环境，分析和调测网络数据收发。也可以用来在单台主机中运行多台虚拟机服务器，提高服务器的安全性，降低服务器耦合性。大幅降低成本的同时，将硬件系统性能发挥到极致。有时甚至VBox还被用来逃避追踪，销毁证据。无论涉及上述哪一种用途，都离不开VBox的相对复杂的网络配置。本文主要说明Vbox各网络选项">
+<meta name="twitter:title" content="VirtualBox Network Configuration">
+<meta name="twitter:description" content="VirtualBox is a powerful x86 and AMD64/Intel64 virtualization software (VBox for short), which can be used to construct kinds of debug or test network environments, to capture or analyse the packets i">
 <meta name="twitter:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox1.jpg">
 
 
@@ -135,7 +135,7 @@
 
 
 
-  <title>解析VirtualBox网络配置 | Mathematic Revisit</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>VirtualBox Network Configuration | Mathematic Revisit</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -269,7 +269,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">解析VirtualBox网络配置</h1>
+          <h1 class="post-title" itemprop="name headline">VirtualBox Network Configuration</h1>
         
 
         <div class="post-meta">
@@ -304,8 +304,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/网络工具/" itemprop="url" rel="index">
-                    <span itemprop="name">网络工具</span>
+                  <a href="/categories/Network-tools/" itemprop="url" rel="index">
+                    <span itemprop="name">Network tools</span>
                   </a>
                 </span>
 
@@ -341,7 +341,7 @@
       
 
       
-        <p>VirtualBox作为著名的开源虚拟机软件（以下简称VBox），可以用来根据各种需求搭建调试或测试用网络环境，分析和调测网络数据收发。也可以用来在单台主机中运行多台虚拟机服务器，提高服务器的安全性，降低服务器耦合性。大幅降低成本的同时，将硬件系统性能发挥到极致。有时甚至VBox还被用来逃避追踪，销毁证据。无论涉及上述哪一种用途，都离不开VBox的相对复杂的网络配置。本文主要说明Vbox各网络选项的含义，适用场景，及对应的网络拓扑。<a id="more"></a> 既然涉及到网络，那就应该从VBox为用户提供的硬件资源开始说起。</p>
+        <p>VirtualBox is a powerful x86 and AMD64/Intel64 virtualization software (VBox for short), which can be used to construct kinds of debug or test network environments, to capture or analyse the packets in the test network. Sometimes, for the sake of security, some virtual hosts run parallely on the same physical platform to isolate each other, decrease complexity. Sometimes, Vbox is used as hack tools to hide from tracking. All these usages are based on the network configuration of Vbox itself. This article is about the network configurations and the topology of each configuration.<a id="more"></a> 既然涉及到网络，那就应该从VBox为用户提供的硬件资源开始说起。</p>
 <div class="figure">
 <img src="/2015-12-24-network-topology-in-virtualbox/VBox1.jpg">
 
@@ -407,7 +407,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/网络测试环境/" rel="tag"># 网络测试环境</a>
+            <a href="/tags/virtualbox-simulator-network/" rel="tag"># virtualbox simulator network</a>
           
         </div>
       
