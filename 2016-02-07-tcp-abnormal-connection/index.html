@@ -81,23 +81,23 @@
 
 
 
-<meta name="description" content="Actually there are two ways to release a TCP connection. The normal way to terminate a TCP connection is for one side to send a FIN segment, and it follows the normal releasing procedure. It’s also ok">
+<meta name="description" content="Actually there are two ways to release a TCP connection. The normal way to terminate a TCP connection is for one side to send a FIN segment, and it follows the normal releasing procedure. It&apos;s also ok">
 <meta name="keywords" content="Network protocal, TCP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Abortion of TCP connection">
 <meta property="og:url" content="http://taotao.guru/2016-02-07-tcp-abnormal-connection/index.html">
 <meta property="og:site_name" content="Mathematic Revisit">
-<meta property="og:description" content="Actually there are two ways to release a TCP connection. The normal way to terminate a TCP connection is for one side to send a FIN segment, and it follows the normal releasing procedure. It’s also ok">
+<meta property="og:description" content="Actually there are two ways to release a TCP connection. The normal way to terminate a TCP connection is for one side to send a FIN segment, and it follows the normal releasing procedure. It&apos;s also ok">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://taotao.guru/2016-02-07-tcp-abnormal-connection/TCPStack1.png">
 <meta property="og:image" content="http://taotao.guru/2016-02-07-tcp-abnormal-connection/TCPAbnormal1.png">
 <meta property="og:image" content="http://taotao.guru/2016-02-07-tcp-abnormal-connection/TCPAbnormal2.png">
 <meta property="og:image" content="http://taotao.guru/2016-02-07-tcp-abnormal-connection/TCPAbnormal3.png">
 <meta property="og:image" content="http://taotao.guru/2016-02-07-tcp-abnormal-connection/TCPAbnormal4.png">
-<meta property="og:updated_time" content="2018-03-09T08:58:31.000Z">
+<meta property="og:updated_time" content="2018-03-09T09:03:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Abortion of TCP connection">
-<meta name="twitter:description" content="Actually there are two ways to release a TCP connection. The normal way to terminate a TCP connection is for one side to send a FIN segment, and it follows the normal releasing procedure. It’s also ok">
+<meta name="twitter:description" content="Actually there are two ways to release a TCP connection. The normal way to terminate a TCP connection is for one side to send a FIN segment, and it follows the normal releasing procedure. It&apos;s also ok">
 <meta name="twitter:image" content="http://taotao.guru/2016-02-07-tcp-abnormal-connection/TCPStack1.png">
 
 
@@ -340,49 +340,64 @@
       
 
       
-        <p>Actually there are two ways to release a TCP connection. The normal way to terminate a TCP connection is for one side to send a FIN segment, and it follows the normal releasing procedure. It’s also ok to send a segment which is called RST segment to release the connection immedietly. The difference between these two ways is that the normal release operation guarantee that the data transferred is reliable, the RST segment cut off the connection imedietly which mostly cause the data loss. Sometimes RST segment is involved into the communication software architecture on purpose, but most of the time when RST is caught in a network, it indicates that something goes wrong in the network. <a id="more"></a></p>
-<h1 id="Experiment-Network-Topology"><a href="#Experiment-Network-Topology" class="headerlink" title="Experiment Network Topology"></a>Experiment Network Topology</h1><div class="table-container">
+        <p>Actually there are two ways to release a TCP connection. The normal way to terminate a TCP connection is for one side to send a FIN segment, and it follows the normal releasing procedure. It's also ok to send a segment which is called RST segment to release the connection immedietly. The difference between these two ways is that the normal release operation guarantee that the data transferred is reliable, the RST segment cut off the connection imedietly which mostly cause the data loss. Sometimes RST segment is involved into the communication software architecture on purpose, but most of the time when RST is caught in a network, it indicates that something goes wrong in the network. <a id="more"></a></p>
+<h1 id="experiment-network-topology">Experiment Network Topology</h1>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Host</th>
 <th>IP addresses</th>
-<th>TCP port number </th>
+<th>TCP port number</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Server</td>
 <td>10.22.5.3</td>
 <td>55555</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Client</td>
 <td>10.16.56.2</td>
 <td>1982</td>
 </tr>
 </tbody>
 </table>
+<div class="figure">
+<img src="/2016-02-07-tcp-abnormal-connection/TCPStack1.png">
+
 </div>
-<p><img src="/2016-02-07-tcp-abnormal-connection/TCPStack1.png" alt=""></p>
-<h1 id="连接未建立，服务端进程未启动"><a href="#连接未建立，服务端进程未启动" class="headerlink" title="连接未建立，服务端进程未启动"></a>连接未建立，服务端进程未启动</h1><p>TCP/IP协议栈软件正常运行，服务端应用层进程未启动时，客户端发起SYN连接请求，到达服务端协议栈的TCP层。由于没有服务进程监听服务端口，应用层数据即使发送过来也无法实现应用层的可靠传输，TCP层只能拒绝来自客户端的连接请求，此时TCP使用RST分段回复SYN分段，客户端收到RST分段后，向应用层提示“connect error: connection refused”。RST分段除了将标志位部分的RST置位以外，还将Sequence number设置为0，Acknowledge number设置为SYN分段的Sequence number加1。</p>
-<p><img src="/2016-02-07-tcp-abnormal-connection/TCPAbnormal1.png" alt=""></p>
-<h1 id="使用Socket发送一个RST段"><a href="#使用Socket发送一个RST段" class="headerlink" title="使用Socket发送一个RST段"></a>使用Socket发送一个RST段</h1><p>除了以上的情况产生RST分段，也可以使用Socket选项SO_LINGER制造一个RST分段，在客户端增加以下的参数设置，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Connect(sockfd, (SA *) &amp;servaddr, sizeof(servaddr));</span><br><span class="line"></span><br><span class="line">struct linger ling;</span><br><span class="line">ling.l_onoff = 1;</span><br><span class="line">ling.l_linger = 0;</span><br><span class="line">Setsockopt(sockfd, SOL_SOCKET, SO_LINGER, &amp;ling, sizeof(ling));</span><br><span class="line"></span><br><span class="line">Close(sockfd);</span><br></pre></td></tr></table></figure></p>
-<p>在127.0.0.1上使用Wireshark抓包的结果，三次握手建立后，客户端立即发出了RST段。<br><img src="/2016-02-07-tcp-abnormal-connection/TCPAbnormal2.png" alt=""></p>
-<h1 id="连接未建立，服务端主机未启动"><a href="#连接未建立，服务端主机未启动" class="headerlink" title="连接未建立，服务端主机未启动"></a>连接未建立，服务端主机未启动</h1><p>与服务进程未启动不同，服务端主机关机时，TCP/IP协议栈没有工作，所以客户端发出SYN连接请求后，SYN连接请求的IP包会迷失在网络中，SYN不会被对端确认，所以客户端会在一定时间后超时重传SYN，并再次设定定时器，并且延时时长为上一次的两倍，当重复这个过程一定次数后，客户端停止尝试建立连接并向应用层报告超时错误。以主机10.22.5.3作为客户端向服务端主机10.16.56.2建立连接为例，使用Wireshark观察SYN超时重发的情形。最终客户端Connect()函数输出连接超时错误，connect error: Connection timed out。</p>
-<p><img src="/2016-02-07-tcp-abnormal-connection/TCPAbnormal3.png" alt=""></p>
-<p>注意SYN重传的时间间隔分别为1s，2s，4s，8s，16s，32s，以及最后一次直接导致应用层报错的64s，一共重传了6次。可以修改以下参数设定重传次数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">toto@guru:~$ sysctl net.ipv4.tcp_syn_retries </span><br><span class="line">net.ipv4.tcp_syn_retries = 6</span><br></pre></td></tr></table></figure></p>
-<h1 id="客户端进程崩溃"><a href="#客户端进程崩溃" class="headerlink" title="客户端进程崩溃"></a>客户端进程崩溃</h1><p>客户端进程退出的时机，决定了TCP连接将会出现的一场情况。例如，当客户端在SYN_SENT状态退出时，客户端只发送SYN便退出，服务端回复SYN+ACK没有响应，服务端会进行延时重试，如果客户端故意这么做，就相当与SYN Flood攻击行为。如果客户端在ESTABLISHED状态退出，客户端进程Socket文件描述符会自动释放，生成FIN分段，发起正常的断连流程。所以进程崩溃造成的后果需要具体的分场合进行分析。</p>
-<h1 id="连接建立后，服务端进程崩溃"><a href="#连接建立后，服务端进程崩溃" class="headerlink" title="连接建立后，服务端进程崩溃"></a>连接建立后，服务端进程崩溃</h1><p>服务进程被杀掉，会自动释放其占用的全部文件描述符，所以服务端向客户端发送FIN段，客户端回复ACK确认，从服务端到客户端方向的通信管道单向关闭，查看服务端状态处于FIN_WAIT2状态，服务端等待着客户端的关闭请求FIN。查看客户端状态处于CLOSE_WAIT状态，客户端等待本侧的应用层通知TCP层应用层数据发送结束。从客户端到服务端方向的通信管道没有关闭，这种状态称为<strong>TCP连接半关闭</strong>。</p>
+<h1 id="连接未建立服务端进程未启动">连接未建立，服务端进程未启动</h1>
+<p>TCP/IP协议栈软件正常运行，服务端应用层进程未启动时，客户端发起SYN连接请求，到达服务端协议栈的TCP层。由于没有服务进程监听服务端口，应用层数据即使发送过来也无法实现应用层的可靠传输，TCP层只能拒绝来自客户端的连接请求，此时TCP使用RST分段回复SYN分段，客户端收到RST分段后，向应用层提示“connect error: connection refused”。RST分段除了将标志位部分的RST置位以外，还将Sequence number设置为0，Acknowledge number设置为SYN分段的Sequence number加1。</p>
+<div class="figure">
+<img src="/2016-02-07-tcp-abnormal-connection/TCPAbnormal1.png">
+
+</div>
+<h1 id="使用socket发送一个rst段">使用Socket发送一个RST段</h1>
+<p>除了以上的情况产生RST分段，也可以使用Socket选项SO_LINGER制造一个RST分段，在客户端增加以下的参数设置， <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Connect(sockfd, (SA *) &amp;servaddr, sizeof(servaddr));</span><br><span class="line"></span><br><span class="line">struct linger ling;</span><br><span class="line">ling.l_onoff = 1;</span><br><span class="line">ling.l_linger = 0;</span><br><span class="line">Setsockopt(sockfd, SOL_SOCKET, SO_LINGER, &amp;ling, sizeof(ling));</span><br><span class="line"></span><br><span class="line">Close(sockfd);</span><br></pre></td></tr></table></figure></p>
+<p>在127.0.0.1上使用Wireshark抓包的结果，三次握手建立后，客户端立即发出了RST段。 <img src="/2016-02-07-tcp-abnormal-connection/TCPAbnormal2.png"></p>
+<h1 id="连接未建立服务端主机未启动">连接未建立，服务端主机未启动</h1>
+<p>与服务进程未启动不同，服务端主机关机时，TCP/IP协议栈没有工作，所以客户端发出SYN连接请求后，SYN连接请求的IP包会迷失在网络中，SYN不会被对端确认，所以客户端会在一定时间后超时重传SYN，并再次设定定时器，并且延时时长为上一次的两倍，当重复这个过程一定次数后，客户端停止尝试建立连接并向应用层报告超时错误。以主机10.22.5.3作为客户端向服务端主机10.16.56.2建立连接为例，使用Wireshark观察SYN超时重发的情形。最终客户端Connect()函数输出连接超时错误，connect error: Connection timed out。</p>
+<div class="figure">
+<img src="/2016-02-07-tcp-abnormal-connection/TCPAbnormal3.png">
+
+</div>
+<p>注意SYN重传的时间间隔分别为1s，2s，4s，8s，16s，32s，以及最后一次直接导致应用层报错的64s，一共重传了6次。可以修改以下参数设定重传次数。 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">toto@guru:~$ sysctl net.ipv4.tcp_syn_retries </span><br><span class="line">net.ipv4.tcp_syn_retries = 6</span><br></pre></td></tr></table></figure></p>
+<h1 id="客户端进程崩溃">客户端进程崩溃</h1>
+<p>客户端进程退出的时机，决定了TCP连接将会出现的一场情况。例如，当客户端在SYN_SENT状态退出时，客户端只发送SYN便退出，服务端回复SYN+ACK没有响应，服务端会进行延时重试，如果客户端故意这么做，就相当与SYN Flood攻击行为。如果客户端在ESTABLISHED状态退出，客户端进程Socket文件描述符会自动释放，生成FIN分段，发起正常的断连流程。所以进程崩溃造成的后果需要具体的分场合进行分析。</p>
+<h1 id="连接建立后服务端进程崩溃">连接建立后，服务端进程崩溃</h1>
+<p>服务进程被杀掉，会自动释放其占用的全部文件描述符，所以服务端向客户端发送FIN段，客户端回复ACK确认，从服务端到客户端方向的通信管道单向关闭，查看服务端状态处于FIN_WAIT2状态，服务端等待着客户端的关闭请求FIN。查看客户端状态处于CLOSE_WAIT状态，客户端等待本侧的应用层通知TCP层应用层数据发送结束。从客户端到服务端方向的通信管道没有关闭，这种状态称为<strong>TCP连接半关闭</strong>。</p>
 <p>客户端TCP层等待应用层发出EOF，根据EOF，客户端TCP层生成FIN段，如果客户端应用层不发送EOF到TCP层，客户端会一直处于CLOSE_WAIT状态，与此同时服务端的FIN_WAIT2状态在等待一段时间，超时后迁移到CLOSED状态，</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//服务端TCP端口状态</span><br><span class="line">toto@guru:~$ netstat -ant | grep 1982    </span><br><span class="line">tcp        0      0 10.22.5.3:1982          10.16.56.2:33383        FIN_WAIT2</span><br><span class="line"></span><br><span class="line">//客户端TCP端口状态</span><br><span class="line">toto@client:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 10.16.56.2:33383        10.22.5.3:1982          CLOSE_WAIT</span><br></pre></td></tr></table></figure>
 <p>服务端处于FIN_WAIT2状态时，若客户端调用Write函数发送请求消息到达服务端，服务端此时期待收到的是FIN请求，实际收到的却是请求消息数据，所以服务端直接回复RST段给客户端，关闭连接。</p>
 <p>FIN_WAIT2状态超时时长设置，</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">toto@guru:~$ sysctl net.ipv4.tcp_fin_timeout</span><br><span class="line">net.ipv4.tcp_fin_timeout = 60</span><br></pre></td></tr></table></figure>
-<p>在FIN_WAIT2状态超时结束后，查看服务端和客户端TCP端口状态。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//服务端TCP端口状态</span><br><span class="line">toto@guru:~$ netstat -ant | grep 1982    </span><br><span class="line"></span><br><span class="line">//客户端TCP端口状态</span><br><span class="line">toto@client:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 10.16.56.2:33383        10.22.5.3:1982          CLOSE_WAIT</span><br></pre></td></tr></table></figure></p>
-<h1 id="连接未建立，出口路由器宕机"><a href="#连接未建立，出口路由器宕机" class="headerlink" title="连接未建立，出口路由器宕机"></a>连接未建立，出口路由器宕机</h1><p>只限于本测试拓扑中的情形，其它情形需要具体分析。如果客户端主机的ARP缓存列表还在，TCP连接请求仍然重传多次，最终输出连接超时错误“connect error: Connection timed out”。如果客户端主机ARP缓存列表已经清空的情况下，函数Connect会很快返回并提示“connect error: No route to host”。</p>
-<h1 id="连接建立后，出口路由器宕机"><a href="#连接建立后，出口路由器宕机" class="headerlink" title="连接建立后，出口路由器宕机"></a>连接建立后，出口路由器宕机</h1><p>运行服务端进程，客户端单步运行至Connect函数返回后，完成三次握手。查看两端状态都是ESTABLISHED状态。</p>
-<p>此时，路由器关机或路由器物理接口关闭，模拟网络层不通。查看两端状态均保持不变，两端都认为连接已经正常建立。客户端继续运行至Write函数发送请求消息，注意Write函数不阻塞，把应用层数据交给TCP层立即返回，继续到Readline函数阻塞等待服务端的应答消息。由于网络层不通，TCP层发生多次重传。如果路由器不恢复，请求消息永远无法发送到服务端，所以应答消息也将永远无法被收到。从客户端抓包可以看到这一点。<br><img src="/2016-02-07-tcp-abnormal-connection/TCPAbnormal4.png" alt=""></p>
+<p>在FIN_WAIT2状态超时结束后，查看服务端和客户端TCP端口状态。 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//服务端TCP端口状态</span><br><span class="line">toto@guru:~$ netstat -ant | grep 1982    </span><br><span class="line"></span><br><span class="line">//客户端TCP端口状态</span><br><span class="line">toto@client:~$ netstat -ant | grep 1982</span><br><span class="line">tcp        0      0 10.16.56.2:33383        10.22.5.3:1982          CLOSE_WAIT</span><br></pre></td></tr></table></figure></p>
+<h1 id="连接未建立出口路由器宕机">连接未建立，出口路由器宕机</h1>
+<p>只限于本测试拓扑中的情形，其它情形需要具体分析。如果客户端主机的ARP缓存列表还在，TCP连接请求仍然重传多次，最终输出连接超时错误“connect error: Connection timed out”。如果客户端主机ARP缓存列表已经清空的情况下，函数Connect会很快返回并提示“connect error: No route to host”。</p>
+<h1 id="连接建立后出口路由器宕机">连接建立后，出口路由器宕机</h1>
+<p>运行服务端进程，客户端单步运行至Connect函数返回后，完成三次握手。查看两端状态都是ESTABLISHED状态。</p>
+<p>此时，路由器关机或路由器物理接口关闭，模拟网络层不通。查看两端状态均保持不变，两端都认为连接已经正常建立。客户端继续运行至Write函数发送请求消息，注意Write函数不阻塞，把应用层数据交给TCP层立即返回，继续到Readline函数阻塞等待服务端的应答消息。由于网络层不通，TCP层发生多次重传。如果路由器不恢复，请求消息永远无法发送到服务端，所以应答消息也将永远无法被收到。从客户端抓包可以看到这一点。 <img src="/2016-02-07-tcp-abnormal-connection/TCPAbnormal4.png"></p>
 <p>如果此时有一端关机，另一端将永远保留这个TCP连接，与其相关的资源无法释放，这种状态称为<strong>TCP连接半打开</strong>。假设客户端进程总是在这种情况下终止，服务端系统资源将无限被消耗。为了解决这种场景所带来的问题，TCP的实现引入了Keepalive机制，周期性地探测非活动状态TCP连接是否为半打开。关于是否开启Keepalive功能存在着很多争议，具体参考<a href="http://tools.ietf.org/html/rfc1122" target="_blank" rel="noopener">链接1</a>，<a href="http://ltxfaq.custhelp.com/app/answers/detail/a_id/1512/~/tcp-keepalives-explained" target="_blank" rel="noopener">链接2</a>，<a href="http://www.tldp.org/HOWTO/TCP-Keepalive-HOWTO/overview.html" target="_blank" rel="noopener">链接3</a>的详细说明。另外也可以在应用层引入心跳机制才避免这种情况产生。</p>
 <p>本文只是列举了少量TCP连接异常情况，TCP异常连接不止于此，需要根据具体情况进行具体分析。</p>
 
@@ -530,7 +545,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
@@ -586,7 +601,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Experiment-Network-Topology"><span class="nav-number">1.</span> <span class="nav-text">Experiment Network Topology</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#连接未建立，服务端进程未启动"><span class="nav-number">2.</span> <span class="nav-text">连接未建立，服务端进程未启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用Socket发送一个RST段"><span class="nav-number">3.</span> <span class="nav-text">使用Socket发送一个RST段</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#连接未建立，服务端主机未启动"><span class="nav-number">4.</span> <span class="nav-text">连接未建立，服务端主机未启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#客户端进程崩溃"><span class="nav-number">5.</span> <span class="nav-text">客户端进程崩溃</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#连接建立后，服务端进程崩溃"><span class="nav-number">6.</span> <span class="nav-text">连接建立后，服务端进程崩溃</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#连接未建立，出口路由器宕机"><span class="nav-number">7.</span> <span class="nav-text">连接未建立，出口路由器宕机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#连接建立后，出口路由器宕机"><span class="nav-number">8.</span> <span class="nav-text">连接建立后，出口路由器宕机</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#experiment-network-topology"><span class="nav-number">1.</span> <span class="nav-text">Experiment Network Topology</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#连接未建立服务端进程未启动"><span class="nav-number">2.</span> <span class="nav-text">连接未建立，服务端进程未启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用socket发送一个rst段"><span class="nav-number">3.</span> <span class="nav-text">使用Socket发送一个RST段</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#连接未建立服务端主机未启动"><span class="nav-number">4.</span> <span class="nav-text">连接未建立，服务端主机未启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#客户端进程崩溃"><span class="nav-number">5.</span> <span class="nav-text">客户端进程崩溃</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#连接建立后服务端进程崩溃"><span class="nav-number">6.</span> <span class="nav-text">连接建立后，服务端进程崩溃</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#连接未建立出口路由器宕机"><span class="nav-number">7.</span> <span class="nav-text">连接未建立，出口路由器宕机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#连接建立后出口路由器宕机"><span class="nav-number">8.</span> <span class="nav-text">连接建立后，出口路由器宕机</span></a></li></ol></div>
             
 
           </div>
