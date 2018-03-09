@@ -19,10 +19,10 @@
         <y:ProxyAutoBoundsNode>
           <y:Realizers active="0">
             <y:GenericGroupNode configuration="com.yworks.bpmn.Artifact.withShadow">
-              <y:Geometry height="311.7705767506835" width="820.0" x="-3.46331947513022" y="28.268588689767824"/>
+              <y:Geometry height="311.7705767506835" width="831.0390625" x="-3.46331947513022" y="28.268588689767824"/>
               <y:Fill color="#FFFFFFE6" transparent="false"/>
               <y:BorderStyle color="#000000" type="dashed_dotted" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" modelName="custom" textColor="#000000" visible="true" width="4.0" x="408.0" y="303.7705767506835">
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" modelName="custom" textColor="#000000" visible="true" width="4.0" x="413.51953125" y="303.7705767506835">
                 <y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
@@ -60,7 +60,7 @@
               <y:Geometry height="9.0" width="184.0" x="617.0733610497396" y="311.47275919045137"/>
               <y:Fill hasColor="false" transparent="false"/>
               <y:BorderStyle hasColor="false" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="node_height" fontFamily="DejaVu Sans" fontSize="12" fontStyle="italic" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" modelName="custom" textColor="#000000" visible="true" width="180.02734375" x="1.986328125" y="-4.56640625">Original by http://taotao.guru<y:LabelModel>
+              <y:NodeLabel alignment="center" autoSizePolicy="node_height" fontFamily="DejaVu Sans" fontSize="12" fontStyle="italic" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" modelName="custom" textColor="#000000" visible="true" width="206.078125" x="-11.0390625" y="-4.56640625">Original by toto.zhang@gmail.com<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
                 <y:ModelParameter>
