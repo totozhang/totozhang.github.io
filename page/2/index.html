@@ -244,12 +244,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://taotao.guru/2016-01-01-tcp-data-encapsulation/">
+    <link itemprop="mainEntityOfPage" href="http://taotao.guru/2016-01-11-tcp-self-connection/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="toto">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="image" content="/images/logo.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -263,7 +263,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016-01-01-tcp-data-encapsulation/" itemprop="url">TCP/IP网络数据封装</a></h1>
+                <a class="post-title-link" href="/2016-01-11-tcp-self-connection/" itemprop="url">TCP自连接问题</a></h1>
         
 
         <div class="post-meta">
@@ -275,8 +275,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-01T20:38:55+08:00">
-                2016-01-01
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-11T23:29:55+08:00">
+                2016-01-11
               </time>
             
 
@@ -336,10 +336,10 @@
 
       
         
-          <p>计算机进行网络通信时，实质是跨操作系统的进程间通信。同一个操作系统内部进程间通信时，进程通过管道，FIFO，共享内存等交互数据<a href="https://www.ibm.com/developerworks/cn/linux/l-ipc/" target="_blank" rel="noopener">{1}</a>，数据本身并不会发生变化。网络通信时，由于跨越了操作系统，进程需要借助操作系统提供的网络层和传输层模块帮助定位远端进程。本篇简单说明进程间通信的数据（应用层数据）跨越TCP/IP网络协议栈进行交互时，数据封装，发送与解封装。</p>
+          <p>TCP连接可以由两端同时向对方发起的SYN分段建立，同时建立的连接发生必须满足一个条件，两个TCP端发出SYN连接请求后，收到的仍然是一个SYN连接请求，而收到的SYN，恰好来自发出SYN去请求连接的一端。那么会不会有这样一种情况呢？一个TCP端发出一个SYN分段给自己，这个SYN分段所请求的连接正是这个TCP端自身，这样就符合了条件“发出SYN请求的同时收到了SYN请求，而收到的SYN恰好来自请求连接的一端”。这种情况是实际存在的，被称为TCP自连接。自连接的存在经常引发一些莫名其妙的问题和难以复现的故障和软件BUG。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016-01-01-tcp-data-encapsulation/#more" rel="contents">
+            <a class="btn" href="/2016-01-11-tcp-self-connection/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -390,12 +390,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/">
+    <link itemprop="mainEntityOfPage" href="http://taotao.guru/2016-01-10-tcp-simutaneous-connection/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="toto">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="image" content="/images/logo.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -409,7 +409,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2015-12-24-network-topology-in-virtualbox/" itemprop="url">VirtualBox Network Configuration</a></h1>
+                <a class="post-title-link" href="/2016-01-10-tcp-simutaneous-connection/" itemprop="url">TCP连接同时建立与关闭</a></h1>
         
 
         <div class="post-meta">
@@ -421,8 +421,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-12-24T19:56:48+08:00">
-                2015-12-24
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-10T23:29:55+08:00">
+                2016-01-10
               </time>
             
 
@@ -444,8 +444,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Network-tools/" itemprop="url" rel="index">
-                    <span itemprop="name">Network tools</span>
+                  <a href="/categories/网络协议/" itemprop="url" rel="index">
+                    <span itemprop="name">网络协议</span>
                   </a>
                 </span>
 
@@ -482,10 +482,448 @@
 
       
         
-          <p>VirtualBox is a powerful x86 and AMD64/Intel64 virtualization software(VBox for short), which can be used to construct kinds of debug or test network environments, to capture or analyse the packets in the test network. Sometimes, for the sake of security, some virtual hosts run parallely on the same physical platform to isolate each other, decrease complexity. Sometimes, Vbox is used as hack tools to hide from tracking. All these usages are based on the network configuration of Vbox itself. This article is about the network configurations and the topology of each configuration.</p>
+          <p>当通信行为发生时，除了通信一端发起通信请求的，另一端被动等待情况外，还有可能存在通信两端同时具有通信意向，两端同时发起连接对端的请求的情形。当通信行为结束时，也存在同样的情况，两端同时没有数据发送给对方，而在同一时刻结束通信。TCP协议支持这种通信连接的同时建立与关闭。连接同时建立和同时关闭在什么情况下可以发生？建立与关闭的时序与正常的通信有哪些不同？本文将对同时建立和同时断开的TCP连接进行模拟重现并详细分析分段的交互过程。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2015-12-24-network-topology-in-virtualbox/#more" rel="contents">
+            <a class="btn" href="/2016-01-10-tcp-simutaneous-connection/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://taotao.guru/2016-01-04-tcp-connection-management/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="toto">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/logo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mathematic Revisit">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016-01-04-tcp-connection-management/" itemprop="url">TCP协议连接管理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-04T10:29:55+08:00">
+                2016-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络协议/" itemprop="url" rel="index">
+                    <span itemprop="name">网络协议</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>任何通信发生时，至少存在一个参与通信的对象发起通信请求，以判断对端是否可以进行通信。在TCP协议中同样如此，这个发起请求的过程称为同步（Synchronization），由于TCP确保为应用层提供可靠的字节流数据传输，会对所有应用层通信数据进行字节编号，这个编号的第一个数值ISN（Initial Sequence Number）并不是从0或1开始的数值，而是由特定算法生成，ISN的取值范围为[0, 2^32-1]。TCP通信的两端需要互换彼此的ISN数值，从而控制字节流的传输。互换ISN的过程称为TCP建立连接的过程，也被称为建立虚连接或虚电路的过程。当通信结束时，两端也需要有特定的交互过程释放连接。建立连接为什么需要互换ISN？为什么ISN不是从0或1开始？全双工的TCP通信怎么控制断开连接的过程？这部分主要说说TCP连接管理的内容。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016-01-04-tcp-connection-management/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://taotao.guru/2016-01-03-tcp-reliable-communication/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="toto">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/logo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mathematic Revisit">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016-01-03-tcp-reliable-communication/" itemprop="url">TCP协议可靠性</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-04T10:29:55+08:00">
+                2016-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络协议/" itemprop="url" rel="index">
+                    <span itemprop="name">网络协议</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>TCP协议为应用层提供可靠的字节流数据传输服务，同时，TCP却构建在IP层之上。在转发数据包时，IP层设备只是简单的将IP包发往下一跳，尽量的向前转发IP包，当IP包在传输过程中被路由器或接收端抛弃时，其携带的用户数据就会永久丢失，IP层对于数据的丢失没有任何补救措施。另外，IP层的数据包的尺寸上限取决于数据链路层的能力，所以IP包尺寸会有大小的限制，也就是说，当应用层的字节流到达IP层时，数据量超过一定数值时，会被分成多个IP数据封包传输，每一个IP封包到达对端的顺序不一定会按顺序到达，可能会出现重复的IP封包。构建在不可信赖的IP网络之上的TCP协议是如何确保应用层的可靠字节流的传输呢？</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016-01-03-tcp-reliable-communication/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://taotao.guru/2016-01-02-tcp-comminication-model/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="toto">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/logo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mathematic Revisit">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016-01-02-tcp-comminication-model/" itemprop="url">TCP/IP网络通信模型</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-02T21:38:55+08:00">
+                2016-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络协议/" itemprop="url" rel="index">
+                    <span itemprop="name">网络协议</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>TCP/IP网络应用之间通信本质都是进程间通信，网络协议栈的分层结构只是解耦了应用层实现通信的复杂度，应用层实现时不需考虑通信过程中的数据丢失，数据重复和传输时效性等问题，此类问题由传输层进行解决，应用层只关注本层消息及处理逻辑。因此，一般传输层模块都工作在系统内核中，以便于为系统中所有的进程提供同样的服务。操作系统封装了传输层和其他底层协议，并为应用层提供统一访问接口。本文主要说明TCP传输层如何为应用层提供抽象服务，并尝试实现一个基于TCP的极简应用层协议，从应用层角度观察TCP协议。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016-01-02-tcp-comminication-model/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -527,7 +965,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -563,7 +1001,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/images/avatar.jpg"
+                src="/images/logo.jpg"
                 alt="toto" />
             
               <p class="site-author-name" itemprop="name">toto</p>
