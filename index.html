@@ -409,7 +409,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016-02-07-tcp-abnormal-connection/" itemprop="url">TCP连接异常终止</a></h1>
+                <a class="post-title-link" href="/2016-02-07-tcp-abnormal-connection/" itemprop="url">Abortion of TCP connection</a></h1>
         
 
         <div class="post-meta">
@@ -444,8 +444,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/网络协议/" itemprop="url" rel="index">
-                    <span itemprop="name">网络协议</span>
+                  <a href="/categories/Network-Protocol/" itemprop="url" rel="index">
+                    <span itemprop="name">Network Protocol</span>
                   </a>
                 </span>
 
@@ -482,7 +482,7 @@
 
       
         
-          <p>终止TCP连接有两种方法，正常流程使用FIN分段四次挥手正常终止一个TCP连接，也可以使用RST分段迅速重置一个TCP连接。前者由TCP层确保应用层数据可靠传输，后者导致TCP层数据结构立即释放，切断连接，而且不确保应用层数据传输完成。除了通信架构设计中故意引入了RST的情况外，当网络中发现了RST时，说明网络中可能存在问题。RST分段究竟会产生于何种情形呢？另外还有哪些导致TCP通信异常终止的情形呢？RST分段在这些情况下的发送时机是什么呢？</p>
+          <p>Actually there are two ways to release a TCP connection. The normal way to terminate a TCP connection is for one side to send a FIN segment, and it follows the normal releasing procedure. It’s also ok to send a segment which is called RST segment to release the connection immedietly. The difference between these two ways is that the normal release operation guarantee that the data transferred is reliable, the RST segment cut off the connection imedietly which mostly cause the data loss. Sometimes RST segment is involved into the communication software architecture on purpose, but most of the time when RST is caught in a network, it indicates that something goes wrong in the network.</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016-02-07-tcp-abnormal-connection/#more" rel="contents">
@@ -1027,7 +1027,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>
@@ -1038,7 +1038,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
