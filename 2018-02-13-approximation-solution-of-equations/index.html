@@ -81,19 +81,19 @@
 
 
 
-<meta name="description" content="Consider the equation $x^3-3x-5=0$, we can get the exact solution just as the quadratic equations.  But it’s not easy to remember the formula. And for some equations like, $x-cosx=0$,  there’s even no">
+<meta name="description" content="Consider the equation \(x^3-3x-5=0\), we can get the exact solution just as the quadratic equations. But it&apos;s not easy to remember the formula. And for some equations like, \(x-cosx=0\), there&apos;s even">
 <meta name="keywords" content="Calculus">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Approximation solutions of equation">
 <meta property="og:url" content="http://taotao.guru/2018-02-13-approximation-solution-of-equations/index.html">
 <meta property="og:site_name" content="Mathematic Revisit">
-<meta property="og:description" content="Consider the equation $x^3-3x-5=0$, we can get the exact solution just as the quadratic equations.  But it’s not easy to remember the formula. And for some equations like, $x-cosx=0$,  there’s even no">
+<meta property="og:description" content="Consider the equation \(x^3-3x-5=0\), we can get the exact solution just as the quadratic equations. But it&apos;s not easy to remember the formula. And for some equations like, \(x-cosx=0\), there&apos;s even">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://taotao.guru/2018-02-13-approximation-solution-of-equations/1.png">
 <meta property="og:updated_time" content="2018-02-26T15:20:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Approximation solutions of equation">
-<meta name="twitter:description" content="Consider the equation $x^3-3x-5=0$, we can get the exact solution just as the quadratic equations.  But it’s not easy to remember the formula. And for some equations like, $x-cosx=0$,  there’s even no">
+<meta name="twitter:description" content="Consider the equation \(x^3-3x-5=0\), we can get the exact solution just as the quadratic equations. But it&apos;s not easy to remember the formula. And for some equations like, \(x-cosx=0\), there&apos;s even">
 <meta name="twitter:image" content="http://taotao.guru/2018-02-13-approximation-solution-of-equations/1.png">
 
 
@@ -336,57 +336,63 @@
       
 
       
-        <p>Consider the equation $x^3-3x-5=0$, we can get the exact solution just as the quadratic equations.  But it’s not easy to remember the formula. And for some equations like, $x-cosx=0$,  there’s even no way to use. As an engineer, sometimes, we just require a acceptable numerical solution that is accurate to a reasonable number of decimal places. </p>
+        <p>Consider the equation <span class="math inline">\(x^3-3x-5=0\)</span>, we can get the exact solution just as the quadratic equations. But it's not easy to remember the formula. And for some equations like, <span class="math inline">\(x-cosx=0\)</span>, there's even no way to use. As an engineer, sometimes, we just require a acceptable numerical solution that is accurate to a reasonable number of decimal places.</p>
 <a id="more"></a>
-<h2 id="Plot-the-function"><a href="#Plot-the-function" class="headerlink" title="Plot the function"></a>Plot the function</h2><p>Sketch the function $f(x)=x^3-3x-5$ ,  the derivative of function $f(x)$ is $f’(x)=3x^2-3$,   </p>
-<div class="table-container">
+<h2 id="plot-the-function">Plot the function</h2>
+<p>Sketch the function <span class="math inline">\(f(x)=x^3-3x-5\)</span> , the derivative of function <span class="math inline">\(f(x)\)</span> is <span class="math inline">\(f&#39;(x)=3x^2-3\)</span>,</p>
 <table>
 <thead>
-<tr>
-<th style="text-align:center">x</th>
-<th style="text-align:center">f(x) or f’(x)</th>
+<tr class="header">
+<th align="center">x</th>
+<th align="center">f(x) or f'(x)</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center">$x=1 , x=-1$</td>
-<td style="text-align:center">$f’(x)=0$</td>
+<tr class="odd">
+<td align="center"><span class="math inline">\(x=1 , x=-1\)</span></td>
+<td align="center"><span class="math inline">\(f&#39;(x)=0\)</span></td>
 </tr>
-<tr>
-<td style="text-align:center">$x&lt;-1, x&gt;1$</td>
-<td style="text-align:center">$f’(x)&gt;0$</td>
+<tr class="even">
+<td align="center"><span class="math inline">\(x&lt;-1, x&gt;1\)</span></td>
+<td align="center"><span class="math inline">\(f&#39;(x)&gt;0\)</span></td>
 </tr>
-<tr>
-<td style="text-align:center">$-1&lt;$x$&lt;1$</td>
-<td style="text-align:center">$f’(x)&lt;0$</td>
+<tr class="odd">
+<td align="center"><span class="math inline">\(-1&lt;\)</span>x<span class="math inline">\(&lt;1\)</span></td>
+<td align="center"><span class="math inline">\(f&#39;(x)&lt;0\)</span></td>
 </tr>
-<tr>
-<td style="text-align:center">$x=-1$</td>
-<td style="text-align:center">$f(x)=-3$</td>
+<tr class="even">
+<td align="center"><span class="math inline">\(x=-1\)</span></td>
+<td align="center"><span class="math inline">\(f(x)=-3\)</span></td>
 </tr>
-<tr>
-<td style="text-align:center">$x=1$</td>
-<td style="text-align:center">$f(1)=-7$</td>
+<tr class="odd">
+<td align="center"><span class="math inline">\(x=1\)</span></td>
+<td align="center"><span class="math inline">\(f(1)=-7\)</span></td>
 </tr>
-<tr>
-<td style="text-align:center">$x=2$</td>
-<td style="text-align:center">$f(2)=-3$</td>
+<tr class="even">
+<td align="center"><span class="math inline">\(x=2\)</span></td>
+<td align="center"><span class="math inline">\(f(2)=-3\)</span></td>
 </tr>
-<tr>
-<td style="text-align:center">$x=3$</td>
-<td style="text-align:center">$f(3)=13$</td>
+<tr class="odd">
+<td align="center"><span class="math inline">\(x=3\)</span></td>
+<td align="center"><span class="math inline">\(f(3)=13\)</span></td>
 </tr>
 </tbody>
 </table>
+<p>The second derivative is <span class="math inline">\(f&#39;&#39;(x)=6x\)</span>, so the point <span class="math inline">\((0, -5)\)</span> is the point of inflection, when x &lt; 0, the chart concave down, x &gt; 0, the chart concave up.</p>
+<div class="figure">
+<img src="/2018-02-13-approximation-solution-of-equations/1.png" alt="Function Chart">
+<p class="caption">Function Chart</p>
 </div>
-<p>The second derivative is $f’’(x)=6x$,  so the point $(0, -5)$ is the point of inflection,  when x &lt; 0, the chart concave down, x &gt; 0, the chart concave up.</p>
-<p><img src="/2018-02-13-approximation-solution-of-equations/1.png" alt="Function Chart"></p>
-<p>$f(2)=-3, f(3)=13 \Rightarrow x<em>{0} \in (2, 3)$, we start from the point $x</em>{1}=3$,  </p>
-<script type="math/tex; mode=display">
-f'(x_{1})=\frac{f(x_{1})-0}{x_{1}-x_{2}} \Rightarrow x_{2}=x1-\frac{f(x_{1})}{f'(x_{1})}</script><script type="math/tex; mode=display">
-f'(x_{2})=\frac{f(x_{2})-0}{x_{2}-x_{3}} \Rightarrow x_{3}=x2-\frac{f(x_{2})}{f'(x_{2})}</script><p>​                              $…$</p>
-<p>we get the x by multiple calculation of $x<em>{n}$, $x</em>{2}=2.458333$, $x<em>{3}=2.294310$, $x</em>{4}=2.279144$, $x_{5}=2.279018$</p>
-<p>and $f(x<em>{5})=-0.000009$, and $x</em>{5}$ is acceptable as the root of the equation.</p>
+<p><span class="math inline">\(f(2)=-3, f(3)=13 \Rightarrow x_{0} \in (2, 3)\)</span>, we start from the point <span class="math inline">\(x_{1}=3\)</span>,</p>
+<p><span class="math display">\[
+f&#39;(x_{1})=\frac{f(x_{1})-0}{x_{1}-x_{2}} \Rightarrow x_{2}=x1-\frac{f(x_{1})}{f&#39;(x_{1})}
+\]</span></p>
+<p><span class="math display">\[
+f&#39;(x_{2})=\frac{f(x_{2})-0}{x_{2}-x_{3}} \Rightarrow x_{3}=x2-\frac{f(x_{2})}{f&#39;(x_{2})}
+\]</span></p>
+<p>​ <span class="math inline">\(...\)</span></p>
+<p>we get the x by multiple calculation of <span class="math inline">\(x_{n}\)</span>, <span class="math inline">\(x_{2}=2.458333\)</span>, <span class="math inline">\(x_{3}=2.294310\)</span>, <span class="math inline">\(x_{4}=2.279144\)</span>, <span class="math inline">\(x_{5}=2.279018\)</span></p>
+<p>and <span class="math inline">\(f(x_{5})=-0.000009\)</span>, and <span class="math inline">\(x_{5}\)</span> is acceptable as the root of the equation.</p>
 
       
     </div>
@@ -521,7 +527,7 @@ f'(x_{2})=\frac{f(x_{2})-0}{x_{2}-x_{3}} \Rightarrow x_{3}=x2-\frac{f(x_{2})}{f'
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>
@@ -588,7 +594,7 @@ f'(x_{2})=\frac{f(x_{2})-0}{x_{2}-x_{3}} \Rightarrow x_{3}=x2-\frac{f(x_{2})}{f'
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Plot-the-function"><span class="nav-number">1.</span> <span class="nav-text">Plot the function</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#plot-the-function"><span class="nav-number">1.</span> <span class="nav-text">Plot the function</span></a></li></ol></div>
             
 
           </div>
