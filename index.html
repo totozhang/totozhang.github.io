@@ -774,8 +774,7 @@
 
       
         
-          <p>TIME_WAIT state is the most complicated status among the state transmit of TCP protocal, at first glance its existence is not nessesary, some of the optimization technique eliminate the TIME_WAIT state arbiterily. 但需要注意的是，既然Robert Kahn和Vint Cerf在设计TCP时引入了TIME_WAIT状态，既然TIME_WAIT状态已经在应用如此广泛的TCP协议中稳定存在了数十个年头，就必然有其存在的道理，至少进行操作之前，应该把握清楚TIME_WAIT的来龙去脉。正如Richard Stevens在他的书里写的一段话，“Instead of trying to avoid the state, we should understand it”。</p>
-<p>那么，处于TIME_WAIT状态的TCP端在等待什么呢？TCP端为什么进入这个状态呢？这个状态引发了哪些问题呢？有什么方法来规避这些问题呢？</p>
+          <p>TIME_WAIT state is the most complicated status among the state transmit of TCP protocal, at first glance its existence is not nessesary, some of the optimization technique eliminate the TIME_WAIT state arbitrarily. But as a part of a protocal which has been applied for so many years, there must be some reason. At least , before eliminating it, we should know the details about it, just as Richard Stevens referred in his book, “Instead of trying to avoid the state, we should understand it”。So what is a TIME_WAIT state TCP endpoint waiting for? Why the endpoint transimit to this state? What's the problems it brought us? Any way that we can keep away from these problems?</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016-01-31-tcp-timewait-status/#more" rel="contents">
