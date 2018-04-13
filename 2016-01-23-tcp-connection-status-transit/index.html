@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://taotao.guru/2016-01-23-tcp-connection-status-transit/TCPState8.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-23-tcp-connection-status-transit/TCPState9.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-23-tcp-connection-status-transit/TCPState10.png">
-<meta property="og:updated_time" content="2018-03-30T07:03:04.000Z">
+<meta property="og:updated_time" content="2018-04-13T06:32:47.662Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP state transmissions">
 <meta name="twitter:description" content="For every instance of a kind of item, in a specific period of time, the instance itself will stay in a specific status. Take a cell phone as example, it can be in IDLE status, ALERTING status, CONNECT">
@@ -356,36 +356,37 @@
 <figure>
 <img src="/2016-01-23-tcp-connection-status-transit/TCPState2.png" alt="TCP two endpoints state transmission"><figcaption>TCP two endpoints state transmission</figcaption>
 </figure>
-<p>TCP服务端和客户端初始状态都是CLOSED状态。服务端调用函数Accept()后，由CLOSED状态迁移到LISTEN状态，服务端等待客户端连接请求SYN到达。客户端发出[1.SYN]请求连接，客户端状态有CLOSED状态迁移到SYN_SENT状态，客户端在此状态等待三次握手结束。服务端收到[1.SYN]后，立即由LISTEN状态迁移到SYN_RECEIVED状态，发出第二次握手的数据[2.SYN，ACK]。服务端继续等待第三次握手数据[3.ACK]。客户发送第三次握手数据[3.ACK]，进入ESTABLISHED状态，服务端收到[3.ACK]后进入ESTABLISHED状态，连接建立，双端开始收发数据。客户端首先发起断开连接[8.FIN]请求（也可由服务端发起），此请求发出后客户端状态也随之迁移到FIN_WAIT_1状态，等待着对端确认[8.FIN]。服务端收到[8.FIN]后，得知客户端已经没有更多数据发送，服务端回复[9.ACK]，并迁移到CLOSE_WAIT状态，继续等待将本端应用层数据发往客户端。而客户端从服务端收到[9.ACK]时，客户端由FIN_WAIT_1状态迁移到FIN_WAIT_2状态，在FIN_WAIT_2状态中，客户端只接收服务端的数据，不发送数据，直到服务端发来FIN明确通知客户端没有更多数据发送。服务端一旦发出最后一个[10.FIN]，服务端便迁移到LAST_ACK状态以等待客户端对[10.FIN]确认。客户端确认后，进入TIME_WAIT状态，以防这个确认[11.ACK]丢失。收到确认后，服务端直接迁移到CLOSED状态。TIME_WAIT状态超时后，客户端进入CLOSED状态。</p>
-<p>由于两端的状态变化互相关联，所以可以将二者合并，得到RFC793里所描述的状态迁移图的雏形。</p>
+<p>The initial state for each points is CLOSED. After the server calls the function Accept(), and the state changes from the CLOSED to LISTEN, and stay in the LISTEN until a SYN from client is received. Sometime later, A client sends a [1.SYN] to request a connection. The state of the client tansmits from CLOSED to SYN_SENT, here, the client keeps wating for the end of the 3-way-handshake. After the [1.SYN] is received by the server, it will become SYN_RECEIVED, and responses with a [2.SYN，ACK], to answer the [1.SYN], and at the same time to request a connection from server to client. The client answers a [3.ACK], both of the endpoints become ESTABLISHED state, a connection has been established, the application layer data is sent back and forth.</p>
+<p>When either endpoint requires to cut the established connection, it will send a FIN, say, the client sends a [8.FIN] to finish the connection (Maybe the server initiate the release procedure), this action will drive the client going to the state FIN_WAIT_1, in which the client keeps waiting for the ACK from the counter point. The server side gets the [8.FIN], notices that there will be no more data from the client side. Server answers the [8.FIN] with an [9.ACK], transfer to the CLOSE_WAIT state to wait for the server application layer finishing sending application data. After getting the [9.ACK], client transfers from FIN_WAIT_1 to FIN_WAIT_2. In FIN_WAIT_2, the client is receiving data only, but will never send anything until the server sends a FIN. At last, the server sends a [10.FIN], the server waits for the lask ACK from the client, this state is LAST_ACK. The client acknowledges the [10.FIN] with [11.ACK] as known as the last ACK, and goes to the TIME_WAIT state. The server goes to the CLOSED state after getting the last ACK. After the TIME_WAIT timeouts, the client goes to the CLOSED state.</p>
+<p>When we combine the state tranfermation diagram, we get the one descripted in RFC793.</p>
 <figure>
 <img src="/2016-01-23-tcp-connection-status-transit/TCPState3.png" alt="TCP双端正常通信状态迁移图"><figcaption>TCP双端正常通信状态迁移图</figcaption>
 </figure>
-<p>#TCP双端异常通信状态迁移</p>
-<p>异常TCP通信主要是指存在RST分段数据参与的TCP通信，比如客户端主动连接服务器端口遇到服务器没有进程监听对应端口，服务器回复RST分段拒绝客户端的连接请求。RST分段会导致TCP端直接迁移到CLOSED状态，如果服务端循环调用函数Accept()，也可以认为服务端迁移到LISTEN状态。下图增加了两个异常状态的迁移作为例子。</p>
+<p>#TCP abnormal endpoints state transmission</p>
+<p>When we consider the RST segment, e.g. the client requests a connection to the server port, on which there’s no processing listening, the server answers with a RST, RST makes the client transfering to the CLOSED state.</p>
 <figure>
 <img src="/2016-01-23-tcp-connection-status-transit/TCPState4.png" alt="TCP双端异常通信状态迁移"><figcaption>TCP双端异常通信状态迁移</figcaption>
 </figure>
-<p>#TCP双端同时建立连接状态迁移</p>
-<p>当两个进程同时建立TCP连接时，连接建立过程与客户端和服务端建立连接的三次握手不同。同时建立连接过程的时序如下，这里不区分客户端和服务端。</p>
+<p>#TCP simultaneous established connection</p>
+<p>When the endpoints request a connection to each other simultaneously. It’s acting like this, there’s no client or server now, they are both clients, or servers.</p>
 <figure>
 <img src="/2016-01-23-tcp-connection-status-transit/TCPState5.png" alt="连接同时建立时序"><figcaption>连接同时建立时序</figcaption>
 </figure>
-<p>根据同时建立连接的时序，来完善状态迁移图。由于两端的状态迁移相同，合并后的结果如下。</p>
+<p>State diagram,</p>
 <figure>
 <img src="/2016-01-23-tcp-connection-status-transit/TCPState6.png" alt="连接同时建立状态迁移"><figcaption>连接同时建立状态迁移</figcaption>
 </figure>
-<p>#TCP双端同时断开连接状态迁移</p>
-<p>同时断开双向通信管道仍然需要四次挥手。</p>
+<p>#TCP simultineous shutdown connection</p>
+<p>Shutdown a connection simultineously on both sides.</p>
 <figure>
 <img src="/2016-01-23-tcp-connection-status-transit/TCPState7.png" alt="当FIN和ACK分别发送时的时序"><figcaption>当FIN和ACK分别发送时的时序</figcaption>
 </figure>
-<p>FIN段和ACK段经常可能会绑定在一起发送，所以同时断开连接时的状态迁移过程中在这种情况下不经历CLOSING状态而直接进入TIME_WAIT。</p>
+<p>Sometimes, FIN and ACK are combined to send together. In this situation, there’s no CLOSING state.</p>
 <figure>
 <img src="/2016-01-23-tcp-connection-status-transit/TCPState8.png" alt="当FIN和ACK绑定发送时的时序"><figcaption>当FIN和ACK绑定发送时的时序</figcaption>
 </figure>
-<p>合并有CLOSING状态和没有CLOSING状态的两种情况。 <img src="/2016-01-23-tcp-connection-status-transit/TCPState9.png" alt="同时关闭状态迁移"></p>
-<p>#TCP完整状态迁移图 将以上叙述的全部状态迁移整理合并，得到RFC793的状态迁移图，分解整理状态迁移的过程，更加有利于对于此状态迁移图中每个细节的深入理解。 <img src="/2016-01-23-tcp-connection-status-transit/TCPState10.png" alt="图22，完整的TCP状态迁移图"></p>
+<p>State diagram. <img src="/2016-01-23-tcp-connection-status-transit/TCPState9.png" alt="同时关闭状态迁移"></p>
+<p>#Integrated TCP endpoints state transmission When we comblie above state transmission diagrams in different situation, we get a final version. <img src="/2016-01-23-tcp-connection-status-transit/TCPState10.png" alt="图22，完整的TCP状态迁移图"></p>
 
       
     </div>

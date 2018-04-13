@@ -350,7 +350,7 @@
 
       
         <p>任何通信发生时，至少存在一个参与通信的对象发起通信请求，以判断对端是否可以进行通信。在TCP协议中同样如此，这个发起请求的过程称为同步（Synchronization），由于TCP确保为应用层提供可靠的字节流数据传输，会对所有应用层通信数据进行字节编号，这个编号的第一个数值ISN（Initial Sequence Number）并不是从0或1开始的数值，而是由特定算法生成，ISN的取值范围为[0, 2^32-1]。TCP通信的两端需要互换彼此的ISN数值，从而控制字节流的传输。互换ISN的过程称为TCP建立连接的过程，也被称为建立虚连接或虚电路的过程。当通信结束时，两端也需要有特定的交互过程释放连接。建立连接为什么需要互换ISN？为什么ISN不是从0或1开始？全双工的TCP通信怎么控制断开连接的过程？这部分主要说说TCP连接管理的内容。 <a id="more"></a></p>
-<h1 id="关于isn">关于ISN</h1>
+<p>#关于ISN</p>
 <h2 id="isn的选择">ISN的选择</h2>
 <p>为什么ISN不是从0或1开始，为什么后期的RFC修改了RFC793的按时间生成ISN。可以参考如下几个链接的详细说明。主要的原因有两条，第一个原因是为了防止TCP的替身连接（也就是使用同一个四元组，又一次建立的TCP连接）之间的数据发生混淆。第二个原因出于安全方面的考虑，为了防止预测TCP段序号的网络攻击。</p>
 <table>
@@ -379,38 +379,32 @@
 </tr>
 </tbody>
 </table>
-<h2 id="为什么互换isn">为什么互换ISN？</h2>
+<p>##为什么互换ISN？</p>
 <p>建立的TCP连接并不是一个建立一条真正的物理通路，而是建立逻辑层面的连接。客户端要将字节流发送到服务端，服务端收到后，需要将字节按顺序排序，那么作为服务端的第一个疑问，客户端发过来的哪一个字节是第一个，在这个序号之前有没有其他字节？所以在通信开始之前，客户端必须告诉服务端，第一个字节的序号将是多少。由于TCP是双向通信，客户端也同样要了解服务端发过来的字节流的第一个字节序号是多少。这两个过程完成ISN互换，这其中每一次发送接收段数据，TCP称为1次握手。</p>
-<h1 id="建立连接三次握手">建立连接，三次握手</h1>
-<p>TCP建立一次连接，需要使用3次握手完成。这个过程发生在<a href="http://taotao.guru/2016/01/02/2016-01-02-tcp-comminication-model/">《TCP/IP网络通信模型》</a>，进程通过调用Socket API函数集合实现网络通信的第二个阶段，TCP连接建立阶段。</p>
-<div class="figure">
-<img src="/2016-01-04-tcp-connection-management/TCPConnect1.png" alt="三次握手">
-<p class="caption">三次握手</p>
-</div>
+<p>#建立连接，三次握手 TCP建立一次连接，需要使用3次握手完成。这个过程发生在<a href="http://taotao.guru/2016/01/02/2016-01-02-tcp-comminication-model/">《TCP/IP网络通信模型》</a>，进程通过调用Socket API函数集合实现网络通信的第二个阶段，TCP连接建立阶段。</p>
+<figure>
+<img src="/2016-01-04-tcp-connection-management/TCPConnect1.png" alt="三次握手"><figcaption>三次握手</figcaption>
+</figure>
 <p>使用gdb运行Server进程至Accept()函数，运行Client进程至Connect()函数完成，使用Wireshark获取TCP段数据 [1.SYN]，[2.SYN，ACK]，[3.ACK] 的细节如下，</p>
 <p>TCP段数据[1.SYN]的具体内容如下，ISN为209863725。其中Flags标志位SYN置为1，标识当前TCP分段为SYN段。 <img src="/2016-01-04-tcp-connection-management/TCPConnect1a.png" alt="1.SYN"></p>
 <p>TCP段数据[2.SYN，ACK]的具体内容如下，其自身ISN为354358497，对[1.SYN]的确认号ACK为209863726。其中Flags标志位SYN，ACK置为1。 <img src="/2016-01-04-tcp-connection-management/TCPConnect1b.png" alt="2.SYN，ACK"></p>
 <p>TCP段数据[3.ACK]的具体内容如下，对[2.SYN]的ISN确认，确认号ACK为354358498。此时客户端与服务端彼此知道了对方的ISN。 <img src="/2016-01-04-tcp-connection-management/TCPConnect1c.png" alt="3.ACK"></p>
 <p>通信建立过程中，除了进行ISN的交换，在三次握手过程中，两端还进行的收发数据时一些相关参数的协商，比如窗口大小，快速重传，时间标签等内容。这些内容在接下来的主题文章中分别说明。</p>
-<h1 id="正常通信数据收发">正常通信，数据收发</h1>
-<p>通信连接建立以后，进程开始进行应用层数据收发。服务端阻塞等待接收客户端的请求消息，客户端发送请求后等待服务端的响应，服务端发送响应消息。</p>
+<p>#正常通信，数据收发 通信连接建立以后，进程开始进行应用层数据收发。服务端阻塞等待接收客户端的请求消息，客户端发送请求后等待服务端的响应，服务端发送响应消息。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//server.c</span><br><span class="line">//服务端Server接收Client进程的消息</span><br><span class="line">Readline(connectfd, requestbuf, sizeof(requestbuf));</span><br><span class="line"></span><br><span class="line">//client.c</span><br><span class="line">//客户端Client进程发送请求消息</span><br><span class="line">Write(sockfd, l(char*) request, strlen(request));</span><br><span class="line">//阻塞等待从Server进程接收一行响应消息</span><br><span class="line">Readline(sockfd, response, MAXLINE);</span><br><span class="line"></span><br><span class="line">//server.c</span><br><span class="line">//Server进程返回响应消息给Client进程，消息格式为&quot;response, &lt;hostname&gt;\r\n&quot;</span><br><span class="line">Write(connectfd, responsbuf, strlen(responsbuf));</span><br></pre></td></tr></table></figure>
-<div class="figure">
-<img src="/2016-01-04-tcp-connection-management/TCPConnect2.png" alt="数据收发">
-<p class="caption">数据收发</p>
-</div>
+<figure>
+<img src="/2016-01-04-tcp-connection-management/TCPConnect2.png" alt="数据收发"><figcaption>数据收发</figcaption>
+</figure>
 <p>使用gdb继续运行Server进程和Client进程，使用Wireshark查看TCP段数据 [4.request]，[5.ACK]，[6.reponse]，[7.ACK] 的细节如下，</p>
 <p>TCP段数据[4.request]的具体内容如下，这是第1个带有客户端应用层字节数据的TCP分段，字节流首字节序号为，ISN+1=209863726。数据内容共有18Bytes，也就是“request,hostname”。 <img src="/2016-01-04-tcp-connection-management/TCPConnect2a.png" alt="4.SYN"></p>
 <p>TCP段数据[5.ACK]是服务端对客户端请求消息的确认，ACK号209863744，表示收到了18字节数据。 <img src="/2016-01-04-tcp-connection-management/TCPConnect2b.png" alt="5.SYN，ACK"></p>
 <p>TCP段数据[6.reponse]是服务端对客户端的响应消息，数据内容共有14Bytes，也就是“response,guru”。 <img src="/2016-01-04-tcp-connection-management/TCPConnect2.png" alt="6.ACK"></p>
 <p>TCP段数据[7.ACK]是服务端发送给客户端响应消息的确认，ACK号209863744，表示收到了18字节数据。 <img src="/2016-01-04-tcp-connection-management/TCPConnect2d.png" alt="7.ACK"></p>
-<h1 id="断开连接四次挥手">断开连接，四次挥手</h1>
-<p>当应用层通信结束后，应用层调用函数Close()关闭文件描述符或者进程结束导致文件描述符自动释放，这个行为会触发自身系统内核的TCP模块发送断开连接请求的TCP分段数据，FIN分段。当对端收到FIN分段时，对端系统内核将FIN分段转化EOF（End of file）发送给接收进程。</p>
+<p>#断开连接，四次挥手 当应用层通信结束后，应用层调用函数Close()关闭文件描述符或者进程结束导致文件描述符自动释放，这个行为会触发自身系统内核的TCP模块发送断开连接请求的TCP分段数据，FIN分段。当对端收到FIN分段时，对端系统内核将FIN分段转化EOF（End of file）发送给接收进程。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//client.c</span><br><span class="line">//关闭socketfd，向服务进程发送FIN段</span><br><span class="line">Close(sockfd);</span><br><span class="line"></span><br><span class="line">//server.c</span><br><span class="line">//关闭connectfd，向客户进程发送FIN段</span><br><span class="line">Close(conectfd);</span><br></pre></td></tr></table></figure>
-<div class="figure">
-<img src="/2016-01-04-tcp-connection-management/TCPConnect3.png" alt="四次挥手">
-<p class="caption">四次挥手</p>
-</div>
+<figure>
+<img src="/2016-01-04-tcp-connection-management/TCPConnect3.png" alt="四次挥手"><figcaption>四次挥手</figcaption>
+</figure>
 <p>从图中可以发现，TCP连接的释放最多需要4次交互，在有些情况下[9.ACK]和[10.FIN]可以绑定在一起发送。为什么TCP协议为断开链接过程使用了4次交互呢？因为TCP是收发数据可以同时进行全双工的协议，相当于连接建立以后，有两条单向数据管道连接着两个通信进程，其中的某一个进程只能知道自身还有没有数据发送到对端，在接收到对端明确的通知之前，不能确定对端是否还有数据发送给自己。所以TCP协议支持单方向的管道关闭，需要明确单向关闭时，可以使用函数shutdown()实现，此时文件描述符仍然保持可用状态。</p>
 <p>使用gdb继续运行Server进程和Client进程至函数Close()，使用Wireshark查看TCP段数据 [8.FIN]，[9.ACK]，[10.FIN]，[11.ACK] 的细节如下，</p>
 <p>TCP段数据[8.FIN]的具体内容如下，客户端没有更多数据发送给服务端，关闭Socket文件描述符，客户端系统生成TCP分段FIN通知服务端没有更多的数据发送。 <img src="/2016-01-04-tcp-connection-management/TCPConnect3a.png" alt="8.FIN"></p>
@@ -619,7 +613,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于isn"><span class="nav-number">1.</span> <span class="nav-text">关于ISN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#isn的选择"><span class="nav-number">1.1.</span> <span class="nav-text">ISN的选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么互换isn"><span class="nav-number">1.2.</span> <span class="nav-text">为什么互换ISN？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#建立连接三次握手"><span class="nav-number">2.</span> <span class="nav-text">建立连接，三次握手</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正常通信数据收发"><span class="nav-number">3.</span> <span class="nav-text">正常通信，数据收发</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#断开连接四次挥手"><span class="nav-number">4.</span> <span class="nav-text">断开连接，四次挥手</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#isn的选择"><span class="nav-number">1.</span> <span class="nav-text">ISN的选择</span></a></li></ol></div>
             
 
           </div>
