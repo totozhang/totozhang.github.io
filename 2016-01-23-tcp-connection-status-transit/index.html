@@ -74,7 +74,7 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Mathematic Revisit" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="Back to Basics" type="application/atom+xml" />
 
 
 
@@ -86,7 +86,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="TCP state transmissions">
 <meta property="og:url" content="http://taotao.guru/2016-01-23-tcp-connection-status-transit/index.html">
-<meta property="og:site_name" content="Mathematic Revisit">
+<meta property="og:site_name" content="Back to Basics">
 <meta property="og:description" content="For every instance of a kind of item, in a specific period of time, the instance itself will stay in a specific status. Take a cell phone as example, it can be in IDLE status, ALERTING status, CONNECT">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://taotao.guru/2016-01-23-tcp-connection-status-transit/TCPState1.png">
@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://taotao.guru/2016-01-23-tcp-connection-status-transit/TCPState8.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-23-tcp-connection-status-transit/TCPState9.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-23-tcp-connection-status-transit/TCPState10.png">
-<meta property="og:updated_time" content="2018-04-13T06:32:47.662Z">
+<meta property="og:updated_time" content="2018-04-13T06:35:53.051Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP state transmissions">
 <meta name="twitter:description" content="For every instance of a kind of item, in a specific period of time, the instance itself will stay in a specific status. Take a cell phone as example, it can be in IDLE status, ALERTING status, CONNECT">
@@ -139,7 +139,7 @@
 
 
 
-  <title>TCP state transmissions | Mathematic Revisit</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>TCP state transmissions | Back to Basics</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -169,7 +169,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Mathematic Revisit</span>
+        <span class="site-title">Back to Basics</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -265,7 +265,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mathematic Revisit">
+      <meta itemprop="name" content="Back to Basics">
     </span>
 
     
@@ -285,8 +285,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-23T23:29:55+08:00">
-                2016-01-23
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-24T00:29:55+09:00">
+                2016-01-24
               </time>
             
 
@@ -360,22 +360,20 @@
 <p>When either endpoint requires to cut the established connection, it will send a FIN, say, the client sends a [8.FIN] to finish the connection (Maybe the server initiate the release procedure), this action will drive the client going to the state FIN_WAIT_1, in which the client keeps waiting for the ACK from the counter point. The server side gets the [8.FIN], notices that there will be no more data from the client side. Server answers the [8.FIN] with an [9.ACK], transfer to the CLOSE_WAIT state to wait for the server application layer finishing sending application data. After getting the [9.ACK], client transfers from FIN_WAIT_1 to FIN_WAIT_2. In FIN_WAIT_2, the client is receiving data only, but will never send anything until the server sends a FIN. At last, the server sends a [10.FIN], the server waits for the lask ACK from the client, this state is LAST_ACK. The client acknowledges the [10.FIN] with [11.ACK] as known as the last ACK, and goes to the TIME_WAIT state. The server goes to the CLOSED state after getting the last ACK. After the TIME_WAIT timeouts, the client goes to the CLOSED state.</p>
 <p>When we combine the state tranfermation diagram, we get the one descripted in RFC793.</p>
 <figure>
-<img src="/2016-01-23-tcp-connection-status-transit/TCPState3.png" alt="TCP双端正常通信状态迁移图"><figcaption>TCP双端正常通信状态迁移图</figcaption>
+<img src="/2016-01-23-tcp-connection-status-transit/TCPState3.png" alt="TCP normal state transfermation diagram"><figcaption>TCP normal state transfermation diagram</figcaption>
 </figure>
 <p>#TCP abnormal endpoints state transmission</p>
 <p>When we consider the RST segment, e.g. the client requests a connection to the server port, on which there’s no processing listening, the server answers with a RST, RST makes the client transfering to the CLOSED state.</p>
 <figure>
-<img src="/2016-01-23-tcp-connection-status-transit/TCPState4.png" alt="TCP双端异常通信状态迁移"><figcaption>TCP双端异常通信状态迁移</figcaption>
+<img src="/2016-01-23-tcp-connection-status-transit/TCPState4.png" alt="TCP abnormal connction establishing"><figcaption>TCP abnormal connction establishing</figcaption>
 </figure>
 <p>#TCP simultaneous established connection</p>
 <p>When the endpoints request a connection to each other simultaneously. It’s acting like this, there’s no client or server now, they are both clients, or servers.</p>
 <figure>
-<img src="/2016-01-23-tcp-connection-status-transit/TCPState5.png" alt="连接同时建立时序"><figcaption>连接同时建立时序</figcaption>
+<img src="/2016-01-23-tcp-connection-status-transit/TCPState5.png" alt="Simultaneously establish connection"><figcaption>Simultaneously establish connection</figcaption>
 </figure>
 <p>State diagram,</p>
-<figure>
-<img src="/2016-01-23-tcp-connection-status-transit/TCPState6.png" alt="连接同时建立状态迁移"><figcaption>连接同时建立状态迁移</figcaption>
-</figure>
+<p><img src="/2016-01-23-tcp-connection-status-transit/TCPState6.png"></p>
 <p>#TCP simultineous shutdown connection</p>
 <p>Shutdown a connection simultineously on both sides.</p>
 <figure>
