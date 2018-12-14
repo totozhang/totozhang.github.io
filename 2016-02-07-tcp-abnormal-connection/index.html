@@ -93,7 +93,7 @@
 <meta property="og:image" content="http://taotao.guru/2016-02-07-tcp-abnormal-connection/TCPAbnormal2.png">
 <meta property="og:image" content="http://taotao.guru/2016-02-07-tcp-abnormal-connection/TCPAbnormal3.png">
 <meta property="og:image" content="http://taotao.guru/2016-02-07-tcp-abnormal-connection/TCPAbnormal4.png">
-<meta property="og:updated_time" content="2018-12-14T06:27:46.612Z">
+<meta property="og:updated_time" content="2018-12-14T07:36:50.650Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Abortion of TCP connection">
 <meta name="twitter:description" content="Actually there are two ways to release a TCP connection. The normal way to terminate a TCP connection is for one side to send a FIN segment, and it follows the normal releasing procedure. It’s also ok">
@@ -367,7 +367,7 @@
 <p><img src="/2016-02-07-tcp-abnormal-connection/TCPAbnormal1.png"></p>
 <p>#Case 2: Send a RST segment with socket API</p>
 <p>As other segments, RST segment can be sent mannully with the socket API,</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Connect(sockfd, (SA *) &amp;servaddr, sizeof(servaddr));</span><br><span class="line"></span><br><span class="line">struct linger ling;</span><br><span class="line">ling.l_onoff = 1;</span><br><span class="line">ling.l_linger = 0;</span><br><span class="line">Setsockopt(sockfd, SOL_SOCKET, SO_LINGER, &amp;ling, sizeof(ling));</span><br><span class="line"></span><br><span class="line">Close(sockfd);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Connect(sockfd, (SA *) &amp;servaddr, <span class="keyword">sizeof</span>(servaddr));</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">linger</span> <span class="title">ling</span>;</span></span><br><span class="line">ling.l_onoff = <span class="number">1</span>;</span><br><span class="line">ling.l_linger = <span class="number">0</span>;</span><br><span class="line">Setsockopt(sockfd, SOL_SOCKET, SO_LINGER, &amp;ling, <span class="keyword">sizeof</span>(ling));</span><br><span class="line"></span><br><span class="line">Close(sockfd);</span><br></pre></td></tr></table></figure>
 <p>Here is a wireshark packets capture, after the three handshake, the client send a RST segment.</p>
 <p><img src="/2016-02-07-tcp-abnormal-connection/TCPAbnormal2.png"></p>
 <p>#Case 3: Connection not establishment, server host not start</p>
@@ -518,21 +518,12 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>
             
 
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                
-                  <span class="site-state-item-count">7</span>
-                  <span class="site-state-item-name">tags</span>
-                
-              </div>
             
 
           </nav>

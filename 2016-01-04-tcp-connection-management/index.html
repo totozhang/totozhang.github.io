@@ -102,7 +102,7 @@
 <meta property="og:image" content="http://taotao.guru/2016-01-04-tcp-connection-management/TCPConnect3b.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-04-tcp-connection-management/TCPConnect3c.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-04-tcp-connection-management/TCPConnect3d.png">
-<meta property="og:updated_time" content="2018-12-14T06:27:10.627Z">
+<meta property="og:updated_time" content="2018-12-14T07:35:15.101Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP协议连接管理">
 <meta name="twitter:description" content="任何通信发生时，至少存在一个参与通信的对象发起通信请求，以判断对端是否可以进行通信。在TCP协议中同样如此，这个发起请求的过程称为同步（Synchronization），由于TCP确保为应用层提供可靠的字节流数据传输，会对所有应用层通信数据进行字节编号，这个编号的第一个数值ISN（Initial Sequence Number）并不是从0或1开始的数值，而是由特定算法生成，ISN的取值范围为[0,">
@@ -390,7 +390,7 @@
 <p>TCP段数据[3.ACK]的具体内容如下，对[2.SYN]的ISN确认，确认号ACK为354358498。此时客户端与服务端彼此知道了对方的ISN。 <img src="/2016-01-04-tcp-connection-management/TCPConnect1c.png" alt="3.ACK"></p>
 <p>通信建立过程中，除了进行ISN的交换，在三次握手过程中，两端还进行的收发数据时一些相关参数的协商，比如窗口大小，快速重传，时间标签等内容。这些内容在接下来的主题文章中分别说明。</p>
 <p>#正常通信，数据收发 通信连接建立以后，进程开始进行应用层数据收发。服务端阻塞等待接收客户端的请求消息，客户端发送请求后等待服务端的响应，服务端发送响应消息。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//server.c</span><br><span class="line">//服务端Server接收Client进程的消息</span><br><span class="line">Readline(connectfd, requestbuf, sizeof(requestbuf));</span><br><span class="line"></span><br><span class="line">//client.c</span><br><span class="line">//客户端Client进程发送请求消息</span><br><span class="line">Write(sockfd, l(char*) request, strlen(request));</span><br><span class="line">//阻塞等待从Server进程接收一行响应消息</span><br><span class="line">Readline(sockfd, response, MAXLINE);</span><br><span class="line"></span><br><span class="line">//server.c</span><br><span class="line">//Server进程返回响应消息给Client进程，消息格式为&quot;response, &lt;hostname&gt;\r\n&quot;</span><br><span class="line">Write(connectfd, responsbuf, strlen(responsbuf));</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//server.c</span></span><br><span class="line"><span class="comment">//服务端Server接收Client进程的消息</span></span><br><span class="line">Readline(connectfd, requestbuf, <span class="keyword">sizeof</span>(requestbuf));</span><br><span class="line"></span><br><span class="line"><span class="comment">//client.c</span></span><br><span class="line"><span class="comment">//客户端Client进程发送请求消息</span></span><br><span class="line">Write(sockfd, l(<span class="keyword">char</span>*) request, <span class="built_in">strlen</span>(request));</span><br><span class="line"><span class="comment">//阻塞等待从Server进程接收一行响应消息</span></span><br><span class="line">Readline(sockfd, response, MAXLINE);</span><br><span class="line"></span><br><span class="line"><span class="comment">//server.c</span></span><br><span class="line"><span class="comment">//Server进程返回响应消息给Client进程，消息格式为"response, &lt;hostname&gt;\r\n"</span></span><br><span class="line">Write(connectfd, responsbuf, <span class="built_in">strlen</span>(responsbuf));</span><br></pre></td></tr></table></figure>
 <figure>
 <img src="/2016-01-04-tcp-connection-management/TCPConnect2.png" alt="数据收发"><figcaption>数据收发</figcaption>
 </figure>
@@ -400,7 +400,7 @@
 <p>TCP段数据[6.reponse]是服务端对客户端的响应消息，数据内容共有14Bytes，也就是“response,guru”。 <img src="/2016-01-04-tcp-connection-management/TCPConnect2.png" alt="6.ACK"></p>
 <p>TCP段数据[7.ACK]是服务端发送给客户端响应消息的确认，ACK号209863744，表示收到了18字节数据。 <img src="/2016-01-04-tcp-connection-management/TCPConnect2d.png" alt="7.ACK"></p>
 <p>#断开连接，四次挥手 当应用层通信结束后，应用层调用函数Close()关闭文件描述符或者进程结束导致文件描述符自动释放，这个行为会触发自身系统内核的TCP模块发送断开连接请求的TCP分段数据，FIN分段。当对端收到FIN分段时，对端系统内核将FIN分段转化EOF（End of file）发送给接收进程。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//client.c</span><br><span class="line">//关闭socketfd，向服务进程发送FIN段</span><br><span class="line">Close(sockfd);</span><br><span class="line"></span><br><span class="line">//server.c</span><br><span class="line">//关闭connectfd，向客户进程发送FIN段</span><br><span class="line">Close(conectfd);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//client.c</span></span><br><span class="line"><span class="comment">//关闭socketfd，向服务进程发送FIN段</span></span><br><span class="line">Close(sockfd);</span><br><span class="line"></span><br><span class="line"><span class="comment">//server.c</span></span><br><span class="line"><span class="comment">//关闭connectfd，向客户进程发送FIN段</span></span><br><span class="line">Close(conectfd);</span><br></pre></td></tr></table></figure>
 <figure>
 <img src="/2016-01-04-tcp-connection-management/TCPConnect3.png" alt="四次挥手"><figcaption>四次挥手</figcaption>
 </figure>
@@ -539,21 +539,12 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>
             
 
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                
-                  <span class="site-state-item-count">7</span>
-                  <span class="site-state-item-name">tags</span>
-                
-              </div>
             
 
           </nav>
