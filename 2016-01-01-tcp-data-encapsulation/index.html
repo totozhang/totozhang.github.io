@@ -68,13 +68,13 @@
 
 
 
-  <meta name="keywords" content="深入浅出TCP," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Back to Basics" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="Back To The Basics" type="application/atom+xml" />
 
 
 
@@ -82,11 +82,10 @@
 
 
 <meta name="description" content="计算机进行网络通信时，实质是跨操作系统的进程间通信。同一个操作系统内部进程间通信时，进程通过管道，FIFO，共享内存等交互数据{1}，数据本身并不会发生变化。网络通信时，由于跨越了操作系统，进程需要借助操作系统提供的网络层和传输层模块帮助定位远端进程。本篇简单说明进程间通信的数据（应用层数据）跨越TCP/IP网络协议栈进行交互时，数据封装，发送与解封装。">
-<meta name="keywords" content="深入浅出TCP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TCP&#x2F;IP网络数据封装">
 <meta property="og:url" content="http://taotao.guru/2016-01-01-tcp-data-encapsulation/index.html">
-<meta property="og:site_name" content="Back to Basics">
+<meta property="og:site_name" content="Back To The Basics">
 <meta property="og:description" content="计算机进行网络通信时，实质是跨操作系统的进程间通信。同一个操作系统内部进程间通信时，进程通过管道，FIFO，共享内存等交互数据{1}，数据本身并不会发生变化。网络通信时，由于跨越了操作系统，进程需要借助操作系统提供的网络层和传输层模块帮助定位远端进程。本篇简单说明进程间通信的数据（应用层数据）跨越TCP/IP网络协议栈进行交互时，数据封装，发送与解封装。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://taotao.guru/2016-01-01-tcp-data-encapsulation/TCPStack1.png">
@@ -99,7 +98,7 @@
 <meta property="og:image" content="http://taotao.guru/2016-01-01-tcp-data-encapsulation/TCPStack8.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-01-tcp-data-encapsulation/TCPStack9.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-01-tcp-data-encapsulation/TCPStack10.png">
-<meta property="og:updated_time" content="2018-04-12T15:23:55.427Z">
+<meta property="og:updated_time" content="2018-12-14T06:26:50.017Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP&#x2F;IP网络数据封装">
 <meta name="twitter:description" content="计算机进行网络通信时，实质是跨操作系统的进程间通信。同一个操作系统内部进程间通信时，进程通过管道，FIFO，共享内存等交互数据{1}，数据本身并不会发生变化。网络通信时，由于跨越了操作系统，进程需要借助操作系统提供的网络层和传输层模块帮助定位远端进程。本篇简单说明进程间通信的数据（应用层数据）跨越TCP/IP网络协议栈进行交互时，数据封装，发送与解封装。">
@@ -139,7 +138,7 @@
 
 
 
-  <title>TCP/IP网络数据封装 | Back to Basics</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>TCP/IP网络数据封装 | Back To The Basics</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -169,7 +168,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Back to Basics</span>
+        <span class="site-title">Back To The Basics</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -265,7 +264,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Back to Basics">
+      <meta itemprop="name" content="Back To The Basics">
     </span>
 
     
@@ -285,7 +284,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-01T21:38:55+09:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-01T20:38:55+08:00">
                 2016-01-01
               </time>
             
@@ -308,8 +307,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/网络协议/" itemprop="url" rel="index">
-                    <span itemprop="name">网络协议</span>
+                  <a href="/categories/Network/" itemprop="url" rel="index">
+                    <span itemprop="name">Network</span>
                   </a>
                 </span>
 
@@ -394,12 +393,6 @@
     
 
     <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/深入浅出TCP/" rel="tag"># 深入浅出TCP</a>
-          
-        </div>
       
 
       
@@ -514,7 +507,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>
@@ -525,7 +518,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>

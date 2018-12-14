@@ -68,13 +68,13 @@
 
 
 
-  <meta name="keywords" content="深入浅出TCP," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Back to Basics" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="Back To The Basics" type="application/atom+xml" />
 
 
 
@@ -82,17 +82,16 @@
 
 
 <meta name="description" content="TCP/IP网络应用之间通信本质都是进程间通信，网络协议栈的分层结构只是解耦了应用层实现通信的复杂度，应用层实现时不需考虑通信过程中的数据丢失，数据重复和传输时效性等问题，此类问题由传输层进行解决，应用层只关注本层消息及处理逻辑。因此，一般传输层模块都工作在系统内核中，以便于为系统中所有的进程提供同样的服务。操作系统封装了传输层和其他底层协议，并为应用层提供统一访问接口。本文主要说明TCP传输层如">
-<meta name="keywords" content="深入浅出TCP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TCP&#x2F;IP网络通信模型">
 <meta property="og:url" content="http://taotao.guru/2016-01-02-tcp-comminication-model/index.html">
-<meta property="og:site_name" content="Back to Basics">
+<meta property="og:site_name" content="Back To The Basics">
 <meta property="og:description" content="TCP/IP网络应用之间通信本质都是进程间通信，网络协议栈的分层结构只是解耦了应用层实现通信的复杂度，应用层实现时不需考虑通信过程中的数据丢失，数据重复和传输时效性等问题，此类问题由传输层进行解决，应用层只关注本层消息及处理逻辑。因此，一般传输层模块都工作在系统内核中，以便于为系统中所有的进程提供同样的服务。操作系统封装了传输层和其他底层协议，并为应用层提供统一访问接口。本文主要说明TCP传输层如">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://taotao.guru/2016-01-02-tcp-comminication-model/TCPAppLayer1.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-02-tcp-comminication-model/TCPAppLayer2.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-02-tcp-comminication-model/TCPAppLayer3.png">
-<meta property="og:updated_time" content="2018-04-12T15:24:11.129Z">
+<meta property="og:updated_time" content="2018-12-14T06:26:58.386Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP&#x2F;IP网络通信模型">
 <meta name="twitter:description" content="TCP/IP网络应用之间通信本质都是进程间通信，网络协议栈的分层结构只是解耦了应用层实现通信的复杂度，应用层实现时不需考虑通信过程中的数据丢失，数据重复和传输时效性等问题，此类问题由传输层进行解决，应用层只关注本层消息及处理逻辑。因此，一般传输层模块都工作在系统内核中，以便于为系统中所有的进程提供同样的服务。操作系统封装了传输层和其他底层协议，并为应用层提供统一访问接口。本文主要说明TCP传输层如">
@@ -132,7 +131,7 @@
 
 
 
-  <title>TCP/IP网络通信模型 | Back to Basics</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>TCP/IP网络通信模型 | Back To The Basics</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -162,7 +161,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Back to Basics</span>
+        <span class="site-title">Back To The Basics</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -258,7 +257,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Back to Basics">
+      <meta itemprop="name" content="Back To The Basics">
     </span>
 
     
@@ -278,7 +277,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-02T22:38:55+09:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-02T21:38:55+08:00">
                 2016-01-02
               </time>
             
@@ -301,8 +300,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/网络协议/" itemprop="url" rel="index">
-                    <span itemprop="name">网络协议</span>
+                  <a href="/categories/Network/" itemprop="url" rel="index">
+                    <span itemprop="name">Network</span>
                   </a>
                 </span>
 
@@ -402,12 +401,6 @@
     
 
     <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/深入浅出TCP/" rel="tag"># 深入浅出TCP</a>
-          
-        </div>
       
 
       
@@ -522,7 +515,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>
@@ -533,7 +526,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>

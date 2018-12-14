@@ -68,13 +68,13 @@
 
 
 
-  <meta name="keywords" content="深入浅出TCP," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Back to Basics" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="Back To The Basics" type="application/atom+xml" />
 
 
 
@@ -82,11 +82,10 @@
 
 
 <meta name="description" content="当通信行为发生时，除了通信一端发起通信请求的，另一端被动等待情况外，还有可能存在通信两端同时具有通信意向，两端同时发起连接对端的请求的情形。当通信行为结束时，也存在同样的情况，两端同时没有数据发送给对方，而在同一时刻结束通信。TCP协议支持这种通信连接的同时建立与关闭。连接同时建立和同时关闭在什么情况下可以发生？建立与关闭的时序与正常的通信有哪些不同？本文将对同时建立和同时断开的TCP连接进行模拟">
-<meta name="keywords" content="深入浅出TCP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TCP连接同时建立与关闭">
 <meta property="og:url" content="http://taotao.guru/2016-01-10-tcp-simutaneous-connection/index.html">
-<meta property="og:site_name" content="Back to Basics">
+<meta property="og:site_name" content="Back To The Basics">
 <meta property="og:description" content="当通信行为发生时，除了通信一端发起通信请求的，另一端被动等待情况外，还有可能存在通信两端同时具有通信意向，两端同时发起连接对端的请求的情形。当通信行为结束时，也存在同样的情况，两端同时没有数据发送给对方，而在同一时刻结束通信。TCP协议支持这种通信连接的同时建立与关闭。连接同时建立和同时关闭在什么情况下可以发生？建立与关闭的时序与正常的通信有哪些不同？本文将对同时建立和同时断开的TCP连接进行模拟">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://taotao.guru/2016-01-10-tcp-simutaneous-connection/TCPSimutaneousConnection1.png">
@@ -102,7 +101,7 @@
 <meta property="og:image" content="http://taotao.guru/2016-01-10-tcp-simutaneous-connection/TCPSimutaneousConnection11.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-10-tcp-simutaneous-connection/TCPSimutaneousConnection12.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-10-tcp-simutaneous-connection/TCPSimutaneousConnection13.png">
-<meta property="og:updated_time" content="2018-02-27T01:52:13.000Z">
+<meta property="og:updated_time" content="2018-12-14T06:27:16.582Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP连接同时建立与关闭">
 <meta name="twitter:description" content="当通信行为发生时，除了通信一端发起通信请求的，另一端被动等待情况外，还有可能存在通信两端同时具有通信意向，两端同时发起连接对端的请求的情形。当通信行为结束时，也存在同样的情况，两端同时没有数据发送给对方，而在同一时刻结束通信。TCP协议支持这种通信连接的同时建立与关闭。连接同时建立和同时关闭在什么情况下可以发生？建立与关闭的时序与正常的通信有哪些不同？本文将对同时建立和同时断开的TCP连接进行模拟">
@@ -142,7 +141,7 @@
 
 
 
-  <title>TCP连接同时建立与关闭 | Back to Basics</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>TCP连接同时建立与关闭 | Back To The Basics</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -172,7 +171,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Back to Basics</span>
+        <span class="site-title">Back To The Basics</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -268,7 +267,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Back to Basics">
+      <meta itemprop="name" content="Back To The Basics">
     </span>
 
     
@@ -288,8 +287,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-11T00:29:55+09:00">
-                2016-01-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-10T23:29:55+08:00">
+                2016-01-10
               </time>
             
 
@@ -311,8 +310,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/网络协议/" itemprop="url" rel="index">
-                    <span itemprop="name">网络协议</span>
+                  <a href="/categories/Network/" itemprop="url" rel="index">
+                    <span itemprop="name">Network</span>
                   </a>
                 </span>
 
@@ -394,12 +393,6 @@
     
 
     <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/深入浅出TCP/" rel="tag"># 深入浅出TCP</a>
-          
-        </div>
       
 
       
@@ -505,7 +498,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>
@@ -516,7 +509,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
