@@ -95,7 +95,7 @@
 <meta property="og:image" content="http://taotao.guru/2016-01-16-linux-zombieprocess/LinuxZombie5.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-16-linux-zombieprocess/LinuxZombie6.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-16-linux-zombieprocess/LinuxZombie7.png">
-<meta property="og:updated_time" content="2018-12-14T07:36:14.385Z">
+<meta property="og:updated_time" content="2018-12-17T02:27:57.835Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LINUX僵尸进程">
 <meta name="twitter:description" content="LINUX系统中，任何进程结束运行后，在一定时间窗口内都会成为僵尸进程，所以单个僵尸进程本身并没有危害。只有当僵尸进程在系统中的数量持续累积且不消失时，系统的安全运行才会受到威胁，尤其在重要服务器系统中，对于僵尸进程的潜在危害需要格外关注。那么僵尸进程为什么存在？这种进程如何产生？当僵尸进程大量聚积时会对系统造成什么影响？如何规避僵尸进程的潜在危害？本篇针对以上问题展开讨论，并同时简单总结LINU">
@@ -350,7 +350,13 @@
 <p>通过状态迁移可以看到，僵死状态是进程一生的必经之路，处于僵死状态的进程为僵尸进程。</p>
 <h2 id="进程创建">进程创建</h2>
 <p>前边提到，任何进程创建其他进程都需要向操作系统提出申请，申请的途径就是fork系统调用。进程调用fork时，操作系统内核在其进程表中添加一个新项目，并为新项目分配相关资源，这些资源包括内存资源，文件描述符等。从用户角度看，一个新进程就此诞生。进程表中的新项目描述新进程的全部信息，新项目的每个字段在当前的Linux内核中使用结构体<a href="#附加内容_进程表项数据结构">task_struct</a>描述，其中一项数据 pid代表进程ID，是内核进程表中对进程的唯一标识。通常fork()与exec()函数族配合使用。详细用法可以参考<a href="http://www.amazon.com/gp/product/0321637739?keywords=apue&amp;qid=1453159112&amp;ref_=sr_1_1&amp;sr=8-1" target="_blank" rel="noopener">APUEv3</a>或man手册相关内容。下图中描述了一个进程PIDm创建PIDx的过程。</p>
-<p>步骤1. （1）进程PIDm调用fork，进入内核执行。 步骤2. （2）内核为新进程分配task_struct结构描述的内容，并将此项添加到内核进程表。 步骤3. （3）新项目描述一个新分配的进程PIDx。 步骤4. （4）fork调用从内核返回进程PIDm，返回值为PIDx。 步骤5. （4）fork调用从内核返回进程PIDx，返回值为0，以区分当前是在父进程PIDm中还是子进程PIDx中。</p>
+<ul>
+<li>步骤1. （1）进程PIDm调用fork，进入内核执行。</li>
+<li>步骤2. （2）内核为新进程分配task_struct结构描述的内容，并将此项添加到内核进程表。</li>
+<li>步骤3. （3）新项目描述一个新分配的进程PIDx。</li>
+<li>步骤4. （4）fork调用从内核返回进程PIDm，返回值为PIDx。</li>
+<li>步骤5. （4）fork调用从内核返回进程PIDx，返回值为0，以区分当前是在父进程PIDm中还是子进程PIDx中。</li>
+</ul>
 <p>PIDm与PIDx持有相同的内存空间，文件描述符等资源，具体持有资源的异同可以参考“man fork”。 <img src="/2016-01-16-linux-zombieprocess/LinuxZombie2.png" alt="图2，进程的创建"></p>
 <p>以下代码创建一个子进程，之后父子进程同时向标准输出打印信息。<a href="2016-01-16-linux-zombieprocess/LinuxZombie_fork.c">查看完整代码</a> <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">pid_t</span> pid = Fork();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Child 子进程中PID为0，对应步骤5。</span></span><br><span class="line">    <span class="keyword">if</span> (pid == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 子进程的处理，此处一般使用exec函数族启动其它进程。</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"child process: PID = %d\n"</span>, getpid());</span><br><span class="line">        proc_child();</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Parent 父进程中PID大于0，对应步骤4。</span></span><br><span class="line">    <span class="comment">// 父进程的处理</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"parent process: PID = %d\n"</span>, getpid());</span><br><span class="line">    proc_parent();</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h2 id="进程退出">进程退出</h2>
