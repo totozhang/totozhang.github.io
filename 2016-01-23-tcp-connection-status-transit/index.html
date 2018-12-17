@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://taotao.guru/2016-01-23-tcp-connection-status-transit/TCPState8.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-23-tcp-connection-status-transit/TCPState9.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-23-tcp-connection-status-transit/TCPState10.png">
-<meta property="og:updated_time" content="2018-12-14T06:27:35.422Z">
+<meta property="og:updated_time" content="2018-12-17T02:25:48.191Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP state transmissions">
 <meta name="twitter:description" content="For every instance of a kind of item, in a specific period of time, the instance itself will stay in a specific status. Take a cell phone as example, it can be in IDLE status, ALERTING status, CONNECT">
@@ -348,42 +348,30 @@
 <a id="more"></a>
 <h1 id="state-transmission-chart">State transmission chart</h1>
 <p>People usually use a state transmission diagram to describe the state transfermations of an item. Before sketching a diagram, there are something should be clarified. We must tell explicitly the item that we need to describe, list all the states during the whole transformation and the events that triger the transfermation. I still take the celll phone as example. The phone is the object which has IDLE, SHUTDOWN, ALERTING, CONNECTED states, the events trigering the transmission are shown with arrows.</p>
-<figure>
-<img src="/2016-01-23-tcp-connection-status-transit/TCPState1.png" alt="Phone state transmission diagram"><figcaption>Phone state transmission diagram</figcaption>
-</figure>
-<p>#TCP endpoints state transmission TCP protocal discribe the communication from endpoint to endpoint. The tcp state tranmission diagram describe the endpoints’ state change. It actually the transmission ctronl block in the os kernel (in most conditions), from the application layer, we can treat it as the socket state transfermation. Let’s review a whole process of a tcp segment sending and receiving, the connection is initiated with 3 segments, then established, and shut down with 4 segments(normally). For each endpoint, as the tcp segment’s sending and receiving, the state is changing. I presume there’s no exception during the communication, and the change will be as following,</p>
-<figure>
-<img src="/2016-01-23-tcp-connection-status-transit/TCPState2.png" alt="TCP two endpoints state transmission"><figcaption>TCP two endpoints state transmission</figcaption>
-</figure>
+<p><img src="/2016-01-23-tcp-connection-status-transit/TCPState1.png"></p>
+<h1 id="tcp-endpoints-state-transmission">TCP endpoints state transmission</h1>
+<p>TCP protocal discribe the communication from endpoint to endpoint. The tcp state tranmission diagram describe the endpoints’ state change. It actually the transmission ctronl block in the os kernel (in most conditions), from the application layer, we can treat it as the socket state transfermation. Let’s review a whole process of a tcp segment sending and receiving, the connection is initiated with 3 segments, then established, and shut down with 4 segments(normally). For each endpoint, as the tcp segment’s sending and receiving, the state is changing. I presume there’s no exception during the communication, and the change will be as following,</p>
+<p><img src="/2016-01-23-tcp-connection-status-transit/TCPState2.png"></p>
 <p>The initial state for each points is CLOSED. After the server calls the function Accept(), and the state changes from the CLOSED to LISTEN, and stay in the LISTEN until a SYN from client is received. Sometime later, A client sends a [1.SYN] to request a connection. The state of the client tansmits from CLOSED to SYN_SENT, here, the client keeps wating for the end of the 3-way-handshake. After the [1.SYN] is received by the server, it will become SYN_RECEIVED, and responses with a [2.SYN，ACK], to answer the [1.SYN], and at the same time to request a connection from server to client. The client answers a [3.ACK], both of the endpoints become ESTABLISHED state, a connection has been established, the application layer data is sent back and forth.</p>
 <p>When either endpoint requires to cut the established connection, it will send a FIN, say, the client sends a [8.FIN] to finish the connection (Maybe the server initiate the release procedure), this action will drive the client going to the state FIN_WAIT_1, in which the client keeps waiting for the ACK from the counter point. The server side gets the [8.FIN], notices that there will be no more data from the client side. Server answers the [8.FIN] with an [9.ACK], transfer to the CLOSE_WAIT state to wait for the server application layer finishing sending application data. After getting the [9.ACK], client transfers from FIN_WAIT_1 to FIN_WAIT_2. In FIN_WAIT_2, the client is receiving data only, but will never send anything until the server sends a FIN. At last, the server sends a [10.FIN], the server waits for the lask ACK from the client, this state is LAST_ACK. The client acknowledges the [10.FIN] with [11.ACK] as known as the last ACK, and goes to the TIME_WAIT state. The server goes to the CLOSED state after getting the last ACK. After the TIME_WAIT timeouts, the client goes to the CLOSED state.</p>
 <p>When we combine the state tranfermation diagram, we get the one descripted in RFC793.</p>
-<figure>
-<img src="/2016-01-23-tcp-connection-status-transit/TCPState3.png" alt="TCP normal state transfermation diagram"><figcaption>TCP normal state transfermation diagram</figcaption>
-</figure>
-<p>#TCP abnormal endpoints state transmission</p>
+<p><img src="/2016-01-23-tcp-connection-status-transit/TCPState3.png"></p>
+<h1 id="tcp-abnormal-endpoints-state-transmission">TCP abnormal endpoints state transmission</h1>
 <p>When we consider the RST segment, e.g. the client requests a connection to the server port, on which there’s no processing listening, the server answers with a RST, RST makes the client transfering to the CLOSED state.</p>
-<figure>
-<img src="/2016-01-23-tcp-connection-status-transit/TCPState4.png" alt="TCP abnormal connction establishing"><figcaption>TCP abnormal connction establishing</figcaption>
-</figure>
-<p>#TCP simultaneous established connection</p>
+<p><img src="/2016-01-23-tcp-connection-status-transit/TCPState4.png"></p>
+<h1 id="tcp-simultaneous-established-connection">TCP simultaneous established connection</h1>
 <p>When the endpoints request a connection to each other simultaneously. It’s acting like this, there’s no client or server now, they are both clients, or servers.</p>
-<figure>
-<img src="/2016-01-23-tcp-connection-status-transit/TCPState5.png" alt="Simultaneously establish connection"><figcaption>Simultaneously establish connection</figcaption>
-</figure>
+<p><img src="/2016-01-23-tcp-connection-status-transit/TCPState5.png"></p>
 <p>State diagram,</p>
 <p><img src="/2016-01-23-tcp-connection-status-transit/TCPState6.png"></p>
-<p>#TCP simultineous shutdown connection</p>
+<h1 id="tcp-simultineous-shutdown-connection">TCP simultineous shutdown connection</h1>
 <p>Shutdown a connection simultineously on both sides.</p>
-<figure>
-<img src="/2016-01-23-tcp-connection-status-transit/TCPState7.png" alt="当FIN和ACK分别发送时的时序"><figcaption>当FIN和ACK分别发送时的时序</figcaption>
-</figure>
+<p><img src="/2016-01-23-tcp-connection-status-transit/TCPState7.png"></p>
 <p>Sometimes, FIN and ACK are combined to send together. In this situation, there’s no CLOSING state.</p>
-<figure>
-<img src="/2016-01-23-tcp-connection-status-transit/TCPState8.png" alt="当FIN和ACK绑定发送时的时序"><figcaption>当FIN和ACK绑定发送时的时序</figcaption>
-</figure>
-<p>State diagram. <img src="/2016-01-23-tcp-connection-status-transit/TCPState9.png" alt="同时关闭状态迁移"></p>
-<p>#Integrated TCP endpoints state transmission When we comblie above state transmission diagrams in different situation, we get a final version. <img src="/2016-01-23-tcp-connection-status-transit/TCPState10.png" alt="图22，完整的TCP状态迁移图"></p>
+<p><img src="/2016-01-23-tcp-connection-status-transit/TCPState8.png"></p>
+<p>State diagram. <img src="/2016-01-23-tcp-connection-status-transit/TCPState9.png"></p>
+<h1 id="integrated-tcp-endpoints-state-transmission">Integrated TCP endpoints state transmission</h1>
+<p>When we comblie above state transmission diagrams in different situation, we get a final version. <img src="/2016-01-23-tcp-connection-status-transit/TCPState10.png"></p>
 
       
     </div>
@@ -570,7 +558,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#state-transmission-chart"><span class="nav-number">1.</span> <span class="nav-text">State transmission chart</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#state-transmission-chart"><span class="nav-number">1.</span> <span class="nav-text">State transmission chart</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp-endpoints-state-transmission"><span class="nav-number">2.</span> <span class="nav-text">TCP endpoints state transmission</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp-abnormal-endpoints-state-transmission"><span class="nav-number">3.</span> <span class="nav-text">TCP abnormal endpoints state transmission</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp-simultaneous-established-connection"><span class="nav-number">4.</span> <span class="nav-text">TCP simultaneous established connection</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp-simultineous-shutdown-connection"><span class="nav-number">5.</span> <span class="nav-text">TCP simultineous shutdown connection</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#integrated-tcp-endpoints-state-transmission"><span class="nav-number">6.</span> <span class="nav-text">Integrated TCP endpoints state transmission</span></a></li></ol></div>
             
 
           </div>
