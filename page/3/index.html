@@ -555,7 +555,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016-01-01-tcp-data-encapsulation/" itemprop="url">TCP/IP网络数据封装</a></h1>
+                <a class="post-title-link" href="/2016-01-01-tcp-data-encapsulation/" itemprop="url">TCP Data Encapsulation</a></h1>
         
 
         <div class="post-meta">
@@ -628,7 +628,7 @@
 
       
         
-          <p>计算机进行网络通信时，实质是跨操作系统的进程间通信。同一个操作系统内部进程间通信时，进程通过管道，FIFO，共享内存等交互数据<a href="https://www.ibm.com/developerworks/cn/linux/l-ipc/" target="_blank" rel="noopener">{1}</a>，数据本身并不会发生变化。网络通信时，由于跨越了操作系统，进程需要借助操作系统提供的网络层和传输层模块帮助定位远端进程。本篇简单说明进程间通信的数据（应用层数据）跨越TCP/IP网络协议栈进行交互时，数据封装，发送与解封装。</p>
+          <p>When computers performs network communication, it’s essentially inter-process communication across operating systems. When communicating between processes within the same operating system, the process exchanges data through pipes, FIFOs, shared memory, etc<a href="https://www.ibm.com/developerworks/cn/linux/l-ipc/" target="_blank" rel="noopener">{1}</a>. The data itself does not change. In network communication, because the operating system is spanned, the process needs to help locate the remote process by using the network layer and transport layer module provided by the operating system. This article briefly describes the data (encapsulation layer) of the interprocess communication when it interacts across the TCP/IP network protocol stack, data encapsulation, transmission and decapsulation.</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016-01-01-tcp-data-encapsulation/#more" rel="contents">

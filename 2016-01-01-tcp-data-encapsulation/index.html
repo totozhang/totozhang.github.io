@@ -81,12 +81,12 @@
 
 
 
-<meta name="description" content="计算机进行网络通信时，实质是跨操作系统的进程间通信。同一个操作系统内部进程间通信时，进程通过管道，FIFO，共享内存等交互数据{1}，数据本身并不会发生变化。网络通信时，由于跨越了操作系统，进程需要借助操作系统提供的网络层和传输层模块帮助定位远端进程。本篇简单说明进程间通信的数据（应用层数据）跨越TCP/IP网络协议栈进行交互时，数据封装，发送与解封装。">
+<meta name="description" content="When computers performs network communication, it’s essentially inter-process communication across operating systems. When communicating between processes within the same operating system, the process">
 <meta property="og:type" content="article">
-<meta property="og:title" content="TCP&#x2F;IP网络数据封装">
+<meta property="og:title" content="TCP Data Encapsulation">
 <meta property="og:url" content="http://taotao.guru/2016-01-01-tcp-data-encapsulation/index.html">
 <meta property="og:site_name" content="Back To The Basics">
-<meta property="og:description" content="计算机进行网络通信时，实质是跨操作系统的进程间通信。同一个操作系统内部进程间通信时，进程通过管道，FIFO，共享内存等交互数据{1}，数据本身并不会发生变化。网络通信时，由于跨越了操作系统，进程需要借助操作系统提供的网络层和传输层模块帮助定位远端进程。本篇简单说明进程间通信的数据（应用层数据）跨越TCP/IP网络协议栈进行交互时，数据封装，发送与解封装。">
+<meta property="og:description" content="When computers performs network communication, it’s essentially inter-process communication across operating systems. When communicating between processes within the same operating system, the process">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://taotao.guru/2016-01-01-tcp-data-encapsulation/TCPStack1.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-01-tcp-data-encapsulation/TCPStack2.png">
@@ -98,10 +98,10 @@
 <meta property="og:image" content="http://taotao.guru/2016-01-01-tcp-data-encapsulation/TCPStack8.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-01-tcp-data-encapsulation/TCPStack9.png">
 <meta property="og:image" content="http://taotao.guru/2016-01-01-tcp-data-encapsulation/TCPStack10.png">
-<meta property="og:updated_time" content="2018-12-17T02:41:43.384Z">
+<meta property="og:updated_time" content="2018-12-18T10:24:18.399Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TCP&#x2F;IP网络数据封装">
-<meta name="twitter:description" content="计算机进行网络通信时，实质是跨操作系统的进程间通信。同一个操作系统内部进程间通信时，进程通过管道，FIFO，共享内存等交互数据{1}，数据本身并不会发生变化。网络通信时，由于跨越了操作系统，进程需要借助操作系统提供的网络层和传输层模块帮助定位远端进程。本篇简单说明进程间通信的数据（应用层数据）跨越TCP/IP网络协议栈进行交互时，数据封装，发送与解封装。">
+<meta name="twitter:title" content="TCP Data Encapsulation">
+<meta name="twitter:description" content="When computers performs network communication, it’s essentially inter-process communication across operating systems. When communicating between processes within the same operating system, the process">
 <meta name="twitter:image" content="http://taotao.guru/2016-01-01-tcp-data-encapsulation/TCPStack1.png">
 
 
@@ -138,7 +138,7 @@
 
 
 
-  <title>TCP/IP网络数据封装 | Back To The Basics</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>TCP Data Encapsulation | Back To The Basics</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -272,7 +272,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">TCP/IP网络数据封装</h1>
+          <h1 class="post-title" itemprop="name headline">TCP Data Encapsulation</h1>
         
 
         <div class="post-meta">
@@ -344,30 +344,30 @@
       
 
       
-        <p>计算机进行网络通信时，实质是跨操作系统的进程间通信。同一个操作系统内部进程间通信时，进程通过管道，FIFO，共享内存等交互数据<a href="https://www.ibm.com/developerworks/cn/linux/l-ipc/" target="_blank" rel="noopener">{1}</a>，数据本身并不会发生变化。网络通信时，由于跨越了操作系统，进程需要借助操作系统提供的网络层和传输层模块帮助定位远端进程。本篇简单说明进程间通信的数据（应用层数据）跨越TCP/IP网络协议栈进行交互时，数据封装，发送与解封装。 <a id="more"></a></p>
-<h2 id="典型tcpip网络">典型TCP/IP网络</h2>
-<p>本文使用“图1”网络拓扑，进行说明。两台以太网交换机（Switch）组成了两个以太局域网网段（LAN A和LAN B），其中网段LAN A为“10.22.5.0/24”与网段LAN B为“10.16.56.0/24”，两个网段被路由器（Router）连接形成一个互联网络（internet）。 <img src="/2016-01-01-tcp-data-encapsulation/TCPStack1.png"></p>
-<p>可以使用VirtualBox与GNS3搭建此拓扑，涉及到的操作系统和软件列表为，</p>
+        <p>When computers performs network communication, it’s essentially inter-process communication across operating systems. When communicating between processes within the same operating system, the process exchanges data through pipes, FIFOs, shared memory, etc<a href="https://www.ibm.com/developerworks/cn/linux/l-ipc/" target="_blank" rel="noopener">{1}</a>. The data itself does not change. In network communication, because the operating system is spanned, the process needs to help locate the remote process by using the network layer and transport layer module provided by the operating system. This article briefly describes the data (encapsulation layer) of the interprocess communication when it interacts across the TCP/IP network protocol stack, data encapsulation, transmission and decapsulation. <a id="more"></a></p>
+<h2 id="a-typical-tcpip-network">A Typical TCP/IP Network</h2>
+<p>The two Ethernet switches form two Ethernet LAN segments (LAN A and LAN B), where the network segment LAN A is 10.22.5.0/24 and the network segment LAN B is 10.16.56.0/24. Segments are connected by a router to form an internet. <img src="/2016-01-01-tcp-data-encapsulation/TCPStack1.png"></p>
+<p>Use VirtualBox and GNS3 to build this topology, involving the operating system and software,</p>
 <ul>
-<li>网络A中主机S：Ubuntu14.04</li>
-<li>网络B中主机C：Ubuntu12.04（运行在Virtualbox）</li>
-<li>路由器Router的OS：Cisco2600（运行在GNS3）</li>
+<li>Host A in network A: Ubuntu14.04</li>
+<li>Host B in Network B: Ubuntu 12.04 (running in Virtualbox)</li>
+<li>Router Router OS: Cisco 2600 (running on GNS3)</li>
 </ul>
-<h2 id="操作系统tcpip协议栈结构">操作系统TCP/IP协议栈结构</h2>
-<p>TCP/IP网络的协议栈结构作为互联网中应用最广泛的协议栈结构（图2）。协议栈中，每一层都对应着与这一层相关软件及协议。“应用层”代表着用户进程及其所遵守的相关协议，比如使用浏览器浏览网页时，浏览器进程与远端Web服务器进程进行通信，两者都遵守HTTP协议，浏览器发送请求，服务器回送应答。“传输层”代表着操作系统内核（OS Kernel）中实现的如TCP模块，UDP模块等软件模块及其遵守的协议，传输层为上层提供服务，比如应用层需要数据在传输过程中不丢失，不重复，那么应用层就需要引用TCP协议收发数据。“网络层”用来为数据包寻找目的主机，并将数据发送到目的主机。“数据链路层”执行数据实际的收发操作。数据封装都以这个协议栈结构进行。（实际上传输层的实现并不一定限定在系统内核中，目前绝大多数操作系统实现都把传输层协议放在内核中实现） <img src="/2016-01-01-tcp-data-encapsulation/TCPStack2.png"></p>
-<h2 id="来自用户进程的数据应用层消息">来自用户进程的数据，应用层消息</h2>
-<p>正如TCP/IP协议栈结构中指出，应用层协议是互联网络中进程间通信使用的协议。主要用于互连网络中的两个进程或多个进程互相发送数据。在这一层所发送的数据，我们称为消息（Message），进程间所发送的消息，由进程开发者根据其所引用的应用层协议来生成，比如我们常说的HTTP消息，LDAP消息等等。为了清楚的说明问题，我们暂时抛开复杂的已有应用层协议，来设计一个极简的全新应用层协议，协议规定如下，</p>
+<h2 id="tcpip-protocol-stacks">TCP/IP protocol stacks</h2>
+<p>The TCP/IP nprotocol stack is the most widely applied protocols in the network area (Figure 2). In this protocol stack, each layer corresponds to the software associated with this layer. The “application layer” represents the user process and the related protocols that it complies with. For example, when browsing a webpage using a browser, the browser process communicates with the remote web server process, both of which comply with the HTTP protocol, the browser sends the request, and the server sends back the responses. The “transport layer” represents the software modules implemented in the operating system kernel (sometimes not in OS kernel) such as TCP module, UDP module and the protocols it complies with. The transport layer provides services for the upper layer. For example, the application layer needs data not to be lost during transmission, and not duplicated, the application layer needs to reference the TCP protocol to send and receive data. The “network layer” is used to find the destination host for the packets and route the data to the destination host. The “data link layer” performs the actual transceiving operation of the data. Data encapsulation is performed in this protocol stack structure. (In fact, the implementation of the transport layer is not necessarily limited to the system kernel. At present, most operating system implementations implement the transport layer protocol in the kernel.) <img src="/2016-01-01-tcp-data-encapsulation/TCPStack2.png"></p>
+<h2 id="data-from-user-processes-application-layer-messages">Data from user processes, application layer messages</h2>
+<p>The application layer protocol is the protocol used for interprocess communication in the internetwork. It is mainly used for two processes or multiple processes in the network to send data back and forth. The data sent at this layer, we call them messages, the message sent between processes, generated by the process developer according to the application layer protocol it refers to, such as HTTP messages, LDAP messages, etc. In order to clearly explain the problem, we temporarily set aside complex and existing application layer protocols to design a minimalist new application layer protocol. The protocol is as follows:</p>
 <ul>
-<li>在一个互连网络internet中（注意首字母为小写的互联网络，Internet的超集）</li>
-<li>服务端：主机S中运行的一个“Server”进程（主机S在网络中的位置，见图1）</li>
-<li>客户端：主机C中运行的一个“Client”进程（主机C在网络中的位置，见图1）</li>
-<li>客户端发送请求消息内容为字符串，“request,hostname”，请求服务端的主机名称。</li>
-<li>服务端收到请求消息后，获得自己的主机名称，然后回复应答消息内容为字符串“response,<获取到的主机名称>”。</获取到的主机名称></li>
+<li>In an internet.</li>
+<li>Server：Server process running on host S.</li>
+<li>CLient: Client process running on host C.</li>
+<li>Client sends a string “request,hostname”, which is ask for the hostname of the server.</li>
+<li>After the server receives the message, the server get the hostname of itself, and response a string “response, [the real hostname]”。</li>
 </ul>
-<p>根据现代多任务操作系统的实际情况，这个过程可以示意为： <img src="/2016-01-01-tcp-data-encapsulation/TCPStack3.png"></p>
-<p>在TCP/IP网络中，进程Client将进程Server的相关信息（IP地址，TCP服务端口号）提供给Client OS。进程Server也会通知自己所在的操作系统Server OS，自己要监听来自于哪一个TCP端口的连接请求。以上内容是应用开发者和应用层协议的相关者（比如网络技术支持，黑帽子，白帽子抓包分析等等）需要关注的内容。</p>
-<h2 id="操作系统传输层对应用层消息的封装">操作系统传输层对应用层消息的封装</h2>
-<p>进程“Client”发送的请求消息“request,hostname”不会凭空送到接收端进程“Server”，它需要在操作系统的协助下，流经“图1”中的网络拓扑送到Server进程。“消息”自身的内容并没有提供足够的信息给客户端操作系统，如何去网络中寻找对端主机，乃至运行在对端主机中的进程Server。所以Client进程需要提供这些信息给操作系统，并由操作系统将这些信息追加到应用层消息数据中，这个信息追加的过程就是所谓的“数据封装”（Data Encapsulation），为了重点说明“数据封装”，传输层的分段处理等细节此处暂时不予说明，后续文章中会专门对这些细节进行说明。</p>
+<p>According to the actual situation of modern multi-task operating system, this process can be shown as follows: <img src="/2016-01-01-tcp-data-encapsulation/TCPStack3.png"></p>
+<p>In TCP/IP networks, the process Client provides the Client OS with information about the process Server (IP address, TCP service port number). Process Server also notifies its operating system, Server OS, on which TCP port it is listening for connection requests. The above content is what application developers and application layer protocol stakeholders (such as network technical support, black hat, white hat packet analysis, etc.) need to pay attention to.</p>
+<h2 id="encapsulation-of-application-layer-messages">Encapsulation of application-layer messages</h2>
+<p>The request message “request,hostname” initiated by the process “Client” will not be sent to the receiver process “Server” arbitraily. It has to go through the network topology showen in figure 1 to the Server process with the help of the operating system. The details of “message” itself does not provide enough information to the client operating system to locate the remote host in the network, or even the process Server running in the remote host.Therefore, the Client process needs to provide this information to the operating system, and the operating system will append this information to the application layer message data. This process of information appending is called “data encapsulation”.In order to focus on “data encapsulation”, details such as segmentation of the transport layer will not be explained here, and these details will be specifically explained in subsequent articles.</p>
 <p>根据TCP/IP网络协议栈结构，应用层消息“request,hostname”，首先来到操作系统内核（OS Kernel）中的TCP传输层处理模块。TCP处理模块为消息添加__源端口号（source port）__以标识数据自ClientOS的哪个进程发出，这个端口号由操作系统负责临时分配。另外，它还为消息添加了__目的端口号（destination port）__以标识消息送往对端的哪一个接收进程，这个端口号由Client进程通知操作系统内核，大多数情况使用所谓“众所周知的端口号（Well-Known Port）”，当然端口号的选择并不是限定死的，如本例中Client进程使用的目标端口为1982，或者也可以使用80端口开FTP服务。</p>
 <p>接下来，TCP模块为消息添加了一些重要的附加字段，也就是在“图4”中我标识了“misc”的部分，这部分是TCP协议区别于其他传输层协议的一些核心功能数据字段（如UDP，SCTP等）。至此，传输层对应用层消息封装结束，经过传输层封装后的数据，我们一般称为“段”（segment）。 <img src="/2016-01-01-tcp-data-encapsulation/TCPStack4.png"></p>
 <p>其中Misc部分的详细内容就是TCP的消息头结构中的一部分，细节此处暂时不予说明，后续文章中会专门对这些细节进行说明。 <img src="/2016-01-01-tcp-data-encapsulation/TCPStack5.png"></p>
@@ -577,7 +577,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#典型tcpip网络"><span class="nav-number">1.</span> <span class="nav-text">典型TCP/IP网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统tcpip协议栈结构"><span class="nav-number">2.</span> <span class="nav-text">操作系统TCP/IP协议栈结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#来自用户进程的数据应用层消息"><span class="nav-number">3.</span> <span class="nav-text">来自用户进程的数据，应用层消息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统传输层对应用层消息的封装"><span class="nav-number">4.</span> <span class="nav-text">操作系统传输层对应用层消息的封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统网络层对数据的封装"><span class="nav-number">5.</span> <span class="nav-text">操作系统网络层对数据的封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包离开主机进入网络"><span class="nav-number">6.</span> <span class="nav-text">数据包离开主机，进入网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包去向何方路由器登场"><span class="nav-number">7.</span> <span class="nav-text">数据包去向何方，路由器登场</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包到达目的主机解封装"><span class="nav-number">8.</span> <span class="nav-text">数据包到达目的主机，解封装</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-typical-tcpip-network"><span class="nav-number">1.</span> <span class="nav-text">A Typical TCP/IP Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tcpip-protocol-stacks"><span class="nav-number">2.</span> <span class="nav-text">TCP/IP protocol stacks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#data-from-user-processes-application-layer-messages"><span class="nav-number">3.</span> <span class="nav-text">Data from user processes, application layer messages</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#encapsulation-of-application-layer-messages"><span class="nav-number">4.</span> <span class="nav-text">Encapsulation of application-layer messages</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统网络层对数据的封装"><span class="nav-number">5.</span> <span class="nav-text">操作系统网络层对数据的封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包离开主机进入网络"><span class="nav-number">6.</span> <span class="nav-text">数据包离开主机，进入网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包去向何方路由器登场"><span class="nav-number">7.</span> <span class="nav-text">数据包去向何方，路由器登场</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包到达目的主机解封装"><span class="nav-number">8.</span> <span class="nav-text">数据包到达目的主机，解封装</span></a></li></ol></div>
             
 
           </div>
