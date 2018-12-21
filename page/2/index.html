@@ -555,7 +555,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016-01-11-tcp-self-connection/" itemprop="url">TCP自连接问题</a></h1>
+                <a class="post-title-link" href="/2016-01-11-tcp-self-connection/" itemprop="url">TCP Self Connection Problem</a></h1>
         
 
         <div class="post-meta">
@@ -628,7 +628,7 @@
 
       
         
-          <p>TCP连接可以由两端同时向对方发起的SYN分段建立，同时建立的连接发生必须满足一个条件，两个TCP端发出SYN连接请求后，收到的仍然是一个SYN连接请求，而收到的SYN，恰好来自发出SYN去请求连接的一端。那么会不会有这样一种情况呢？一个TCP端发出一个SYN分段给自己，这个SYN分段所请求的连接正是这个TCP端自身，这样就符合了条件“发出SYN请求的同时收到了SYN请求，而收到的SYN恰好来自请求连接的一端”。这种情况是实际存在的，被称为TCP自连接。自连接的存在经常引发一些莫名其妙的问题和难以复现的故障和软件BUG。</p>
+          <p>TCP connection can be established by SYN segmentation initiated by both ends to the other party at the same time. At the same time, the established connection must meet one condition. After SYN connection request is issued by both TCP ends, a SYN connection request is still received, and the SYN received is exactly from the end that sent SYN to request connection.So is there a situation like this? A TCP end issues a SYN segment to itself, and the connection requested by the SYN segment is exactly the TCP end itself, which meets the condition of “SYN request is received at the same time as SYN request, and the SYN received happens to be from the end of the requesting connection”. This situation is real and is called TCP self-connection. The existence of self-connectivity often causes inexplicable problems and hard-to-reproduce failures and software bugs.</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016-01-11-tcp-self-connection/#more" rel="contents">
