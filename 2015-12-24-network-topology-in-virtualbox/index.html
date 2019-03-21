@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="en">
+<html class="theme-next pisces use-motion" lang="en">
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox4.png">
 <meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox5.png">
 <meta property="og:image" content="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/VBox6.png">
-<meta property="og:updated_time" content="2018-12-14T06:25:56.016Z">
+<meta property="og:updated_time" content="2019-01-27T05:06:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="VirtualBox Network Topology">
 <meta name="twitter:description" content="VirtualBox is a powerful x86 and AMD64/Intel64 virtualization software(VBox for short), which can be used to construct kinds of debug or test network environments, to capture or analyse the packets in">
@@ -106,7 +106,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Pisces',
     version: '5.1.4',
     sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -220,9 +220,43 @@
       
 
       
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
   
 </nav>
 
@@ -320,6 +354,17 @@
 
           
           
+             <span id="/2015-12-24-network-topology-in-virtualbox/" class="leancloud_visitors" data-flag-title="VirtualBox Network Topology">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
 
           
 
@@ -345,7 +390,7 @@
 <h1 id="network-adapter">Network Adapter</h1>
 <p>VBox provide <strong>8 PCI network adapter for each client</strong>, only 4 of them can be configured with GUI, and all 8 adapters can be configured through command line interface.</p>
 <p>Optional categaries:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">AMD PCNet PCI II(Am79C970A)</span><br><span class="line">AMD PCNet FAST III(Am79C973)</span><br><span class="line">Intel PRO/1000 MT Desktop(82540EM)</span><br><span class="line">Intel PRO/1000 T Server(82543GC)</span><br><span class="line">Intel PRO/1000 MT Server(82545EM)</span><br><span class="line">Paravirtualized network adapter(virtio-net, KVM project related)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">AMD PCNet PCI II(Am79C970A)</span><br><span class="line">AMD PCNet FAST III(Am79C973)</span><br><span class="line">Intel PRO/1000 MT Desktop(82540EM)</span><br><span class="line">Intel PRO/1000 T Server(82543GC)</span><br><span class="line">Intel PRO/1000 MT Server(82545EM)</span><br><span class="line">Paravirtualized network adapter(virtio-net, KVM project related)</span><br></pre></td></tr></table></figure>
 <p>Remark, all the client OS must contain the specific driver for the specific adapter.(Most of modern OS have the drivers.)</p>
 <h1 id="network-types">Network Types</h1>
 <p>VBox provides us 7 options to fullfill kinds of requirements.</p>
@@ -354,7 +399,7 @@
 <h2 id="option-2-network-address-translationnat">Option 2: Network Address Translation(NAT)</h2>
 <p>‘NAT’ is a default option when VBox is installed. VBox provide a NAT router for every clientos and DHCP service. <img src="/2015-12-24-network-topology-in-virtualbox/VBox2.png" alt="NAT"></p>
 <p>e.g. we config 3 clientos at the same time, the 10.0.2.15 is assigned to all the 3 clientos, the default gateway IP address is 10.0.2.2. The default segment is 10.0.2/24. Of course, the default information can be changed with the command:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vboxmanage modifyvm &lt;vmname&gt; --natnet1 &quot;192.168/16&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vboxmanage modifyvm &lt;vmname&gt; --natnet1 <span class="string">"192.168/16"</span></span><br></pre></td></tr></table></figure>
 <p>If the Host os can access the Internet，so do the client os. From the physical network point of view, all of the packets which actually come from the different client os, are all from the Vbox process. At the same time, it’s also show us that the NAT network can be recursive. Now, if any user from the physical network need to access any of the client os in VBox, port forwarding setting method should be considered.</p>
 <h2 id="option-3-nat-networkexperimental">Option 3: NAT Network(Experimental)</h2>
 <p>All of the clients on VBox share the same NAT router. It’s just like the wifi router used at home. <img src="/2015-12-24-network-topology-in-virtualbox/VBox3.png" alt="NAT Network"></p>
@@ -362,23 +407,23 @@
 <h2 id="option-4-bridged-networking">Option 4: Bridged Networking</h2>
 <p>In this mode, client and host machine are bridged in the same ethernet segment. In other words, the clients are connected to the physical network directly. If there’s a DHCP server, the clients get IP addresses automatically. Theoretically, in the bridged mode, either the clients or the VBox itself can provide the DHCP service for the network, and it highly possible result unpredictable conflicts. It’s not recommended to do this. <img src="/2015-12-24-network-topology-in-virtualbox/VBox4.png" alt="Bridged Networking"></p>
 <p>If the host is multihomed, the network interface should be indicated specifically.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#The bridge interface printout</span><br><span class="line">vboxmanage list bridgedifs</span><br><span class="line">#Bridge</span><br><span class="line">vboxmanage modifyvm &lt;vmname&gt; --nic&lt;X&gt; bridged --bridgeadapter&lt;X&gt; &lt;bridgedifs&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#The bridge interface printout</span></span><br><span class="line">vboxmanage list bridgedifs</span><br><span class="line"><span class="comment">#Bridge</span></span><br><span class="line">vboxmanage modifyvm &lt;vmname&gt; --nic&lt;X&gt; bridged --bridgeadapter&lt;X&gt; &lt;bridgedifs&gt;</span><br></pre></td></tr></table></figure>
 <p>Notice that this mode is only effective when the data-link layer is ethernet network including the cabled or the wireless.</p>
 <h2 id="option-5-internal-networking">Option 5: Internal Networking</h2>
 <p>In the process of developing a netowrk app, it’s inevitable to capture the network data packets for debuging or test. Most of the time, engineers prefer the bridged mode. Sometimes it’s more useful to choose the internal network mode. For instance, if the packets will impact the physical network, we should prevent this kind of situation in product environment, or, if we need excluding the extra interference packets, to simplify the analysing process. <img src="/2015-12-24-network-topology-in-virtualbox/VBox5.png" alt="Internal Networking"></p>
 <p>VBox CAN provide DHCP service in this mode, here is the configuration procedure:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Check the Internal Network</span><br><span class="line">vboxmanage list intnets</span><br><span class="line"># Modify the given nic x to Internal Networking</span><br><span class="line">vboxmanage modifyvm &lt;vmname&gt; --nic&lt;x&gt; &lt;intnet&gt;</span><br><span class="line"># Add DHCP service for the Internal Network</span><br><span class="line">vboxmanage dhcpserver add --netname &lt;network_name&gt;</span><br><span class="line"># Check all the DHCP service</span><br><span class="line">vboxmanage list dhcpservers</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Check the Internal Network</span></span><br><span class="line">vboxmanage list intnets</span><br><span class="line"><span class="comment"># Modify the given nic x to Internal Networking</span></span><br><span class="line">vboxmanage modifyvm &lt;vmname&gt; --nic&lt;x&gt; &lt;intnet&gt;</span><br><span class="line"><span class="comment"># Add DHCP service for the Internal Network</span></span><br><span class="line">vboxmanage dhcpserver add --netname &lt;network_name&gt;</span><br><span class="line"><span class="comment"># Check all the DHCP service</span></span><br><span class="line">vboxmanage list dhcpservers</span><br></pre></td></tr></table></figure>
 <p>DHCP service can be configed on one of the client. Static IP address can also be assigned to client directly. Please notice that, under UNIX like os, VBox should run with the same login user to construct a internal network.</p>
 <h2 id="option-6-host-only-networking">Option 6: Host-only Networking</h2>
 <p>In this mode, it’s just like the internal mode, the only difference is that the host machine is added into the internal network. In this mode, it’s optional whether the VBox provides the DHCP service or not. <img src="/2015-12-24-network-topology-in-virtualbox/VBox6.png" alt="Host-only"></p>
 <p>Configuration procedure:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># Config the given nic x of a specific vmname to Host-only mode</span><br><span class="line">vboxmanage modifyvm &lt;vmname&gt; --nic&lt;x&gt; hostonly</span><br><span class="line"># Construct the network which is reserved by Host-only mode</span><br><span class="line">vboxmanage hostonlyif create</span><br><span class="line"># Check the results</span><br><span class="line">vboxmanage list hostonlyifs</span><br><span class="line"># Client power on, on the host machine, check the new created network if</span><br><span class="line">ifconfig</span><br><span class="line"># Switch on the DHCP service which is provided by VBox</span><br><span class="line">vboxmanage dhcpserver add --netname &lt;network_name&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Config the given nic x of a specific vmname to Host-only mode</span></span><br><span class="line">vboxmanage modifyvm &lt;vmname&gt; --nic&lt;x&gt; hostonly</span><br><span class="line"><span class="comment"># Construct the network which is reserved by Host-only mode</span></span><br><span class="line">vboxmanage hostonlyif create</span><br><span class="line"><span class="comment"># Check the results</span></span><br><span class="line">vboxmanage list hostonlyifs</span><br><span class="line"><span class="comment"># Client power on, on the host machine, check the new created network if</span></span><br><span class="line">ifconfig</span><br><span class="line"><span class="comment"># Switch on the DHCP service which is provided by VBox</span></span><br><span class="line">vboxmanage dhcpserver add --netname &lt;network_name&gt;</span><br></pre></td></tr></table></figure>
 <p>After DHCP Server start, sometimes, the client can’t get a proper IP address. It’s a bug of VBox (<a href="https://www.VirtualBox.org/ticket/4038" target="_blank" rel="noopener">#4038</a>). The remedy is to power off all the client machine, on the host machine, kill all the VBox processes, restart the VBox, power on all of the hosts again.</p>
 <h2 id="option-7">Option 7</h2>
 <p>A unusual used option, please refer the <a href="https://www.VirtualBox.org/manual/" target="_blank" rel="noopener">document</a> for details.</p>
 <h1 id="the-packets-capture-feature-of-vbox">The packets-capture-feature of VBox</h1>
 <p>When we need to capture the packets in the network constructed in VBox, tools like tcpdump or wireshark can be applied. VBox provide another option for packets capturing. Procedure:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#Power off the clients</span><br><span class="line">vboxmanage modifyvm [vmname] --nictrace[adapterX] on --nictracefile[adapterX] &lt;filename&gt;.pcap</span><br><span class="line">#Power on the clients, the packets will be captured automatically. After caturing, stop,</span><br><span class="line">vboxmanage modifyvm [vmname] --nictrace[adapterX] off --nictracefile[adapterX] &lt;filename&gt;.pcap</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Power off the clients</span></span><br><span class="line">vboxmanage modifyvm [vmname] --nictrace[adapterX] on --nictracefile[adapterX] &lt;filename&gt;.pcap</span><br><span class="line"><span class="comment">#Power on the clients, the packets will be captured automatically. After caturing, stop,</span></span><br><span class="line">vboxmanage modifyvm [vmname] --nictrace[adapterX] off --nictracefile[adapterX] &lt;filename&gt;.pcap</span><br></pre></td></tr></table></figure>
 <h1 id="the-test-environment-referred-in-the-artical.">The test environment referred in the artical.</h1>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Host OS: ubuntu 14.04 LTS</span><br><span class="line">Client OS: ubuntu 12.04.2 LTS, ubuntu-14.04.2-server</span><br><span class="line">VirtualBox: Version 4.3.0 Ubuntu R93012</span><br></pre></td></tr></table></figure>
 
@@ -392,6 +437,24 @@
 
     
 
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    toto
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://taotao.guru/2015-12-24-network-topology-in-virtualbox/" title="VirtualBox Network Topology">http://taotao.guru/2015-12-24-network-topology-in-virtualbox/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
@@ -494,7 +557,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -583,7 +646,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -695,6 +758,13 @@
   
   
 
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
@@ -743,11 +813,435 @@
 
   
 
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('-1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
 
 
 
 
   
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("Ydm0PHunjDoFd8GhNYLQhkwF-gzGzoHsz", "VLMknIKI1rHOerV09D0IThD1");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
 
   
 
