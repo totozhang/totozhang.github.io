@@ -91,7 +91,7 @@
 <meta property="og:image" content="http://taotao.guru/2019-03-06-sugarscape/1.jpg">
 <meta property="og:image" content="http://taotao.guru/2019-03-06-sugarscape/2.jpg">
 <meta property="og:image" content="http://taotao.guru/2019-03-06-sugarscape/3.jpg">
-<meta property="og:updated_time" content="2019-03-23T01:41:23.727Z">
+<meta property="og:updated_time" content="2019-03-23T01:47:25.862Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="大糖帝国的实现（上）">
 <meta name="twitter:description" content="本文主要是记录实现“西西河”论坛的名帖“大糖帝国”的基本思路，原文链接目前已经404了，文章作者是“淮夷”。文章内容来自《The Origin of Wealth》书中的一个章节中提及的经济模型游戏，此书的写作视角很独特，推荐给朋友们阅读。此文的中文翻译正是翻译了这本书中的Sugarscape这部分内容，翻译要比原书的英文内容描述的更加精彩。这个著名游戏是1996年美国布鲁金斯研究所的Epstei">
@@ -405,7 +405,7 @@
 <p>如今中国的贫富悬殊程度已经全球瞩目，十八大报告又强调中国“必须坚持走共同富裕道路”，这条路怎样才能走的通呢？中国的未来方案有待观察。但是我希望中国能走通这条路，中国也必须走通这条路。毕竟，大多数国民并不喜欢生活在一个“富者田连阡陌，贫者无立锥之地”的大糖帝国。</p>
 <p>以上为原帖内容。</p>
 <h1 id="大糖帝国实现效果">大糖帝国实现效果</h1>
-<p>根据原文的说明，我在地图中随机分布了200个糖人，为了清楚展示糖人的数量及分布情况，饿死的糖人没有将其清除出地图，糖人死后不能移动，不能吃糖，不影响其尸体所在位置的含糖量的变化，活着的糖人可以践踏在尸体上吃糖，也就是说，死去的糖人在地图上相当于不存在。活着的糖人为蓝色。饿死的糖人为淡绿色。200个糖人全部都移动一次，算是这个世界中1天时间结束。糖人移动的先后顺序是随机的，类似多线程被随机调度。一个瞬时，只有一个糖人在移动，所以多个糖人针对同一时刻，针对同一含糖量较高的目的地不存在竞争关系。由于每次调度都是随机的，所以针对各个糖人来说，寻找含糖量最高点的概率是相同的。</p>
+<p>根据原文的说明，我在地图中随机分布了200个糖人，为了清楚展示糖人的数量及分布情况，饿死的糖人没有将其清除出地图，糖人死后不能移动，不能吃糖，不影响其尸体所在位置的含糖量的变化，活着的糖人可以践踏在尸体上吃糖，也就是说，死去的糖人在地图上相当于不存在。活着的糖人为蓝色。饿死的糖人为淡绿色。200个糖人全部都移动一次，算是这个世界中1天时间结束。糖人移动的先后顺序是随机的，类似多线程被随机调度。一个瞬时，只有一个糖人在移动，所以多个糖人针对同一时刻，同一含糖量较高的目的地不存在竞争关系。由于每次调度都是随机的，所以针对各个糖人来说，寻找含糖量最高点的概率是相同的。</p>
 <h2 id="地图含糖量每次恢复1个单位糖量的情形">地图含糖量每次恢复1个单位糖量的情形</h2>
 <p>地图上每个点每“天”恢复1单位糖，是含糖量恢复速度最慢的设定，由于资源的恢复速度不高，导致糖人不得不离开自己的位置寻找更好的目标位置，所以糖人并不会完全聚集在糖山，糖人的分布并没有出现书中的情景。 <div id="dplayer0" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer0"),"theme":"#FADFA3","video":{"url":"https://totozhang.github.io/2019-03-06-sugarscape/1.mp4","pic":"https://totozhang.github.io/2019-03-06-sugarscape/4.png"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>
 <h2 id="地图含糖量每次恢复4个单位糖量的情形">地图含糖量每次恢复4个单位糖量的情形</h2>
