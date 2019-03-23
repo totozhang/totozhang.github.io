@@ -91,7 +91,7 @@
 <meta property="og:image" content="http://taotao.guru/2019-03-06-sugarscape/1.jpg">
 <meta property="og:image" content="http://taotao.guru/2019-03-06-sugarscape/2.jpg">
 <meta property="og:image" content="http://taotao.guru/2019-03-06-sugarscape/3.jpg">
-<meta property="og:updated_time" content="2019-03-23T01:47:25.862Z">
+<meta property="og:updated_time" content="2019-03-23T05:00:29.543Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="大糖帝国的实现（上）">
 <meta name="twitter:description" content="本文主要是记录实现“西西河”论坛的名帖“大糖帝国”的基本思路，原文链接目前已经404了，文章作者是“淮夷”。文章内容来自《The Origin of Wealth》书中的一个章节中提及的经济模型游戏，此书的写作视角很独特，推荐给朋友们阅读。此文的中文翻译正是翻译了这本书中的Sugarscape这部分内容，翻译要比原书的英文内容描述的更加精彩。这个著名游戏是1996年美国布鲁金斯研究所的Epstei">
@@ -384,7 +384,6 @@
       
         <p>本文主要是记录实现“西西河”论坛的名帖“<a href="http://www.cchere.com/article/3816960" target="_blank" rel="noopener">大糖帝国</a>”的基本思路，<a href="http://www.cchere.com/article/3816960" target="_blank" rel="noopener">原文链接</a>目前已经404了，文章作者是“<strong>淮夷</strong>”。文章内容来自《The Origin of Wealth》书中的一个章节中提及的经济模型游戏，此书的写作视角很独特，推荐给朋友们阅读。此文的中文翻译正是翻译了这本书中的Sugarscape这部分内容，翻译要比原书的英文内容描述的更加精彩。这个著名游戏是1996年美国布鲁金斯研究所的Epstein和Axtell设计的，这两位是用计算机程序模拟经济演化的先驱。唯一的遗憾是原作者和翻译者都没有放出游戏的源代码，因为模型很简洁，所以我决定使用Python自己实现这个模型。<a id="more"></a></p>
 <h1 id="大糖帝国原帖">大糖帝国原帖</h1>
-<p>再次强调一下，此贴原作者是西西河论坛“淮夷“创建于:2012-11-19 13:13:04。<a href="http://www.cchere.com/article/3816960" target="_blank" rel="noopener">点击此处为原文链接</a>。</p>
 <p>设想你生活在一个棋盘上面。棋盘上唯一的资源是糖。你在棋盘上四处移动，试图吃到尽可能多的糖。这个棋盘称作Sugarscape，我给它起的中文名字是“大糖帝国”。这个著名游戏是1996年美国布鲁金斯研究所的Epstein和Axtell设计的，这两位是用计算机程序模拟经济演化的先驱。最近我读过一本砖头厚的书《The Origin of Wealth》，提及一些类似的模拟实验。目的是这样：通过简单的计算机规则，能否模拟出复杂的社会现象，找出现象的成因？为此，他们设计了一个下面的棋盘，然后随机扔进去250个糖人，这些糖人象征着社会中的每一个个体。</p>
 <p><img src="/2019-03-06-sugarscape/1.jpg"></p>
 <p>左侧是大糖帝国的地形图，由50X50个单元格组成。深色格子含糖高，浅色的含糖少，白色的不含糖。西南和东北有两座深色的糖山，是资源富裕区。棋盘上有大片的浅色地带（资源有限区）和白色无糖区（不妨想像为真实世界的沙漠）。右侧图中，250个糖人（黑点）被随机播撒在各个角落。它们在棋盘上漫游，寻找糖吃。每个糖人都是单独的计算机程序(agent)，它们有能力吸收信息，观察四周，做出行动。</p>
