@@ -95,7 +95,7 @@
 <meta property="og:image" content="http://taotao.guru/2019-03-06-sugarscape/1.jpg">
 <meta property="og:image" content="http://taotao.guru/2019-03-06-sugarscape/2.jpg">
 <meta property="og:image" content="http://taotao.guru/2019-03-06-sugarscape/3.jpg">
-<meta property="og:updated_time" content="2019-03-23T14:19:53.425Z">
+<meta property="og:updated_time" content="2019-03-23T14:28:24.171Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="大糖帝国的实现（上）">
 <meta name="twitter:description" content="本文主要针对来自“西西河”论坛的名帖“大糖帝国”的进行实现，西西河的原文链接目前已经404了，我将原文附在了本文末尾。大糖帝国这篇文章内容是由淮夷”提取自《The Origin of Wealth》书中的一个章节中提及的经济学建模，并且淮夷追加了一些自己的观点。大糖帝国正是翻译了这本书中的Sugarscape这个章节的内容，我个人觉得中文翻译要比原书的英文内容描述的更加精彩。这个著名游戏是1996">
@@ -394,7 +394,7 @@
 <p>运行初期和90个运行周期后的详细统计数据，可以看到糖量的占据分布并没有呈现2-8分布，因为糖人的基数较小，除了因为基因和运气不好死掉的糖人，其他活着的基本可以认为是均匀分布。</p>
 <p><img src="/2019-03-06-sugarscape/5.png"></p>
 <p><img src="/2019-03-06-sugarscape/6.png"></p>
-<h2 id="地图含糖量每次恢复4个单位糖量">地图含糖量每次恢复4个单位糖量</h2>
+<h2 id="地图含糖量恢复速度设定为4糖量天">地图含糖量恢复速度设定为“4糖量/天”</h2>
 <p>地图上一个点每“天”恢复4单位糖，是含糖量恢复速度最高的设定，资源充足导致占据有利位置的糖人停止迁移，汇聚在资源较多的位置，而因饥饿死亡的糖人数量与第一种情况并没有很大区别。 <div id="dplayer1" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer1"),"theme":"#FADFA3","video":{"url":"https://totozhang.github.io/2019-03-06-sugarscape/2.mp4","pic":"https://totozhang.github.io/2019-03-06-sugarscape/4.png"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script></p>
 <p>运行初期和260个运行周期后的详细统计数据，可以看到糖量的占据分布依旧没有呈现2-8分布，活着的糖人数量呈现无规律分布。调整了多个参数进行测试，在多次测试中，没有重现出文章中提到的2-8分布情况。我现在开始怀疑作者没放出源代码的原因了。</p>
 <p><img src="/2019-03-06-sugarscape/7.png"></p>
@@ -621,7 +621,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#大糖帝国实现及运行"><span class="nav-number">1.</span> <span class="nav-text">大糖帝国实现及运行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#地图含糖量恢复速度设定为1糖量天"><span class="nav-number">1.1.</span> <span class="nav-text">地图含糖量恢复速度设定为“1糖量/天”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#地图含糖量每次恢复4个单位糖量"><span class="nav-number">1.2.</span> <span class="nav-text">地图含糖量每次恢复4个单位糖量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#地图含糖量停止恢复"><span class="nav-number">1.3.</span> <span class="nav-text">地图含糖量停止恢复</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附大糖帝国原帖"><span class="nav-number">2.</span> <span class="nav-text">附：大糖帝国原帖</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#大糖帝国实现及运行"><span class="nav-number">1.</span> <span class="nav-text">大糖帝国实现及运行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#地图含糖量恢复速度设定为1糖量天"><span class="nav-number">1.1.</span> <span class="nav-text">地图含糖量恢复速度设定为“1糖量/天”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#地图含糖量恢复速度设定为4糖量天"><span class="nav-number">1.2.</span> <span class="nav-text">地图含糖量恢复速度设定为“4糖量/天”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#地图含糖量停止恢复"><span class="nav-number">1.3.</span> <span class="nav-text">地图含糖量停止恢复</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附大糖帝国原帖"><span class="nav-number">2.</span> <span class="nav-text">附：大糖帝国原帖</span></a></li></ol></div>
             
 
           </div>
