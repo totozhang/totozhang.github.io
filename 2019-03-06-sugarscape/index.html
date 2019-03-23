@@ -81,12 +81,12 @@
 
 
 
-<meta name="description" content="本文主要针对来自“西西河”论坛的名帖“大糖帝国”的进行实现，西西河的原文链接目前已经404了，我将原文附在了本文末尾。大糖帝国这篇文章内容是由淮夷”提取自《The Origin of Wealth》书中的一个章节中提及的经济学建模，并且淮夷追加了一些自己的观点。大糖帝国正是翻译了这本书中的Sugarscape这个章节的内容，我个人觉得中文翻译要比原书的英文内容描述的更加精彩。这个著名游戏是1996">
+<meta name="description" content="本文主要针对来自“西西河”论坛的名帖“大糖帝国”进行实现，西西河的原文链接目前已经404了，我将原文附在了本文末尾。大糖帝国这篇文章内容是由淮夷”提取自《The Origin of Wealth》书中的一个章节中提及的经济学建模，并且淮夷追加了一些自己的观点。大糖帝国正是翻译了这本书中的Sugarscape这个章节的内容，我个人觉得中文翻译要比原书的英文内容描述的更加精彩。这个著名游戏是1996年">
 <meta property="og:type" content="article">
 <meta property="og:title" content="大糖帝国的实现（上）">
 <meta property="og:url" content="http://taotao.guru/2019-03-06-sugarscape/index.html">
 <meta property="og:site_name" content="Back To The Basics">
-<meta property="og:description" content="本文主要针对来自“西西河”论坛的名帖“大糖帝国”的进行实现，西西河的原文链接目前已经404了，我将原文附在了本文末尾。大糖帝国这篇文章内容是由淮夷”提取自《The Origin of Wealth》书中的一个章节中提及的经济学建模，并且淮夷追加了一些自己的观点。大糖帝国正是翻译了这本书中的Sugarscape这个章节的内容，我个人觉得中文翻译要比原书的英文内容描述的更加精彩。这个著名游戏是1996">
+<meta property="og:description" content="本文主要针对来自“西西河”论坛的名帖“大糖帝国”进行实现，西西河的原文链接目前已经404了，我将原文附在了本文末尾。大糖帝国这篇文章内容是由淮夷”提取自《The Origin of Wealth》书中的一个章节中提及的经济学建模，并且淮夷追加了一些自己的观点。大糖帝国正是翻译了这本书中的Sugarscape这个章节的内容，我个人觉得中文翻译要比原书的英文内容描述的更加精彩。这个著名游戏是1996年">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://taotao.guru/2019-03-06-sugarscape/5.png">
 <meta property="og:image" content="http://taotao.guru/2019-03-06-sugarscape/6.png">
@@ -95,10 +95,10 @@
 <meta property="og:image" content="http://taotao.guru/2019-03-06-sugarscape/1.jpg">
 <meta property="og:image" content="http://taotao.guru/2019-03-06-sugarscape/2.jpg">
 <meta property="og:image" content="http://taotao.guru/2019-03-06-sugarscape/3.jpg">
-<meta property="og:updated_time" content="2019-03-23T14:28:24.171Z">
+<meta property="og:updated_time" content="2019-03-23T14:34:54.177Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="大糖帝国的实现（上）">
-<meta name="twitter:description" content="本文主要针对来自“西西河”论坛的名帖“大糖帝国”的进行实现，西西河的原文链接目前已经404了，我将原文附在了本文末尾。大糖帝国这篇文章内容是由淮夷”提取自《The Origin of Wealth》书中的一个章节中提及的经济学建模，并且淮夷追加了一些自己的观点。大糖帝国正是翻译了这本书中的Sugarscape这个章节的内容，我个人觉得中文翻译要比原书的英文内容描述的更加精彩。这个著名游戏是1996">
+<meta name="twitter:description" content="本文主要针对来自“西西河”论坛的名帖“大糖帝国”进行实现，西西河的原文链接目前已经404了，我将原文附在了本文末尾。大糖帝国这篇文章内容是由淮夷”提取自《The Origin of Wealth》书中的一个章节中提及的经济学建模，并且淮夷追加了一些自己的观点。大糖帝国正是翻译了这本书中的Sugarscape这个章节的内容，我个人觉得中文翻译要比原书的英文内容描述的更加精彩。这个著名游戏是1996年">
 <meta name="twitter:image" content="http://taotao.guru/2019-03-06-sugarscape/5.png">
 
 
@@ -386,7 +386,7 @@
       
 
       
-        <p>本文主要针对来自“西西河”论坛的名帖“<a href="http://www.cchere.com/article/3816960" target="_blank" rel="noopener">大糖帝国</a>”的进行实现，西西河的<a href="http://www.cchere.com/article/3816960" target="_blank" rel="noopener">原文链接</a>目前已经404了，我将原文附在了本文末尾。大糖帝国这篇文章内容是由<strong>淮夷</strong>”提取自《The Origin of Wealth》书中的一个章节中提及的经济学建模，并且淮夷追加了一些自己的观点。大糖帝国正是翻译了这本书中的Sugarscape这个章节的内容，我个人觉得中文翻译要比原书的英文内容描述的更加精彩。这个著名游戏是1996年美国布鲁金斯研究所的Epstein和Axtell设计的，这两位是用计算机程序模拟经济演化的先驱。唯一的遗憾是书的原作者和西西河的翻译者都没有放出游戏的源代码，因为模型很简洁并且非常具有可玩性，所以我决定使用Python自己实现这个模型。<a id="more"></a></p>
+        <p>本文主要针对来自“西西河”论坛的名帖“<a href="http://www.cchere.com/article/3816960" target="_blank" rel="noopener">大糖帝国</a>”进行实现，西西河的<a href="http://www.cchere.com/article/3816960" target="_blank" rel="noopener">原文链接</a>目前已经404了，我将原文附在了本文末尾。大糖帝国这篇文章内容是由<strong>淮夷</strong>”提取自《The Origin of Wealth》书中的一个章节中提及的经济学建模，并且淮夷追加了一些自己的观点。大糖帝国正是翻译了这本书中的Sugarscape这个章节的内容，我个人觉得中文翻译要比原书的英文内容描述的更加精彩。这个著名游戏是1996年美国布鲁金斯研究所的Epstein和Axtell设计的，这两位是用计算机程序模拟经济演化的先驱。唯一的遗憾是书的原作者和西西河的翻译者都没有放出游戏的源代码，因为模型很简洁并且非常具有可玩性，所以我决定使用Python自己实现这个模型。<a id="more"></a></p>
 <h1 id="大糖帝国实现及运行">大糖帝国实现及运行</h1>
 <p>根据大糖帝国的阐述，我在地图中随机分布了250个糖人，为了清楚展示糖人的数量及分布情况，饿死的糖人没有按照原文的说法将其清除出地图，糖人死后只是不继续移动，不吃糖，并且不影响其尸体所在位置的含糖量的变化。活着的糖人可以践踏在死去糖人尸体上吃糖，也就是说，死去的糖人在地图上除了显示位置，可以认为其不会影响游戏的进程。活着的糖人为蓝色。饿死的糖人为淡绿色。250个糖人全部都找寻了目的地并移动一次，算是这个世界中1个自然天时间周期结束。糖人移动的先后顺序是随机的，类似多线程的随机调度。一个瞬时，只有一个糖人在移动，所以多个糖人在同一时刻，针对同一含糖量较高的目的地实际上不存在竞争关系。由于每次调度都是随机的，所以对于各个糖人来说，寻找含糖量最高点的概率是相同的。以下设定了几种运行情况，实际上还有更多的情景可以进行测试。</p>
 <h2 id="地图含糖量恢复速度设定为1糖量天">地图含糖量恢复速度设定为“1糖量/天”</h2>
