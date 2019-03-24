@@ -81,19 +81,19 @@
 
 
 
-<meta name="description" content="Why the fundamental theorem of calculus is gorgeous?  In the ancient history, it’s easy to calculate the areas like triangles, circles, rectangles or shapes which are consist of the previous ones, eve">
+<meta name="description" content="Why the fundamental theorem of calculus is gorgeous? In the ancient history, it’s easy to calculate the areas like triangles, circles, rectangles or shapes which are consist of the previous ones, even">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Fundamental theorem of calculus">
 <meta property="og:url" content="http://taotao.guru/2018-03-08-fundamental-theorem-of-calculus/index.html">
 <meta property="og:site_name" content="Back To The Basics">
-<meta property="og:description" content="Why the fundamental theorem of calculus is gorgeous?  In the ancient history, it’s easy to calculate the areas like triangles, circles, rectangles or shapes which are consist of the previous ones, eve">
+<meta property="og:description" content="Why the fundamental theorem of calculus is gorgeous? In the ancient history, it’s easy to calculate the areas like triangles, circles, rectangles or shapes which are consist of the previous ones, even">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://taotao.guru/2018-03-08-fundamental-theorem-of-calculus/1.png">
 <meta property="og:image" content="http://taotao.guru/2018-03-08-fundamental-theorem-of-calculus/2.png">
 <meta property="og:updated_time" content="2018-12-17T02:10:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Fundamental theorem of calculus">
-<meta name="twitter:description" content="Why the fundamental theorem of calculus is gorgeous?  In the ancient history, it’s easy to calculate the areas like triangles, circles, rectangles or shapes which are consist of the previous ones, eve">
+<meta name="twitter:description" content="Why the fundamental theorem of calculus is gorgeous? In the ancient history, it’s easy to calculate the areas like triangles, circles, rectangles or shapes which are consist of the previous ones, even">
 <meta name="twitter:image" content="http://taotao.guru/2018-03-08-fundamental-theorem-of-calculus/1.png">
 
 
@@ -381,20 +381,26 @@
       
 
       
-        <p>Why the fundamental theorem of calculus is gorgeous?  In the ancient history, it’s easy to calculate the areas like triangles, circles, rectangles or shapes which are consist of the previous ones, even some genius can calculate the area which is under a closed region of a parabola boundary by indefinitely exhaustive method. Actually it’s the calculation of integrals with the help of the definition of  definite calculus. Such as we caculate the area bounded by the $f(x)=x^2$, axis $x$ and axis $y$, which is OAB. <a id="more"></a></p>
-<p><img src="/2018-03-08-fundamental-theorem-of-calculus/1.png" alt=""></p>
-<p>Definition of  definite calculus,  we use this to stand for the area by the standard Leibniz notation.</p>
-<script type="math/tex; mode=display">
-\int_a^b f(x)dx = \lim_{\max\Delta x_k\to0}\sum_{k=1}^nf(x^*_k) \Delta x_k</script><p>Assume the point B is $(b, 0)$, cut the $OAB$ into n rectangles. The area of the first one is $(\frac{b}{n})(\frac{b}{n})^2$, the second is $(\frac{b}{n})(\frac{2b}{n})^2$ , and the nth is $(\frac{b}{n})(\frac{nb}{n})^2$ , so we have the S,  apparently,  $\Delta x_k = \frac{b}{n}$</p>
-<script type="math/tex; mode=display">
-S = (\frac{b}{n})(\frac{2b}{n})^2  + (\frac{b}{n})(\frac{nb}{n})^2 + ... + (\frac{b}{n})(\frac{nb}{n})^2</script><script type="math/tex; mode=display">
-S=(\frac{b^3}{n^3})(1^2+2^2+...+(n-1)^2+n^2)</script><script type="math/tex; mode=display">
-S=(\frac{b^3}{n^3})(\frac{n(n+1)(2n+1)}{6})=b^3(\frac{1}{6}+\frac{1}{6n})(2+\frac{1}{n})</script><p>When $\Delta x_k\to0, n\to\infty, S=\frac{b^3}{3}$.</p>
-<p>But what about the calculation of $f(x)=x^5$, $f(x)=cosx$, $f(x)=(1+\frac{1}{x^5})$ , it’s not so easy with previous primary method to get the result. We have to use the fundamental theorem of calculation which is described as If $f(x)$ is a continuous function on a closed interval $[a,b]$, $F(x)$ is any antiderivative of $f(x)$, in another word $\int f(x)dx=F(x)+c$, then $\int_a^b f(x)dx = F(b)-F(a)$.</p>
-<p>Now we have a weapon to solve the previous problem in a flash moment. $\int_0^b x^2dx = F(b) = \frac{b^3}{3}$</p>
+        <p>Why the fundamental theorem of calculus is gorgeous? In the ancient history, it’s easy to calculate the areas like triangles, circles, rectangles or shapes which are consist of the previous ones, even some genius can calculate the area which is under a closed region of a parabola boundary by indefinitely exhaustive method. Actually it’s the calculation of integrals with the help of the definition of definite calculus. Such as we caculate the area bounded by the <span class="math inline">\(f(x)=x^2\)</span>, axis <span class="math inline">\(x\)</span> and axis <span class="math inline">\(y\)</span>, which is OAB. <a id="more"></a></p>
+<p><img src="/2018-03-08-fundamental-theorem-of-calculus/1.png"></p>
+<p>Definition of definite calculus, we use this to stand for the area by the standard Leibniz notation. <span class="math display">\[
+\int_a^b f(x)dx = \lim_{\max\Delta x_k\to0}\sum_{k=1}^nf(x^*_k) \Delta x_k
+\]</span> Assume the point B is <span class="math inline">\((b, 0)\)</span>, cut the <span class="math inline">\(OAB\)</span> into n rectangles. The area of the first one is <span class="math inline">\((\frac{b}{n})(\frac{b}{n})^2\)</span>, the second is <span class="math inline">\((\frac{b}{n})(\frac{2b}{n})^2\)</span> , and the nth is <span class="math inline">\((\frac{b}{n})(\frac{nb}{n})^2\)</span> , so we have the S, apparently, <span class="math inline">\(\Delta x_k = \frac{b}{n}\)</span></p>
+<p><span class="math display">\[
+S = (\frac{b}{n})(\frac{2b}{n})^2  + (\frac{b}{n})(\frac{nb}{n})^2 + ... + (\frac{b}{n})(\frac{nb}{n})^2
+\]</span></p>
+<p><span class="math display">\[
+S=(\frac{b^3}{n^3})(1^2+2^2+...+(n-1)^2+n^2)
+\]</span></p>
+<p><span class="math display">\[
+S=(\frac{b^3}{n^3})(\frac{n(n+1)(2n+1)}{6})=b^3(\frac{1}{6}+\frac{1}{6n})(2+\frac{1}{n})
+\]</span></p>
+<p>When <span class="math inline">\(\Delta x_k\to0, n\to\infty, S=\frac{b^3}{3}\)</span>.</p>
+<p>But what about the calculation of <span class="math inline">\(f(x)=x^5\)</span>, <span class="math inline">\(f(x)=cosx\)</span>, <span class="math inline">\(f(x)=(1+\frac{1}{x^5})\)</span> , it’s not so easy with previous primary method to get the result. We have to use the fundamental theorem of calculation which is described as If <span class="math inline">\(f(x)\)</span> is a continuous function on a closed interval <span class="math inline">\([a,b]\)</span>, <span class="math inline">\(F(x)\)</span> is any antiderivative of <span class="math inline">\(f(x)\)</span>, in another word <span class="math inline">\(\int f(x)dx=F(x)+c\)</span>, then <span class="math inline">\(\int_a^b f(x)dx = F(b)-F(a)\)</span>.</p>
+<p>Now we have a weapon to solve the previous problem in a flash moment. <span class="math inline">\(\int_0^b x^2dx = F(b) = \frac{b^3}{3}\)</span></p>
 <p>How did the mathematicians get the FTC? (Fundamental theorem of calculus).</p>
-<p><img src="/2018-03-08-fundamental-theorem-of-calculus/2.png" alt=""></p>
-<p>Now we need to calculate the area between edge a and b, b is moving to the right, so the area A is a function of x, so we note the area $A(x)$, so $\Delta A(x)=A(x+\Delta x)-A(x)=f(\bar x)\Delta x$, so $A’(x)=f(x)$, which means $A(x)=F(x)+c$, $F(x)$ is a antidirevative of $f(x)$. When edge a, b coincide, the area is 0, $A(a)=0$, so we have $A(a)=F(a)+c$ and $c=-F(a)$, we get $A(b) = \int_a^b f(x)dx = F(b) - F(a)$.</p>
+<p><img src="/2018-03-08-fundamental-theorem-of-calculus/2.png"></p>
+<p>Now we need to calculate the area between edge a and b, b is moving to the right, so the area A is a function of x, so we note the area <span class="math inline">\(A(x)\)</span>, so <span class="math inline">\(\Delta A(x)=A(x+\Delta x)-A(x)=f(\bar x)\Delta x\)</span>, so <span class="math inline">\(A&#39;(x)=f(x)\)</span>, which means <span class="math inline">\(A(x)=F(x)+c\)</span>, <span class="math inline">\(F(x)\)</span> is a antidirevative of <span class="math inline">\(f(x)\)</span>. When edge a, b coincide, the area is 0, <span class="math inline">\(A(a)=0\)</span>, so we have <span class="math inline">\(A(a)=F(a)+c\)</span> and <span class="math inline">\(c=-F(a)\)</span>, we get <span class="math inline">\(A(b) = \int_a^b f(x)dx = F(b) - F(a)\)</span>.</p>
 <p>When we need to calculate the area, we just need to find the indefinite integral first, then do some basic calculation. The FTC is a milestone in the development of mathematic.</p>
 
       
@@ -533,7 +539,7 @@ S=(\frac{b^3}{n^3})(\frac{n(n+1)(2n+1)}{6})=b^3(\frac{1}{6}+\frac{1}{6n})(2+\fra
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>
