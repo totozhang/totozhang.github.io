@@ -92,7 +92,8 @@
 <meta property="og:image" content="http://totozhang.github.io/2019-03-06-sugarscape/2.png">
 <meta property="og:image" content="http://totozhang.github.io/2019-03-06-sugarscape/3.png">
 <meta property="og:image" content="http://totozhang.github.io/2019-03-06-sugarscape/4.png">
-<meta property="og:updated_time" content="2019-03-30T06:29:26.003Z">
+<meta property="og:image" content="http://totozhang.github.io/2019-03-06-sugarscape/5.png">
+<meta property="og:updated_time" content="2019-03-30T07:00:52.874Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="玩玩大糖帝国">
 <meta name="twitter:description" content="本文主要针对来自“西西河”论坛的名帖“大糖帝国(知乎链接)”进行实现，西西河的原文链接目前404了。大糖帝国这篇文章内容是由淮夷”提取自《The Origin of Wealth》书中的一个章节中提及的一个简单的经济学模型，并且淮夷追加了一些自己的观点。文章翻译了这本书中的Sugarscape这个章节，我个人觉得中文翻译要比原书的英文内容描述的更加精彩。这个著名游戏是1996年美国布鲁金斯研究所的">
@@ -402,10 +403,14 @@
 <p><strong>地图不恢复</strong>，地图恢复能力设置为0，糖被吃掉后不再恢复，导致所有的糖被瞬间消耗掉，大糖帝国资源枯竭，最终所有糖人在饥饿中死去。</p>
 <p><a href="http://player.youku.com/embed/XNDExNzM0MzAzNg==" target="_blank" rel="noopener">视频演示链接</a></p>
 <h2 id="调整agent参数">调整Agent参数</h2>
-<p><strong>人口数量翻倍</strong></p>
-<p><strong>人口基因变好</strong></p>
-<p><strong>人员初始财富增加</strong></p>
+<p>以下情况Sugarscape的恢复速度设置为3。</p>
+<p><strong>糖人数量翻倍</strong></p>
+<p>人口数量设置为500，其他参数不变。这种情况只是人口死亡会多一些，财富分布规律不变。</p>
+<p><strong>糖人基因变好</strong></p>
+<p>糖人视力设置为10-20，食欲设置为1，此时糖人既聪明消耗有很少，可以无限存活并发现更好的资源。此时糖人大部分都能发现资源多的位置，只有运气极差的会在低糖区饿死。</p>
+<p><img src="/2019-03-06-sugarscape/5.png"></p>
 <h1 id="总结">总结</h1>
+<p>作为糖人，不可能生下来就是顶级的视力和极好的消化能力，所以这种情况是不会真的存在的。低层次的糖人，由于视力范围有限，只有出生在阶层边缘才能跨越阶层，如果出生在地方区，却看不到更好的资源位置，也只能安于现状，混吃等死。有的糖人可能生下来财富就多于其他人，可惜出生在了0糖区中，随机选择路线的时候，一只被困在其中，最后也只能死去。在实现过程中，使用最多的函数是Random。Random决定了我们在这个世界中的生活方式与最终的命运，正如美剧Heros里一个老黑说的，The Universe decides our destiny。</p>
 
       
     </div>
