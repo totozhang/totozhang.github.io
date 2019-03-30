@@ -73,6 +73,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/atom.xml" title="Back To The Basics" type="application/atom+xml" />
 
@@ -93,7 +95,7 @@
 <meta property="og:image" content="http://totozhang.github.io/2019-03-06-sugarscape/3.png">
 <meta property="og:image" content="http://totozhang.github.io/2019-03-06-sugarscape/4.png">
 <meta property="og:image" content="http://totozhang.github.io/2019-03-06-sugarscape/5.png">
-<meta property="og:updated_time" content="2019-03-30T07:00:52.874Z">
+<meta property="og:updated_time" content="2019-03-30T08:48:28.192Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="玩玩大糖帝国">
 <meta name="twitter:description" content="本文主要针对来自“西西河”论坛的名帖“大糖帝国(知乎链接)”进行实现，西西河的原文链接目前404了。大糖帝国这篇文章内容是由淮夷”提取自《The Origin of Wealth》书中的一个章节中提及的一个简单的经济学模型，并且淮夷追加了一些自己的观点。文章翻译了这本书中的Sugarscape这个章节，我个人觉得中文翻译要比原书的英文内容描述的更加精彩。这个著名游戏是1996年美国布鲁金斯研究所的">
@@ -391,13 +393,13 @@
 <h1 id="根据可调整参数运行">根据可调整参数运行</h1>
 <p>根据运行规则可以看到，可调整参数包括地图和糖人自身参数两个方面。</p>
 <h2 id="调整sugarscape-map参数">调整Sugarscape Map参数</h2>
-<p><strong>地图含糖恢复设定为最慢</strong>，每一轮（1Round）恢复糖量为1。由于资源的恢复速度很低，导致糖人不得不离开自己的所在位置去寻找更好的目标位置，所以糖人并不会完全聚集在糖山，而是流动起来，分散到了糖山的各个位置，这种状态下的中高含糖区的糖人非常活跃，低糖区的糖人或者找到一个较合适的位置后就会安于现状或者被饿死。贫富分化由于人员的位置迁移非常活跃，分化会出现，但是差距不会非常大，分化较慢。</p>
-<p><a href="http://player.youku.com/embed/XNDExNzMzNjgwNA==" target="_blank" rel="noopener">视频演示链接</a>（由于Github不支持iframe标签和大视频文件上传，只能留链接了）</p>
+<p><strong>地图含糖恢复速度设定为最慢</strong>，每一轮（1Round）恢复糖量为1。由于资源的恢复速度很低，导致糖人不得不离开自己的所在位置去寻找更好的目标位置，所以糖人并不会完全聚集在糖山，而是流动起来，分散到了糖山的各个位置，这种状态下的中高含糖区的糖人非常活跃，低糖区的糖人，或者找到一个较合适的位置后就会安于现状，或者被饿死。贫富分化由于人员的位置迁移非常活跃，最终会出现，但是分化较慢，差距不会非常大。</p>
+<p><a href="http://player.youku.com/embed/XNDExNzMxNTMyNA==" target="_blank" rel="noopener">视频演示链接</a>（由于Github不支持iframe标签和大视频文件上传，只能留链接了）</p>
 <p><img src="/2019-03-06-sugarscape/2.png"></p>
-<p><strong>地图含糖恢复设定适中</strong>，每一轮（1Round）恢复糖量为3。由于糖的速度恢复较快，糖人们不再进行频繁的迁移，只有糖山顶端的糖人能够看到更优质的资源而导致其活动频繁。而处于含糖量中低区域的糖人停止了活动。</p>
+<p><strong>地图含糖恢复速度设定适中</strong>，每一轮（1Round）恢复糖量为3。由于糖的速度恢复较快，糖人们不再进行频繁的迁移，只有糖山顶端的糖人能够看到更优质的资源而导致其活动频繁。而处于含糖量中低区域的糖人停止了活动。</p>
 <p><a href="http://player.youku.com/embed/XNDExNzMzNjgwNA==" target="_blank" rel="noopener">视频演示链接</a></p>
 <p><img src="/2019-03-06-sugarscape/3.png"></p>
-<p><strong>地图瞬时恢复</strong>，每一轮（1Round）恢复糖量为4。由于糖的速度恢复达到峰值，大糖帝国经济繁荣，糖人们只要不是具有超强的食欲，停留在原地就会得到最多的资源，此时糖人们停止任何寻找糖的活动。可以观察到，这种情况下贫富分化的速度加快，很快呈现出幂律分布的<strong>趋势</strong>。</p>
+<p><strong>地图资源瞬时恢复</strong>，每一轮（1Round）恢复糖量为4。由于糖的速度恢复达到峰值，大糖帝国经济繁荣，糖人们只要不是具有超强的食欲，停留在原地就会得到最多的资源，此时糖人们停止任何寻找糖的活动。可以观察到，这种情况下贫富分化的速度加快，很快呈现出幂律分布的<strong>趋势</strong>。</p>
 <p><a href="http://player.youku.com/embed/XNDExNzM0MDQ2MA==" target="_blank" rel="noopener">视频演示链接</a></p>
 <p><img src="/2019-03-06-sugarscape/4.png"></p>
 <p><strong>地图不恢复</strong>，地图恢复能力设置为0，糖被吃掉后不再恢复，导致所有的糖被瞬间消耗掉，大糖帝国资源枯竭，最终所有糖人在饥饿中死去。</p>
@@ -407,10 +409,10 @@
 <p><strong>糖人数量翻倍</strong></p>
 <p>人口数量设置为500，其他参数不变。这种情况只是人口死亡会多一些，财富分布规律不变。</p>
 <p><strong>糖人基因变好</strong></p>
-<p>糖人视力设置为10-20，食欲设置为1，此时糖人既聪明消耗有很少，可以无限存活并发现更好的资源。此时糖人大部分都能发现资源多的位置，只有运气极差的会在低糖区饿死。</p>
+<p>糖人视力设置为10-20，食欲设置为1，此时糖人视野好，消耗能量少，可以无限存活并发现更好的资源。此时糖人大部分都能发现资源多的位置，只有运气极差的会在低糖区饿死。</p>
 <p><img src="/2019-03-06-sugarscape/5.png"></p>
 <h1 id="总结">总结</h1>
-<p>作为糖人，不可能生下来就是顶级的视力和极好的消化能力，所以这种情况是不会真的存在的。低层次的糖人，由于视力范围有限，只有出生在阶层边缘才能跨越阶层，如果出生在地方区，却看不到更好的资源位置，也只能安于现状，混吃等死。有的糖人可能生下来财富就多于其他人，可惜出生在了0糖区中，随机选择路线的时候，一只被困在其中，最后也只能死去。在实现过程中，使用最多的函数是Random。Random决定了我们在这个世界中的生活方式与最终的命运，正如美剧Heros里一个老黑说的，The Universe decides our destiny。</p>
+<p>作为糖人，不可能生下来就是顶级的视力和极好的消化能力，所以这种情况是不应该存在的。处于低糖区的糖人，由于视力范围有限，很难跨越阶层，只有哪些出生在阶层边缘才能跨越阶层的可能。出生在低糖区，因为看不到更好的资源位置，也只能安于现状，混吃等死。有的糖人可能生下来财富就多于其他人，可惜出生在了0含糖区中，随机选择路线的过程中有因为随机选择方向不对，一只被困在其中，最后也只能死去。在实现过程中，被使用最多的库函数是random。与大糖帝国类似，random决定了我们在这个世界中的生活方式与最终的命运，正如美剧Heros里Haitian说的那句话“The Universe decides our destiny”。</p>
 
       
     </div>
