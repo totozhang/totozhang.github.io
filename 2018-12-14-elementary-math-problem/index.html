@@ -384,44 +384,62 @@
 
       
         <p><strong>已知圆的半径为4，等边三角形的边长为10，且图中三部分阴影部分面积相等，求阴影部分的面积。（6年级）</strong>，这道六年级的数学题，小学六年级的知识肯定是不会做的，除非使用量角器，并且同时量出来的角度是90度，解这个题并不需要多深的数学知识，之所以记录下来是因为我自己解这道题时思考的顺序很有意思。 <a id="more"></a></p>
-<p><img src="/2018-12-14-elementary-math-problem/1.png"></p>
-<h1 id="解法1-初等三角">解法1: 初等三角</h1>
-<p>题中说明三个阴影部分面积相等，显然得出结论圆心与等边三角形中心重合（证明略），所以已知条件为，<span class="math inline">\(假设∠DoF=α，∠EoF=\frac{2π}{3}，∠DoE=\frac{2π}{3}-α，AD=x，DF=y，AB=10，r=4\)</span></p>
+<p><img src="/2018-12-14-elementary-math-problem/1.png" alt=""></p>
+<h1 id="解法1-初等三角"><a href="#解法1-初等三角" class="headerlink" title="解法1: 初等三角"></a>解法1: 初等三角</h1><p>题中说明三个阴影部分面积相等，显然得出结论圆心与等边三角形中心重合（证明略），所以已知条件为，$假设∠DoF=α，∠EoF=\frac{2π}{3}，∠DoE=\frac{2π}{3}-α，AD=x，DF=y，AB=10，r=4$</p>
+<div class="table-container">
 <table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+</tr>
+</thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: center;"><span class="math inline">\(Sin(\frac{\frac{2}{3}π-α}{2})=\frac{\frac{x}{2}}{r}=\frac{x}{8}\)</span></td>
-<td style="text-align: center;">方程1</td>
+<tr>
+<td style="text-align:center">$Sin(\frac{\frac{2}{3}π-α}{2})=\frac{\frac{x}{2}}{r}=\frac{x}{8}$</td>
+<td style="text-align:center">方程1</td>
 </tr>
-<tr class="even">
-<td style="text-align: center;"><span class="math inline">\(Sin(\frac{α}{2})=\frac{\frac{y}{2}}{r}=\frac{y}{8}\)</span></td>
-<td style="text-align: center;">方程2</td>
+<tr>
+<td style="text-align:center">$Sin(\frac{α}{2})=\frac{\frac{y}{2}}{r}=\frac{y}{8}$</td>
+<td style="text-align:center">方程2</td>
 </tr>
-<tr class="odd">
-<td style="text-align: center;"><span class="math inline">\(2x+y=10\)</span></td>
-<td style="text-align: center;">方程3</td>
+<tr>
+<td style="text-align:center">$2x+y=10$</td>
+<td style="text-align:center">方程3</td>
 </tr>
 </tbody>
 </table>
-<p><img src="/2018-12-14-elementary-math-problem/2.png"></p>
-<p>之后就是解这个方程组了，之前我错误的估计了方程组是比较难解的未知数耦合的非线性方程，其实最简单的三角函数展开就行了。 令<span class="math inline">\(β = \frac{α}{2}\)</span>，方程组变为， <span class="math display">\[sin(\frac{ π }{3}-β)=\frac{x}{8}，sinβ=\frac{y}{8}，2x+y=10\]</span> 合并成一个方程 <span class="math display">\[16sin(\frac{ π }{3}-β)+8sinβ=10\]</span> 展开得到 <span class="math display">\[8\sqrt{3}cosβ=10，α=2β=2arccos(\frac{5}{4\sqrt{3}})≈1.528（角度制87.59°），β=0.764，x≈2.231，y≈5.535\]</span> 最终面积为 <span class="math display">\[SB=3*(S_{扇形DoF}-S_{ΔDoF})=3*(πr^{2}*\frac{α}{2π}-\frac{1}{2}*r^{2}sinα)≈12.66\]</span></p>
-<h1 id="解法2-定积分">解法2: 定积分</h1>
-<p>简单粗暴，求面积<span class="math inline">\(3*(S_{EHMGI}-S_{EHGI})\)</span>，此处坐标原点的选取对求解非常重要。选取不好积分非常难积。</p>
-<p><img src="/2018-12-14-elementary-math-problem/3.png"></p>
+</div>
+<p><img src="/2018-12-14-elementary-math-problem/2.png" alt=""></p>
+<p>之后就是解这个方程组了，之前我错误的估计了方程组是比较难解的未知数耦合的非线性方程，其实最简单的三角函数展开就行了。<br>令$β = \frac{α}{2}$，方程组变为，</p>
+<script type="math/tex; mode=display">sin(\frac{ π }{3}-β)=\frac{x}{8}，sinβ=\frac{y}{8}，2x+y=10</script><p>合并成一个方程</p>
+<script type="math/tex; mode=display">16sin(\frac{ π }{3}-β)+8sinβ=10</script><p>展开得到</p>
+<script type="math/tex; mode=display">8\sqrt{3}cosβ=10，α=2β=2arccos(\frac{5}{4\sqrt{3}})≈1.528（角度制87.59°），β=0.764，x≈2.231，y≈5.535</script><p>最终面积为</p>
+<script type="math/tex; mode=display">SB=3*(S_{扇形DoF}-S_{ΔDoF})=3*(πr^{2}*\frac{α}{2π}-\frac{1}{2}*r^{2}sinα)≈12.66</script><h1 id="解法2-定积分"><a href="#解法2-定积分" class="headerlink" title="解法2: 定积分"></a>解法2: 定积分</h1><p>简单粗暴，求面积$3*(S<em>{EHMGI}-S</em>{EHGI})$，此处坐标原点的选取对求解非常重要。选取不好积分非常难积。</p>
+<p><img src="/2018-12-14-elementary-math-problem/3.png" alt=""></p>
+<div class="table-container">
 <table>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;"><span class="math inline">\(S_{EHMGI}=\int_a^b f(x)dx=\int_a^b (-\sqrt{16-x^{2}})dx\)</span></td>
+<thead>
+<tr>
+<th style="text-align:center"></th>
 </tr>
-<tr class="even">
-<td style="text-align: center;">其中a对应H的横坐标， b对应G的横坐标</td>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">$S_{EHMGI}=\int_a^b f(x)dx=\int_a^b (-\sqrt{16-x^{2}})dx$</td>
+</tr>
+<tr>
+<td style="text-align:center">其中a对应H的横坐标， b对应G的横坐标</td>
 </tr>
 </tbody>
 </table>
-<p>设<span class="math display">\[OJ=m，∠OBJ=\frac{π}{6}，OB=2m，BJ=5，计算得到，a=-\sqrt{\frac{23}{3}}，b=\sqrt{\frac{23}{3}}\]</span> 以下就集中搞这个积分。 <span class="math display">\[令x=4sin(u)，dx=4cos(u)du，u=arcsin(\frac{x}{4})\]</span> <span class="math display">\[-\int (\sqrt{16-x^{2}})dx=-\int{ }\sqrt{16-16sin^2u}·4cosudu=-16\int{ } cos^2udu\]</span> 三角变换得 <span class="math display">\[-16\int{ } cos^2udu=-8\int{ }(cos2u+1)du=-4sin(2u)-8u+c=-8sinu·cosu-8u+c\]</span> 把<span class="math inline">\(u=arcsin(\frac{x}{4})\)</span>带入得 <span class="math display">\[-8sinu·cosu-8u+c=-2x\sqrt{1-\frac{x^{2}}{16}}-8arcsin\frac{x}{4}+c\]</span> 最终求定积分为-20.22，则面积为<span class="math inline">\(S_{EHMGI}≈20.22\)</span>，<span class="math inline">\(S_{EHGI}=OJ*2HJ=2\sqrt{\frac{25}{3}}\sqrt{\frac{23}{3}}≈15.99\)</span>，最终面积约为12.69</p>
-<h1 id="解法3-初中阶段三角函数定义">解法3: 初中阶段三角函数定义</h1>
-<p>在求定积分的上下限时，其实已经直接可以算面积了。求得结果与第一种解法完全一样。10000点暴击。 <span class="math display">\[OJ=\sqrt{\frac{25}{3}}，cos∠JoH=\frac{OJ}{OH}=\frac{5}{4\sqrt{3}}，∠JoH=arccos\frac{5}{4\sqrt{3}}≈0.764\]</span></p>
-<p><img src="/2018-12-14-elementary-math-problem/3.png"></p>
+</div>
+<p>设<script type="math/tex">OJ=m，∠OBJ=\frac{π}{6}，OB=2m，BJ=5，计算得到，a=-\sqrt{\frac{23}{3}}，b=\sqrt{\frac{23}{3}}</script> 以下就集中搞这个积分。</p>
+<script type="math/tex; mode=display">令x=4sin(u)，dx=4cos(u)du，u=arcsin(\frac{x}{4})</script><script type="math/tex; mode=display">-\int (\sqrt{16-x^{2}})dx=-\int{ }\sqrt{16-16sin^2u}·4cosudu=-16\int{ } cos^2udu</script><p>三角变换得</p>
+<script type="math/tex; mode=display">-16\int{ } cos^2udu=-8\int{ }(cos2u+1)du=-4sin(2u)-8u+c=-8sinu·cosu-8u+c</script><p>把$u=arcsin(\frac{x}{4})$带入得</p>
+<script type="math/tex; mode=display">-8sinu·cosu-8u+c=-2x\sqrt{1-\frac{x^{2}}{16}}-8arcsin\frac{x}{4}+c</script><p>最终求定积分为-20.22，则面积为$S<em>{EHMGI}≈20.22$，$S</em>{EHGI}=OJ*2HJ=2\sqrt{\frac{25}{3}}\sqrt{\frac{23}{3}}≈15.99$，最终面积约为12.69</p>
+<h1 id="解法3-初中阶段三角函数定义"><a href="#解法3-初中阶段三角函数定义" class="headerlink" title="解法3: 初中阶段三角函数定义"></a>解法3: 初中阶段三角函数定义</h1><p>在求定积分的上下限时，其实已经直接可以算面积了。求得结果与第一种解法完全一样。10000点暴击。</p>
+<script type="math/tex; mode=display">OJ=\sqrt{\frac{25}{3}}，cos∠JoH=\frac{OJ}{OH}=\frac{5}{4\sqrt{3}}，∠JoH=arccos\frac{5}{4\sqrt{3}}≈0.764</script><p><img src="/2018-12-14-elementary-math-problem/3.png" alt=""></p>
 
       
     </div>
@@ -464,7 +482,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018-03-08-fundamental-theorem-of-calculus/" rel="next" title="Fundamental theorem of calculus">
+              <a href="/2016-03-08-fundamental-theorem-of-calculus/" rel="next" title="Fundamental theorem of calculus">
                 <i class="fa fa-chevron-left"></i> Fundamental theorem of calculus
               </a>
             
