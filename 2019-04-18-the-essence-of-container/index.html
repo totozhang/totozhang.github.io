@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="随着5G的到来了，互联网和通信技术的演进，被谷歌力推的Kubernets现在已经成为业界操作容器的标准方案。Kubernets控制对象是容器，那么究竟什么是容器？容器的本质是什么？为什么江湖传闻它相比于虚拟机更轻便？为什么说容器的底层存在安全隐患，隐患从何而来？为什么对于Linux系统自身根本没有容器的概念？了解这些问题对于日后的计算集群运维和开发都有重要的意义。了解这些，需要从创建子进程说起。">
+<meta name="description" content="随着5G的到来了，互联网和通信技术的演进，被谷歌力推的Kubernets现在已经成为业界操作容器的标准方案。Kubernets控制对象是容器，那么究竟什么是容器？容器的本质是什么？为什么江湖传闻它相比于虚拟机更轻便？为什么说容器的底层存在安全隐患，隐患从何而来？为什么对于Linux系统自身根本没有容器的概念？理解这些问题对于日后的计算集群运维和开发都有重要的意义。而了解这些，需要从创建子进程说起。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="容器的本质">
 <meta property="og:url" content="http://totozhang.github.io/2019-04-18-the-essence-of-container/index.html">
 <meta property="og:site_name" content="Back To The Basics">
-<meta property="og:description" content="随着5G的到来了，互联网和通信技术的演进，被谷歌力推的Kubernets现在已经成为业界操作容器的标准方案。Kubernets控制对象是容器，那么究竟什么是容器？容器的本质是什么？为什么江湖传闻它相比于虚拟机更轻便？为什么说容器的底层存在安全隐患，隐患从何而来？为什么对于Linux系统自身根本没有容器的概念？了解这些问题对于日后的计算集群运维和开发都有重要的意义。了解这些，需要从创建子进程说起。">
+<meta property="og:description" content="随着5G的到来了，互联网和通信技术的演进，被谷歌力推的Kubernets现在已经成为业界操作容器的标准方案。Kubernets控制对象是容器，那么究竟什么是容器？容器的本质是什么？为什么江湖传闻它相比于虚拟机更轻便？为什么说容器的底层存在安全隐患，隐患从何而来？为什么对于Linux系统自身根本没有容器的概念？理解这些问题对于日后的计算集群运维和开发都有重要的意义。而了解这些，需要从创建子进程说起。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://totozhang.github.io/2019-04-18-the-essence-of-container/1.png">
-<meta property="og:updated_time" content="2019-04-26T05:03:13.265Z">
+<meta property="og:updated_time" content="2019-04-26T05:10:17.752Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="容器的本质">
-<meta name="twitter:description" content="随着5G的到来了，互联网和通信技术的演进，被谷歌力推的Kubernets现在已经成为业界操作容器的标准方案。Kubernets控制对象是容器，那么究竟什么是容器？容器的本质是什么？为什么江湖传闻它相比于虚拟机更轻便？为什么说容器的底层存在安全隐患，隐患从何而来？为什么对于Linux系统自身根本没有容器的概念？了解这些问题对于日后的计算集群运维和开发都有重要的意义。了解这些，需要从创建子进程说起。">
+<meta name="twitter:description" content="随着5G的到来了，互联网和通信技术的演进，被谷歌力推的Kubernets现在已经成为业界操作容器的标准方案。Kubernets控制对象是容器，那么究竟什么是容器？容器的本质是什么？为什么江湖传闻它相比于虚拟机更轻便？为什么说容器的底层存在安全隐患，隐患从何而来？为什么对于Linux系统自身根本没有容器的概念？理解这些问题对于日后的计算集群运维和开发都有重要的意义。而了解这些，需要从创建子进程说起。">
 <meta name="twitter:image" content="http://totozhang.github.io/2019-04-18-the-essence-of-container/1.png">
 
 
@@ -380,7 +380,7 @@
       
 
       
-        <p>随着5G的到来了，互联网和通信技术的演进，被谷歌力推的Kubernets现在已经成为业界操作容器的标准方案。Kubernets控制对象是容器，那么究竟什么是容器？容器的本质是什么？为什么江湖传闻它相比于虚拟机更轻便？为什么说容器的底层存在安全隐患，隐患从何而来？为什么对于Linux系统自身根本没有容器的概念？了解这些问题对于日后的计算集群运维和开发都有重要的意义。了解这些，需要从创建子进程说起。<a id="more"></a></p>
+        <p>随着5G的到来了，互联网和通信技术的演进，被谷歌力推的Kubernets现在已经成为业界操作容器的标准方案。Kubernets控制对象是容器，那么究竟什么是容器？容器的本质是什么？为什么江湖传闻它相比于虚拟机更轻便？为什么说容器的底层存在安全隐患，隐患从何而来？为什么对于Linux系统自身根本没有容器的概念？理解这些问题对于日后的计算集群运维和开发都有重要的意义。而了解这些，需要从创建子进程说起。<a id="more"></a></p>
 <h1 id="创建一个隔离的进程">创建一个隔离的进程</h1>
 <p>Linux系统中提供的系统调用fork创建子进程是不带参数的，而系统调用clone是可以带参数的，clone的参数列表中就包括用来做进程隔离的标志位参数，以下c代码中，父进程调用clone创建子进程后wait阻塞。clone中的第一个参数函数指针container就是子进程的执行单元。系统调用clone使用了5个标志位，用来对新创建的进程做隔离。</p>
 <table>
