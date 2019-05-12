@@ -73,6 +73,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/atom.xml" title="Back To The Basics" type="application/atom+xml" />
 
@@ -81,16 +83,17 @@
 
 
 
-<meta name="description" content="About Math, About CS.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Back To The Basics">
-<meta property="og:url" content="http://totozhang.github.io/archives/page/2/index.html">
+<meta name="description" content="开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录从Docker容器启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用Bridge方式连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的Web服">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个单独的容器应用">
+<meta property="og:url" content="http://totozhang.github.io/2019-05-01-learning-k8s-1/index.html">
 <meta property="og:site_name" content="Back To The Basics">
-<meta property="og:description" content="About Math, About CS.">
+<meta property="og:description" content="开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录从Docker容器启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用Bridge方式连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的Web服">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-05-11T14:48:49.762Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Back To The Basics">
-<meta name="twitter:description" content="About Math, About CS.">
+<meta name="twitter:title" content="一个单独的容器应用">
+<meta name="twitter:description" content="开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录从Docker容器启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用Bridge方式连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的Web服">
 
 
 
@@ -120,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://totozhang.github.io/archives/page/2/"/>
+  <link rel="canonical" href="http://totozhang.github.io/2019-05-01-learning-k8s-1/"/>
 
 
 
 
 
-  <title>Archive | Back To The Basics</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>一个单独的容器应用 | Back To The Basics</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -145,7 +148,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-archive">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -263,379 +266,195 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      <span class="archive-page-counter">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://totozhang.github.io/2019-05-01-learning-k8s-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="toto">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/logo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Back To The Basics">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">一个单独的容器应用</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-01T23:49:00+08:00">
+                2019-05-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        Um..! 19 posts in total. Keep on posting.
-      </span>
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/学习K8S容器集群/" itemprop="url" rel="index">
+                    <span itemprop="name">学习K8S容器集群</span>
+                  </a>
+                </span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2016">2016</h1>
-          </div>
-        
-        
 
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2016-01-23-tcp-connection-status-transit/" itemprop="url">
-              
-                <span itemprop="name">TCP state transmissions</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-01-23T23:29:55+08:00"
-              content="2016-01-23" >
-          01-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2016-01-16-linux-zombieprocess/" itemprop="url">
-              
-                <span itemprop="name">Zombie Process In Linux</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-01-16T23:29:55+08:00"
-              content="2016-01-16" >
-          01-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2016-01-11-tcp-self-connection/" itemprop="url">
-              
-                <span itemprop="name">TCP Self Connection Problem</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-01-11T23:29:55+08:00"
-              content="2016-01-11" >
-          01-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2016-01-10-tcp-simutaneous-connection/" itemprop="url">
-              
-                <span itemprop="name">TCP Simutaneous Connection</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-01-10T23:29:55+08:00"
-              content="2016-01-10" >
-          01-10
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2016-01-04-tcp-connection-management/" itemprop="url">
-              
-                <span itemprop="name">TCP Connection Management</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-01-04T10:29:55+08:00"
-              content="2016-01-04" >
-          01-04
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2016-01-03-tcp-reliable-communication/" itemprop="url">
-              
-                <span itemprop="name">Reliability of TCP</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-01-04T10:29:55+08:00"
-              content="2016-01-04" >
-          01-04
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2016-01-02-tcp-comminication-model/" itemprop="url">
-              
-                <span itemprop="name">TCP/IP Network Communication Model</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-01-02T21:38:55+08:00"
-              content="2016-01-02" >
-          01-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2016-01-01-tcp-data-encapsulation/" itemprop="url">
-              
-                <span itemprop="name">TCP Data Encapsulation</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-01-01T20:38:55+08:00"
-              content="2016-01-01" >
-          01-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2015">2015</h1>
-          </div>
-        
-        
+            
+          
 
-        
+          
+          
+             <span id="/2019-05-01-learning-k8s-1/" class="leancloud_visitors" data-flag-title="一个单独的容器应用">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2015-12-24-network-topology-in-virtualbox/" itemprop="url">
-              
-                <span itemprop="name">VirtualBox Network Topology</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2015-12-24T19:56:48+08:00"
-              content="2015-12-24" >
-          12-24
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+        </div>
+      </header>
+    
 
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
+      
 
+      
+        <p>开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录从Docker容器启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用<a href="https://totozhang.github.io/2015-12-24-network-topology-in-virtualbox/">Bridge方式</a>连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的Web服务。<a id="more"></a></p>
+<h1 id="在容器中启动web应用">在容器中启动Web应用</h1>
+<h1 id="写一个dockerfile">写一个Dockerfile</h1>
+<h1 id="用新镜像启动web应用">用新镜像启动Web应用</h1>
+
+      
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    toto.zhang@gmail.com
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://totozhang.github.io/2019-05-01-learning-k8s-1/" title="一个单独的容器应用">http://totozhang.github.io/2019-05-01-learning-k8s-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019-04-18-the-essence-of-container/" rel="next" title="容器的本质">
+                <i class="fa fa-chevron-left"></i> 容器的本质
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -643,6 +462,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -663,8 +486,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -754,6 +586,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在容器中启动web应用"><span class="nav-number">1.</span> <span class="nav-text">在容器中启动Web应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写一个dockerfile"><span class="nav-number">2.</span> <span class="nav-text">写一个Dockerfile</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用新镜像启动web应用"><span class="nav-number">3.</span> <span class="nav-text">用新镜像启动Web应用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -888,6 +736,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
