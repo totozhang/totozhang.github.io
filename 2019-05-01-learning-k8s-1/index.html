@@ -73,8 +73,6 @@
 
 
 
-  
-
 
   <link rel="alternate" href="/atom.xml" title="Back To The Basics" type="application/atom+xml" />
 
@@ -83,17 +81,17 @@
 
 
 
-<meta name="description" content="开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录从Docker容器启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用Bridge方式连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的Web服">
+<meta name="description" content="开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录以Docker容器形式启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用Bridge方式连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的We">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一个单独的容器应用">
 <meta property="og:url" content="http://totozhang.github.io/2019-05-01-learning-k8s-1/index.html">
 <meta property="og:site_name" content="Back To The Basics">
-<meta property="og:description" content="开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录从Docker容器启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用Bridge方式连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的Web服">
+<meta property="og:description" content="开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录以Docker容器形式启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用Bridge方式连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的We">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-05-11T14:48:49.762Z">
+<meta property="og:updated_time" content="2019-05-16T10:22:41.020Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一个单独的容器应用">
-<meta name="twitter:description" content="开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录从Docker容器启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用Bridge方式连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的Web服">
+<meta name="twitter:description" content="开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录以Docker容器形式启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用Bridge方式连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的We">
 
 
 
@@ -380,10 +378,26 @@
       
 
       
-        <p>开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录从Docker容器启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用<a href="https://totozhang.github.io/2015-12-24-network-topology-in-virtualbox/">Bridge方式</a>连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的Web服务。<a id="more"></a></p>
+        <p>开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录以Docker容器形式启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用<a href="https://totozhang.github.io/2015-12-24-network-topology-in-virtualbox/">Bridge方式</a>连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的Web服务。<a id="more"></a></p>
 <h1 id="在容器中启动web应用">在容器中启动Web应用</h1>
+<h2 id="安装docker">安装docker</h2>
+<p>修改安装源到阿里云，</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo</span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/</span><br><span class="line">enabled=<span class="number">1</span></span><br><span class="line">gpgcheck=<span class="number">1</span></span><br><span class="line">repo_gpgcheck=<span class="number">1</span></span><br><span class="line">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>安装net-tools和docker并启动，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install net-tools</span><br><span class="line">yum install docker</span><br><span class="line">systemctl enable docker</span><br><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
+<p>修改docker的镜像加速指向阿里云，</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt;EOF &gt; /etc/docker/daemon.json</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [<span class="string">"https://l8gz8qd0.mirror.aliyuncs.com"</span>]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>重启docker服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+<h2 id="从镜像启动一个web应用">从镜像启动一个Web应用</h2>
+<p>将之前制作完成的网页放入当前目录html路径下，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod -R 777 ./html</span><br><span class="line">docker run -p 80:80 -v <span class="variable">$PWD</span>/html:/usr/share/nginx/html nginx</span><br></pre></td></tr></table></figure>
 <h1 id="写一个dockerfile">写一个Dockerfile</h1>
+<p>将网页文件写入到镜像中，并发布到镜像仓库中。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#dockerfile</span></span><br><span class="line"><span class="keyword">FROM</span> nginx</span><br><span class="line"><span class="keyword">MAINTAINER</span> <span class="string">"toto &lt;toto.zhang@gmail.com&gt;"</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> <span class="variable">$PWD</span>/html/ /usr/share/nginx/html/</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t mywebv1 ./</span><br></pre></td></tr></table></figure>
 <h1 id="用新镜像启动web应用">用新镜像启动Web应用</h1>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker image ls</span><br><span class="line">docker run -p 80:80 mywebv1</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -526,7 +540,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>
@@ -596,7 +610,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在容器中启动web应用"><span class="nav-number">1.</span> <span class="nav-text">在容器中启动Web应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写一个dockerfile"><span class="nav-number">2.</span> <span class="nav-text">写一个Dockerfile</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用新镜像启动web应用"><span class="nav-number">3.</span> <span class="nav-text">用新镜像启动Web应用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在容器中启动web应用"><span class="nav-number">1.</span> <span class="nav-text">在容器中启动Web应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装docker"><span class="nav-number">1.1.</span> <span class="nav-text">安装docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从镜像启动一个web应用"><span class="nav-number">1.2.</span> <span class="nav-text">从镜像启动一个Web应用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写一个dockerfile"><span class="nav-number">2.</span> <span class="nav-text">写一个Dockerfile</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用新镜像启动web应用"><span class="nav-number">3.</span> <span class="nav-text">用新镜像启动Web应用</span></a></li></ol></div>
             
 
           </div>
