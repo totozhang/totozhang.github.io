@@ -73,6 +73,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/atom.xml" title="Back To The Basics" type="application/atom+xml" />
 
@@ -81,21 +83,17 @@
 
 
 
-<meta name="description" content="Essentially, it’s just another way of inter process comunication(IPC) between tcp/ip network applications. The layered structure of the network protocol stack only decouples the complexity of communic">
+<meta name="description" content="最近尝试用虚拟机手工搭建k8s集群，本文是搭建流程记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且遇到了很多莫名巧妙的问题，多次重新安装虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略这些细节。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="TCP&#x2F;IP Network Communication Model">
-<meta property="og:url" content="http://totozhang.github.io/2016-01-02-tcp-comminication-model/index.html">
+<meta property="og:title" content="搭建Kubernetes集群">
+<meta property="og:url" content="http://totozhang.github.io/2019-05-01-learning-k8s-2/index.html">
 <meta property="og:site_name" content="Back To The Basics">
-<meta property="og:description" content="Essentially, it’s just another way of inter process comunication(IPC) between tcp/ip network applications. The layered structure of the network protocol stack only decouples the complexity of communic">
+<meta property="og:description" content="最近尝试用虚拟机手工搭建k8s集群，本文是搭建流程记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且遇到了很多莫名巧妙的问题，多次重新安装虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略这些细节。">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://totozhang.github.io/2016-01-02-tcp-comminication-model/TCPAppLayer1.png">
-<meta property="og:image" content="http://totozhang.github.io/2016-01-02-tcp-comminication-model/TCPAppLayer2.png">
-<meta property="og:image" content="http://totozhang.github.io/2016-01-02-tcp-comminication-model/TCPAppLayer3.png">
-<meta property="og:updated_time" content="2019-01-10T06:00:16.000Z">
+<meta property="og:updated_time" content="2019-05-22T16:46:37.987Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TCP&#x2F;IP Network Communication Model">
-<meta name="twitter:description" content="Essentially, it’s just another way of inter process comunication(IPC) between tcp/ip network applications. The layered structure of the network protocol stack only decouples the complexity of communic">
-<meta name="twitter:image" content="http://totozhang.github.io/2016-01-02-tcp-comminication-model/TCPAppLayer1.png">
+<meta name="twitter:title" content="搭建Kubernetes集群">
+<meta name="twitter:description" content="最近尝试用虚拟机手工搭建k8s集群，本文是搭建流程记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且遇到了很多莫名巧妙的问题，多次重新安装虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略这些细节。">
 
 
 
@@ -125,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://totozhang.github.io/2016-01-02-tcp-comminication-model/"/>
+  <link rel="canonical" href="http://totozhang.github.io/2019-05-01-learning-k8s-2/"/>
 
 
 
 
 
-  <title>TCP/IP Network Communication Model | Back To The Basics</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>搭建Kubernetes集群 | Back To The Basics</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -282,7 +280,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://totozhang.github.io/2016-01-02-tcp-comminication-model/">
+    <link itemprop="mainEntityOfPage" href="http://totozhang.github.io/2019-05-01-learning-k8s-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="toto">
@@ -299,7 +297,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">TCP/IP Network Communication Model</h1>
+          <h1 class="post-title" itemprop="name headline">搭建Kubernetes集群</h1>
         
 
         <div class="post-meta">
@@ -311,8 +309,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-01-02T21:38:55+08:00">
-                2016-01-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-10T23:49:00+08:00">
+                2019-05-10
               </time>
             
 
@@ -334,8 +332,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Network/" itemprop="url" rel="index">
-                    <span itemprop="name">Network</span>
+                  <a href="/categories/学习K8S容器集群/" itemprop="url" rel="index">
+                    <span itemprop="name">学习K8S容器集群</span>
                   </a>
                 </span>
 
@@ -351,7 +349,7 @@
 
           
           
-             <span id="/2016-01-02-tcp-comminication-model/" class="leancloud_visitors" data-flag-title="TCP/IP Network Communication Model">
+             <span id="/2019-05-01-learning-k8s-2/" class="leancloud_visitors" data-flag-title="搭建Kubernetes集群">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -382,60 +380,54 @@
       
 
       
-        <p>Essentially, it’s just another way of inter process comunication(IPC) between tcp/ip network applications. The layered structure of the network protocol stack only decouples the complexity of communication in the application layer, which does not need to consider data loss, data duplication and transmission timeliness in the communication process. Such problems are solved by the transport layer, the application layer only focuses on messages and processing logic in the layer. Therefore, the general transport layer modules work in the system kernel to provide the same service for all processes in the system. The operating system encapsulates the transport layer and other underlying protocols and provides uniform access interfaces for the application layer. This article mainly describes how the TCP transport layer provides abstract services for the application layer, and attempts to implement a minimalist application layer protocol based on TCP, observing the TCP protocol from the perspective of the application layer.<a id="more"></a></p>
-<h1 id="tcp-model">TCP Model</h1>
-<p>TCP provides end-to-end connection service for the application layer, and full duplex communication can be achieved between the two sides. The communication data is sent and received in the form of reliable byte stream. Because UNIX systems are designed according to the everything-is-file rule, network devices are also abstracted to files, so network devices can be accessed using the common UNIX system IO. This is all that a process referring to TCP stack communication knows. As for how to ensure the reliability of data transmission, the flow control of data traffic when the network congestion happened, all these are not visible to the process.</p>
-<h2 id="end-to-end-connection">End-to-end connection</h2>
-<p>TCP only supports communication between two processes in the network, and a connection needs to be established before the process can communicate. Typically, the two processes are client and server relationships. When a process sends and receives data, it simply reads and writes from a file descriptor bound to the network. For the system kernel, the file descriptor that establishes the connection is bound to a quad set {client IP, client TCP port number, server IP, server TCP port number}, which can uniquely identifie a TCP connection.</p>
-<p><img src="/2016-01-02-tcp-comminication-model/TCPAppLayer1.png"></p>
-<h2 id="full-duplex">Full-duplex</h2>
-<p>A process that participates in communication and can send and receive data at the same time.</p>
-<h2 id="byte-stream">Byte stream</h2>
-<p>Communication data is a reliable byte stream, which means that process communication data is sent and received byte by byte according to the sort. Therefore, the application layer needs to complete the parsing and segmentation of application-layer messages.</p>
-<h1 id="sequence-of-communication">Sequence of communication</h1>
-<p>The process implements network communication by calling the set of Socket API functions. The communication process is roughly divided into four stages: communication preparation stage, TCP connection establishment stage, data interaction stage, and TCP connection release (disconnect) stage.</p>
-<p><img src="/2016-01-02-tcp-comminication-model/TCPAppLayer2.png"></p>
-<h2 id="preparation">Preparation</h2>
+        <p>最近尝试用虚拟机手工搭建k8s集群，本文是搭建流程记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且遇到了很多莫名巧妙的问题，多次重新安装虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略这些细节。<a id="more"></a></p>
+<h1 id="配置虚拟机系统及软件安装">配置虚拟机系统及软件安装</h1>
 <ul>
-<li>the client mainly calls the function socket() to apply file descriptor sockfd. If the client does not call the function bind() to bind the local TCP port number, the operating system will automatically assign a temporary port number to it. Sockfd corresponds to {client IP, client temporary TCP port number}.</li>
-<li>the server mainly calls the function socket() to apply file descriptor listenfd. The listenfd is used to receive connection requests from unknown clients. The server must call the function bind() to bind the TCP port it is listening to, which is the well-known port number of the server process. The listen() function informs the system kernel that the listenfd is only used to wait on connection requests from unknown clients.</li>
+<li><p>更改主机名为</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostnamectl --static <span class="built_in">set</span>-hostname master</span><br></pre></td></tr></table></figure></li>
+<li><p>更新Docker源</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /etc/yum.repos.d/</span><br><span class="line">wget -c https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure></li>
+<li><p>创建Kubernetes源，kubernetes.repo</p>
+<p>文件内容</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[kubernetes]</span></span><br><span class="line"><span class="attr">name</span>=Kubernetes</span><br><span class="line"><span class="attr">baseurl</span>=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x<span class="number">86_64</span>/</span><br><span class="line"><span class="attr">enabled</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">gpgcheck</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">repo_gpgcheck</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">gpgkey</span>=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br></pre></td></tr></table></figure></li>
+<li><p>开始安装并启动相应服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install docker-ce</span><br><span class="line">yum install kubeadm kubelet kubectl</span><br><span class="line">systemctl <span class="built_in">enable</span> docker &amp;&amp; systemctl start docker</span><br><span class="line">systemctl <span class="built_in">enable</span> kubelet &amp;&amp; systemctl start kubelet</span><br></pre></td></tr></table></figure></li>
+<li><p>修改一些系统参数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#SELINUX</span></span><br><span class="line">在文件中/etc/selinux/config 修改 SELINUX=permissive</span><br><span class="line"><span class="comment">#Firewall</span></span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld &amp;&amp; systemctl stop firewalld</span><br><span class="line"><span class="comment">#网络参数设置</span></span><br><span class="line">sysctl -w net.bridge.bridge-nf-call-iptables=1</span><br><span class="line">在文件中/etc/sysctl.d/k8s.conf 添加一行 net.bridge.bridge-nf-call-iptables=1</span><br><span class="line"><span class="comment">#关闭SWAP</span></span><br><span class="line">swapoff -a </span><br><span class="line">在文件中/etc/fstab执行·将swap所在行注释掉</span><br></pre></td></tr></table></figure></li>
+<li><p>克隆虚拟机</p></li>
 </ul>
-<h2 id="connection-establishment-phase">Connection establishment phase</h2>
+<h1 id="配置k8s-master节点">配置k8s Master节点</h1>
 <ul>
-<li>the client calls the function connect() to initiate a request to establish a connection to the server. If the TCP connection is established successfully, the file descriptor sockfd binding is a quad {server IP, server TCP port number, client IP, client temporary TCP port number}.</li>
-<li>the server side calls the function accept(), which blocks and waits for the TCP connection request of the unknown client. If accept() returns successfully, the return value is the file descriptor connectfd. The connectfd binding content is a quad {server side IP, server side TCP port number, client side IP, client side temporary TCP port number}.</li>
+<li><p>获取所需容器镜像</p>
+<p>由于不能直连其中涉及到的域名，所以只能额外增加了这步操作，查看所需的镜像。也可以通过配置Proxy或者开VPN的方式，这样不需要提前下载镜像。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubeadm config images list</span></span><br><span class="line">k8s.gcr.io/kube-apiserver:v1.14.2</span><br><span class="line">k8s.gcr.io/kube-controller-manager:v1.14.2</span><br><span class="line">k8s.gcr.io/kube-scheduler:v1.14.2</span><br><span class="line">k8s.gcr.io/kube-proxy:v1.14.2</span><br><span class="line">k8s.gcr.io/pause:3.1</span><br><span class="line">k8s.gcr.io/etcd:3.3.10</span><br><span class="line">k8s.gcr.io/coredns:1.3.1</span><br></pre></td></tr></table></figure>
+<p>准备如下shell脚本文件并运行，之后使用docker image ls可以看到下载好的镜像。 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#! /bin/bash</span></span><br><span class="line">images=(</span><br><span class="line">  kube-apiserver:v1.14.2</span><br><span class="line">  kube-controller-manager:v1.14.2</span><br><span class="line">  kube-scheduler:v1.14.2</span><br><span class="line">  kube-proxy:v1.14.2</span><br><span class="line">  pause:3.1</span><br><span class="line">  etcd:3.3.10</span><br><span class="line">  coredns:1.3.1</span><br><span class="line">)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> imageName <span class="keyword">in</span> <span class="variable">$&#123;images[@]&#125;</span> ; <span class="keyword">do</span></span><br><span class="line">  docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$imageName</span></span><br><span class="line">  docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$imageName</span> k8s.gcr.io/<span class="variable">$imageName</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure></p>
+<p>确认下载image，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master ~]<span class="comment"># docker image ls</span></span><br></pre></td></tr></table></figure></li>
+<li><p>初始化Master节点（使用kubeadm reset可以回滚）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm init --apiserver-advertise-address 192.168.56.117 --pod-network-cidr=10.244.0.0/16</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubeadm init --apiserver-advertise-address 192.168.56.117 --pod-network-cidr=10.244.0.0/16</span></span><br><span class="line">...</span><br><span class="line">Your Kubernetes control-plane has initialized successfully!</span><br><span class="line"></span><br><span class="line">To start using your cluster, you need to run the following as a regular user:</span><br><span class="line"></span><br><span class="line">  mkdir -p <span class="variable">$HOME</span>/.kube</span><br><span class="line">  sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</span><br><span class="line">  sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config</span><br><span class="line"></span><br><span class="line">You should now deploy a pod network to the cluster.</span><br><span class="line">Run <span class="string">"kubectl apply -f [podnetwork].yaml"</span> with one of the options listed at:</span><br><span class="line">  https://kubernetes.io/docs/concepts/cluster-administration/addons/</span><br><span class="line"></span><br><span class="line">Then you can join any number of worker nodes by running the following on each as root:</span><br><span class="line"></span><br><span class="line">kubeadm join 192.168.56.117:6443 --token qivprv.la764w1vr8onk3ik \</span><br><span class="line">    --discovery-token-ca-cert-hash sha256:23df71bdfacb9de49311a2ba16fc7a3efb3d707dd8ece2502237955e5ea299e8</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p <span class="variable">$HOME</span>/.kube</span><br><span class="line">sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</span><br><span class="line">sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config</span><br></pre></td></tr></table></figure></li>
 </ul>
-<p><img src="/2016-01-02-tcp-comminication-model/TCPAppLayer3.png"></p>
-<h2 id="data-interaction-phase">Data interaction phase</h2>
+<h1 id="配置k8s-slave节点">配置k8s Slave节点</h1>
 <ul>
-<li>At this point, both ends can use UNIX standard IO functions read() and write() or use Socket function family send() and recv() to send and receive data, the client read and write object is sockfd, the server read and write object is connectfd.</li>
+<li><p>修改两台worker节点主机名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#nodea</span><br><span class="line">hostnamectl --static set-hostname nodea</span><br><span class="line">#nodeb</span><br><span class="line">hostnamectl --static set-hostname nodeb</span><br></pre></td></tr></table></figure></li>
+<li><p>在master，nodea，nodeb上修改/etc/hosts文件，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">192.168.56.117 master</span><br><span class="line">192.168.56.118 nodea</span><br><span class="line">192.168.56.119 nodeb</span><br></pre></td></tr></table></figure></li>
+<li><p>在nodea和nodeb上执行，（使用kubeadm reset可以回滚）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubeadm join 192.168.56.117:6443 --token cn6unj.8xj0rfk7w9a49x5y \</span><br><span class="line">    --discovery-token-ca-cert-hash sha256:0489ee84cbbdd26f759fddac685da43cb5d327fe1b8a5f5f30d90de8d5cd233c</span><br></pre></td></tr></table></figure></li>
+<li><p>在master上执行，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]# kubectl get nodes</span><br><span class="line">NAME     STATUS     ROLES    AGE   VERSION</span><br><span class="line">master   NotReady   master   12m   v1.14.2</span><br><span class="line">nodea    NotReady   &lt;none&gt;   3m    v1.14.2</span><br><span class="line">nodeb    NotReady   &lt;none&gt;   6s    v1.14.2</span><br></pre></td></tr></table></figure></li>
+<li><p>查看NotReady的原因，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master ~]# kubectl describe node k8s-nodea</span><br><span class="line">...</span><br><span class="line">KubeletNotReady              runtime network not ready: NetworkReady=false reason:NetworkPluginNotReady message:docker: network plugin is not ready: cni config uninitialized</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="release">Release</h2>
+<h1 id="安装网络插件">安装网络插件，</h1>
 <ul>
-<li>When either end completes sending or receiving data, use the function shutdown() to close the “r”, “w”, or “rw” operations to the file descriptor, or use the function close() to close the “rw” operations to the file descriptor.</li>
-</ul>
-<h1 id="example">Example</h1>
-<p>The following is an implementation of the simple application layer communication protocol mentioned earlier in c. To simplify error handling in the code, the lib function in UNPv3 (“lib/unp.h”) is used.</p>
-<blockquote>
-<p>Server: a “Server” process running on host S</p>
-<p>Client: a “Client” process running on host C</p>
-<p>The content of the request message sent by the client is a string, “request,hostname”</p>
-<p>After receiving the request message, the server gets its own host name, and then replies it to the client, “response,&lt; the obtained host name &gt;”.</p>
-</blockquote>
-<h2 id="client">Client</h2>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"lib/unp.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//一些初始化工作</span></span><br><span class="line">    <span class="keyword">int</span> sockfd = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">char</span> response[MAXLINE + <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">char</span> request[] = <span class="string">"request,hostname\r\n"</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">servaddr</span>;</span></span><br><span class="line">    bzero(&amp;servaddr, <span class="keyword">sizeof</span>(servaddr));</span><br><span class="line">    bzero(response, MAXLINE + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//设置将要连接服务器进程的IP地址和TCP端口号</span></span><br><span class="line">    servaddr.sin_family = AF_INET;</span><br><span class="line">    servaddr.sin_port = htons(<span class="number">1982</span>);</span><br><span class="line">    Inet_pton(AF_INET, argv[<span class="number">1</span>], &amp;servaddr.sin_addr);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建Socket，AF_INET表示IPv4，SOCK_STREAM表示TCP</span></span><br><span class="line">    sockfd = Socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//发起连接请求, sockfd和Server进程的IP地址，TCP端口号绑定</span></span><br><span class="line">    Connect(sockfd, (SA *) &amp;servaddr, <span class="keyword">sizeof</span>(servaddr));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//发送请求消息</span></span><br><span class="line">    Write(sockfd, (<span class="keyword">char</span>*) request, <span class="built_in">strlen</span>(request));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//等待从Server进程接收响应消息</span></span><br><span class="line">    Readline(sockfd, response, MAXLINE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//将结果输出到标准输出</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%s"</span>, response);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//关闭Socket,通知服务进程通信结束</span></span><br><span class="line">    Close(sockfd);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//进程结束</span></span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="server">Server</h2>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"lib/unp.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//一些初始化工作</span></span><br><span class="line">    <span class="keyword">int</span> listenfd = <span class="number">0</span>;                                      <span class="comment">//Server进程监听文件描述符</span></span><br><span class="line">    <span class="keyword">int</span> connectfd = <span class="number">0</span>;                                     <span class="comment">//Server进程连接文件描述符</span></span><br><span class="line">    <span class="keyword">int</span> length = <span class="number">0</span>;                                        <span class="comment">//Server进程接收到请求长度</span></span><br><span class="line">    <span class="keyword">char</span> responsbuf[MAXLINE] = &#123; <span class="number">0</span> &#125;;                      <span class="comment">//Server响应消息缓存</span></span><br><span class="line">    <span class="keyword">char</span> requestbuf[MAXLINE] = &#123; <span class="number">0</span> &#125;;                      <span class="comment">//Client请求消息缓存</span></span><br><span class="line">    <span class="keyword">char</span> response_prefix[] = <span class="string">"response,"</span>;                  <span class="comment">//响应消息前缀</span></span><br><span class="line">    <span class="keyword">char</span> response_suffix[] = <span class="string">"\r\n"</span>;                       <span class="comment">//响应消息后缀</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//连接Server进程的Client进程的地址信息</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">clntaddr</span>;</span></span><br><span class="line">    bzero(&amp;clntaddr, <span class="keyword">sizeof</span>(clntaddr));</span><br><span class="line">    <span class="keyword">socklen_t</span> sock_length = <span class="keyword">sizeof</span>(struct sockaddr_in);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Server进程所在的IP地址和监听端口号1982</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">servaddr</span>;</span></span><br><span class="line">    bzero(&amp;servaddr, <span class="keyword">sizeof</span>(servaddr));</span><br><span class="line">    servaddr.sin_family = AF_INET;                         <span class="comment">//使用IPv4，实际上也可以使用IPv6</span></span><br><span class="line">    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);          <span class="comment">//监听各个网络接口</span></span><br><span class="line">    servaddr.sin_port = htons(<span class="number">1982</span>);                       <span class="comment">//监听端口号1982</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建Socket，AF_INET表示IPv4，SOCK_STREAM表示TCP</span></span><br><span class="line">    listenfd = Socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//将服务器的地址，端口号绑定到新创立的socket文件描述符listenfd</span></span><br><span class="line">    Bind(listenfd, (SA *) &amp;servaddr, <span class="keyword">sizeof</span>(servaddr));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//通知OS Kernel，新创建的socket文件描述符用于服务器进程</span></span><br><span class="line">    Listen(listenfd, LISTENQ);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//开始处理来自Client进程的请求</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//接受来自Client进程的连接请求，后两个参数保存正在发起连接请求的Client进程信息</span></span><br><span class="line">        connectfd = Accept(listenfd, (SA *) &amp;clntaddr, &amp;sock_length);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//接收Client进程的消息</span></span><br><span class="line">        bzero(requestbuf, <span class="keyword">sizeof</span>(requestbuf));</span><br><span class="line"></span><br><span class="line">        Readline(connectfd, requestbuf, <span class="keyword">sizeof</span>(requestbuf));</span><br><span class="line"></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Receive message from client process on %s: %s\n"</span>,</span><br><span class="line">                inet_ntoa(clntaddr.sin_addr), requestbuf);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//Server进程返回响应消息给Client进程，消息格式为"response, &lt;hostname&gt;\r\n"</span></span><br><span class="line">        bzero(responsbuf, <span class="keyword">sizeof</span>(requestbuf));</span><br><span class="line">        <span class="built_in">strncpy</span>(responsbuf, response_prefix, <span class="built_in">strlen</span>(response_prefix));</span><br><span class="line">        gethostname(responsbuf + <span class="built_in">strlen</span>(response_prefix), MAXLINE);</span><br><span class="line">        <span class="built_in">strncat</span>(responsbuf, response_suffix, <span class="built_in">strlen</span>(response_suffix));</span><br><span class="line">        Write(connectfd, responsbuf, <span class="built_in">strlen</span>(responsbuf));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//再次阻塞等待Client进程的消息，这次等到的是EOF，收到EOF后阻塞态结束，Readline返回</span></span><br><span class="line">        Readline(connectfd, requestbuf, <span class="keyword">sizeof</span>(requestbuf));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//结束与Client进程通信</span></span><br><span class="line">        Close(connectfd);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="run">Run</h2>
-<p>Server <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">toto@ServerOS:~$ server </span><br><span class="line">Receive message from client process on 10.16.56.2: request,hostname</span><br><span class="line">Receive message from client process on 10.16.56.2: request,hostname</span><br><span class="line">～阻塞等待</span><br></pre></td></tr></table></figure></p>
-<p>Client <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">toto@ClientOS:~$ client 10.22.5.3</span><br><span class="line">response,guru</span><br><span class="line">toto@ClientOS:~$ client 10.22.5.3</span><br><span class="line">response,guru</span><br></pre></td></tr></table></figure></p>
-<h1 id="reference">Reference</h1>
-<p>Some more reference</p>
-<ul>
-<li>RFC2616，“Hypertext Transfer Protocol/1.1”和《HTTP The Definitive Guide》</li>
-<li>RFC3117，“On the Design of Application Protocols”</li>
-<li>RFC3205，“On the use of HTTP as a Substrate”</li>
-<li>RFC5321，“Simple Mail Transfer Protocol”</li>
+<li><p>此处使用calico插件，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://docs.projectcalico.org/v3.7/manifests/calico.yaml</span><br></pre></td></tr></table></figure></li>
+<li><p>查看Node状态，ß</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]# kubectl get nodes</span><br><span class="line">NAME     STATUS     ROLES    AGE     VERSION</span><br><span class="line">master   Ready      master   12m     v1.14.2</span><br><span class="line">nodea    Ready      &lt;none&gt;   7m50s   v1.14.2</span><br><span class="line">nodeb    Ready      &lt;none&gt;   7m31s   v1.14.2</span><br></pre></td></tr></table></figure></li>
 </ul>
 
       
@@ -453,11 +445,11 @@
         <ul class="post-copyright">
   <li class="post-copyright-author">
     <strong>Post author:</strong>
-    toto
+    toto.zhang@gmail.com
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://totozhang.github.io/2016-01-02-tcp-comminication-model/" title="TCP/IP Network Communication Model">http://totozhang.github.io/2016-01-02-tcp-comminication-model/</a>
+    <a href="http://totozhang.github.io/2019-05-01-learning-k8s-2/" title="搭建Kubernetes集群">http://totozhang.github.io/2019-05-01-learning-k8s-2/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -479,8 +471,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016-01-01-tcp-data-encapsulation/" rel="next" title="TCP Data Encapsulation">
-                <i class="fa fa-chevron-left"></i> TCP Data Encapsulation
+              <a href="/2019-05-01-learning-k8s-1/" rel="next" title="一个单独的容器应用">
+                <i class="fa fa-chevron-left"></i> 一个单独的容器应用
               </a>
             
           </div>
@@ -488,10 +480,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016-01-03-tcp-reliable-communication/" rel="prev" title="Reliability of TCP">
-                Reliability of TCP <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -653,7 +641,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp-model"><span class="nav-number">1.</span> <span class="nav-text">TCP Model</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#end-to-end-connection"><span class="nav-number">1.1.</span> <span class="nav-text">End-to-end connection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#full-duplex"><span class="nav-number">1.2.</span> <span class="nav-text">Full-duplex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#byte-stream"><span class="nav-number">1.3.</span> <span class="nav-text">Byte stream</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sequence-of-communication"><span class="nav-number">2.</span> <span class="nav-text">Sequence of communication</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#preparation"><span class="nav-number">2.1.</span> <span class="nav-text">Preparation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connection-establishment-phase"><span class="nav-number">2.2.</span> <span class="nav-text">Connection establishment phase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#data-interaction-phase"><span class="nav-number">2.3.</span> <span class="nav-text">Data interaction phase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#release"><span class="nav-number">2.4.</span> <span class="nav-text">Release</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#example"><span class="nav-number">3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#client"><span class="nav-number">3.1.</span> <span class="nav-text">Client</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server"><span class="nav-number">3.2.</span> <span class="nav-text">Server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#run"><span class="nav-number">3.3.</span> <span class="nav-text">Run</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#配置虚拟机系统及软件安装"><span class="nav-number">1.</span> <span class="nav-text">配置虚拟机系统及软件安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置k8s-master节点"><span class="nav-number">2.</span> <span class="nav-text">配置k8s Master节点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置k8s-slave节点"><span class="nav-number">3.</span> <span class="nav-text">配置k8s Slave节点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装网络插件"><span class="nav-number">4.</span> <span class="nav-text">安装网络插件，</span></a></li></ol></div>
             
 
           </div>

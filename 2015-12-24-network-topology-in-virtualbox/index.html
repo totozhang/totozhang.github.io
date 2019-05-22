@@ -93,7 +93,7 @@
 <meta property="og:image" content="http://totozhang.github.io/2015-12-24-network-topology-in-virtualbox/4.png">
 <meta property="og:image" content="http://totozhang.github.io/2015-12-24-network-topology-in-virtualbox/5.png">
 <meta property="og:image" content="http://totozhang.github.io/2015-12-24-network-topology-in-virtualbox/6.png">
-<meta property="og:updated_time" content="2019-05-10T15:20:16.808Z">
+<meta property="og:updated_time" content="2019-05-21T06:29:20.243Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="VirtualBox Network Topology">
 <meta name="twitter:description" content="VirtualBox is a powerful x86 and AMD64/Intel64 virtualization software(VBox for short), which can be used to construct kinds of debug or test network environments, to capture or analyse the packets in">
@@ -406,6 +406,8 @@
 <p>In this mode, client and host machine are bridged in the same ethernet segment. In other words, the clients are connected to the physical network directly. If there’s a DHCP server, the clients get IP addresses automatically. Theoretically, in the bridged mode, either the clients or the VBox itself can provide the DHCP service for the network, and it highly possible result unpredictable conflicts. It’s not recommended to do this. <img src="/2015-12-24-network-topology-in-virtualbox/4.png" alt="Bridged Networking"></p>
 <p>If the host is multihomed, the network interface should be indicated specifically.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#The bridge interface printout</span></span><br><span class="line">vboxmanage list bridgedifs</span><br><span class="line"><span class="comment">#Bridge</span></span><br><span class="line">vboxmanage modifyvm &lt;vmname&gt; --nic&lt;X&gt; bridged --bridgeadapter&lt;X&gt; &lt;bridgedifs&gt;</span><br></pre></td></tr></table></figure>
+<p>If the client can not get a proper ip address from DHCP server, run this on client Linux.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dhclient eth0 -v</span><br></pre></td></tr></table></figure>
 <p>Notice that this mode is only effective when the data-link layer is ethernet network including the cabled or the wireless.</p>
 <h2 id="option-5-internal-networking">Option 5: Internal Networking</h2>
 <p>In the process of developing a network application, it’s inevitable to capture the network data packets for debuging or test. Most of the time, engineers prefer the bridged mode. Sometimes it’s more useful to choose the internal network mode. For instance, if the packets will impact the physical network, we should prevent this kind of situation in product environment, or, if we need excluding the unnecessory interference packets, to simplify the analysing process. Sometimes maybe we also need an extra internal network like the topology for the nodes to communication with each other with heatbeat packets. <img src="/2015-12-24-network-topology-in-virtualbox/5.png" alt="Internal Networking"></p>
@@ -555,7 +557,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
