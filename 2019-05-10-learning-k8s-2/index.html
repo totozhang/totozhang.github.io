@@ -81,19 +81,19 @@
 
 
 
-<meta name="description" content="开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录以Docker容器形式启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用Bridge方式连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的We">
+<meta name="description" content="尝试用虚拟机手工搭建k8s集群，本文是搭建流程简单记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且过程中遇到了很多莫名巧妙的问题，多次重新安装了虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略少部分细节。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一个单独的容器应用">
-<meta property="og:url" content="http://totozhang.github.io/2019-05-01-learning-k8s-1/index.html">
+<meta property="og:title" content="搭建Kubernetes集群">
+<meta property="og:url" content="http://totozhang.github.io/2019-05-10-learning-k8s-2/index.html">
 <meta property="og:site_name" content="Back To The Basics">
-<meta property="og:description" content="开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录以Docker容器形式启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用Bridge方式连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的We">
+<meta property="og:description" content="尝试用虚拟机手工搭建k8s集群，本文是搭建流程简单记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且过程中遇到了很多莫名巧妙的问题，多次重新安装了虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略少部分细节。">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://totozhang.github.io/2019-05-01-learning-k8s-1/1.jpeg">
-<meta property="og:updated_time" content="2019-05-17T08:16:37.291Z">
+<meta property="og:image" content="http://totozhang.github.io/2019-05-10-learning-k8s-2/1.png">
+<meta property="og:updated_time" content="2019-05-23T13:38:10.509Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一个单独的容器应用">
-<meta name="twitter:description" content="开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录以Docker容器形式启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用Bridge方式连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的We">
-<meta name="twitter:image" content="http://totozhang.github.io/2019-05-01-learning-k8s-1/1.jpeg">
+<meta name="twitter:title" content="搭建Kubernetes集群">
+<meta name="twitter:description" content="尝试用虚拟机手工搭建k8s集群，本文是搭建流程简单记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且过程中遇到了很多莫名巧妙的问题，多次重新安装了虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略少部分细节。">
+<meta name="twitter:image" content="http://totozhang.github.io/2019-05-10-learning-k8s-2/1.png">
 
 
 
@@ -123,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://totozhang.github.io/2019-05-01-learning-k8s-1/"/>
+  <link rel="canonical" href="http://totozhang.github.io/2019-05-10-learning-k8s-2/"/>
 
 
 
 
 
-  <title>一个单独的容器应用 | Back To The Basics</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>搭建Kubernetes集群 | Back To The Basics</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -280,7 +280,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://totozhang.github.io/2019-05-01-learning-k8s-1/">
+    <link itemprop="mainEntityOfPage" href="http://totozhang.github.io/2019-05-10-learning-k8s-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="toto">
@@ -297,7 +297,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">一个单独的容器应用</h1>
+          <h1 class="post-title" itemprop="name headline">搭建Kubernetes集群</h1>
         
 
         <div class="post-meta">
@@ -309,8 +309,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-01T23:49:00+08:00">
-                2019-05-01
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-10T23:49:00+08:00">
+                2019-05-10
               </time>
             
 
@@ -349,7 +349,7 @@
 
           
           
-             <span id="/2019-05-01-learning-k8s-1/" class="leancloud_visitors" data-flag-title="一个单独的容器应用">
+             <span id="/2019-05-10-learning-k8s-2/" class="leancloud_visitors" data-flag-title="搭建Kubernetes集群">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -380,29 +380,63 @@
       
 
       
-        <p>开始学习Kubernetes，并对学习过程做一些简单记录。本篇记录以Docker容器形式启动一个Web应用的方法，首先将Web需要的Html文件以本地文件的形式挂载到Nginx容器上，然后再尝试写一个Dockerfile将所需要的网页文件直接写入到Docker镜像中，创建一个镜像并以新镜像直接运行此应用。虚拟机和宿主机用<a href="https://totozhang.github.io/2015-12-24-network-topology-in-virtualbox/">Bridge方式</a>连接。从宿主机浏览器访问虚拟机中所运行Docker容器内的Web服务。<a id="more"></a></p>
-<h1 id="在容器中启动web应用">在容器中启动Web应用</h1>
-<h2 id="安装docker">安装docker</h2>
-<p>修改安装源到阿里云，</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo</span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/</span><br><span class="line">enabled=<span class="number">1</span></span><br><span class="line">gpgcheck=<span class="number">1</span></span><br><span class="line">repo_gpgcheck=<span class="number">1</span></span><br><span class="line">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<p>安装net-tools和docker并启动，</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install net-tools</span><br><span class="line">yum install docker</span><br><span class="line">systemctl enable docker</span><br><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
-<p>修改docker的镜像加速指向阿里云，</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt;EOF &gt; /etc/docker/daemon.json</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [<span class="string">"https://l8gz8qd0.mirror.aliyuncs.com"</span>]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<p>重启docker服务</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
-<h2 id="从镜像启动一个web应用">从镜像启动一个Web应用</h2>
-<p>将之前制作完成的网页放入当前目录html路径下，</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Ubuntu 755就行，这个权限，mmp</span></span><br><span class="line">chmod -R 777 ./html</span><br><span class="line"></span><br><span class="line"><span class="comment">#其中-v是挂载物理机的指定目录到容器内的指定目录，-p是将物理机的端口号映射到容器内端口号</span></span><br><span class="line">[root@master ~]<span class="comment"># docker run -p 80:80 -v $PWD/html:/usr/share/nginx/html nginx</span></span><br></pre></td></tr></table></figure>
-<h1 id="写一个dockerfile">写一个Dockerfile</h1>
-<p>将网页文件写入到镜像中，并发布到镜像仓库中。</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#dockerfile</span></span><br><span class="line"><span class="keyword">FROM</span> nginx</span><br><span class="line"><span class="keyword">MAINTAINER</span> <span class="string">"toto &lt;toto.zhang@gmail.com&gt;"</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> <span class="variable">$PWD</span>/html/ /usr/share/nginx/html/</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># docker build -t mywebv1 ./</span></span><br><span class="line">Sending build context to Docker daemon 15.54 MB</span><br><span class="line">Step 1/3 : FROM nginx</span><br><span class="line"> ---&gt; 53f3fd8007f7</span><br><span class="line">Step 2/3 : MAINTAINER <span class="string">"toto &lt;toto.zhang@gmail.com&gt;"</span></span><br><span class="line"> ---&gt; Using cache</span><br><span class="line"> ---&gt; d4e48c59c558</span><br><span class="line">Step 3/3 : COPY <span class="variable">$PWD</span>/html/ /usr/share/nginx/html/</span><br><span class="line"> ---&gt; Using cache</span><br><span class="line"> ---&gt; eaa41b6b815d</span><br><span class="line">Successfully built eaa41b6b815d</span><br></pre></td></tr></table></figure>
-<h1 id="用新镜像启动web应用">用新镜像启动Web应用</h1>
-<p>当一个开发人员做完了这个应用，运维直接一条指令自动执行。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># docker image ls</span></span><br><span class="line">REPOSITORY  TAG           IMAGE ID            CREATED             SIZE</span><br><span class="line">mywebv1     latest        eaa41b6b815d        21 hours ago        124 MB</span><br><span class="line"></span><br><span class="line">[root@master ~]<span class="comment"># docker run -p 80:80 mywebv1</span></span><br></pre></td></tr></table></figure>
-<p>从外部浏览器访问位于容器内的web服务。</p>
-<p><img src="/2019-05-01-learning-k8s-1/1.jpeg"></p>
+        <p>尝试用虚拟机手工搭建k8s集群，本文是搭建流程简单记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且过程中遇到了很多莫名巧妙的问题，多次重新安装了虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略少部分细节。<a id="more"></a></p>
+<h1 id="网络拓扑">网络拓扑</h1>
+<p>使用三台虚拟机运行Linux，一台作为Master Node使用，两台作为Slave Node使用，网络配置如下，其中Bridge网络作为OAM网络及极端情况下挂VPN下载镜像及组件等（整个过程实际没有使用VPN），Internal网络作为Node之间的联络网络，Pod网络是Calico自建网络。</p>
+<p><img src="/2019-05-10-learning-k8s-2/1.png"></p>
+<h1 id="配置虚拟机系统及软件安装">配置虚拟机系统及软件安装</h1>
+<p>创建1台虚拟机作为Mater节点，安装系统，CPU至少使用2核，单核会导致k8s报错，内存我设置为2GB，硬盘给了10GB，这些硬件配置安装好系统后也可以更改。常规安装CentOS，安装完成后更改主机名为，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostnamectl --static <span class="built_in">set</span>-hostname master</span><br></pre></td></tr></table></figure>
+<p>更新Docker源</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /etc/yum.repos.d/</span><br><span class="line">wget -c https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
+<p>创建Kubernetes源，kubernetes.repo，文件内容为，</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[kubernetes]</span></span><br><span class="line"><span class="attr">name</span>=Kubernetes</span><br><span class="line"><span class="attr">baseurl</span>=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x<span class="number">86_64</span>/</span><br><span class="line"><span class="attr">enabled</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">gpgcheck</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">repo_gpgcheck</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">gpgkey</span>=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br></pre></td></tr></table></figure>
+<p>开始安装并启动相应服务，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install docker-ce</span><br><span class="line">yum install kubeadm kubelet kubectl</span><br><span class="line">systemctl <span class="built_in">enable</span> docker &amp;&amp; systemctl start docker</span><br><span class="line">systemctl <span class="built_in">enable</span> kubelet &amp;&amp; systemctl start kubelet</span><br></pre></td></tr></table></figure>
+<p>修改一些系统参数，尝试了不修改这些参数，在部署过程中会报错，导致部署失败，查看相关原因都跟这几个参数有关。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#SELINUX</span></span><br><span class="line">在文件中/etc/selinux/config 修改 SELINUX=permissive</span><br><span class="line"><span class="comment">#Firewall</span></span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld &amp;&amp; systemctl stop firewalld</span><br><span class="line"><span class="comment">#网络参数设置</span></span><br><span class="line">sysctl -w net.bridge.bridge-nf-call-iptables=1</span><br><span class="line">在文件中/etc/sysctl.d/k8s.conf 添加一行 net.bridge.bridge-nf-call-iptables=1</span><br><span class="line"><span class="comment">#关闭SWAP</span></span><br><span class="line">swapoff -a </span><br><span class="line">在文件中/etc/fstab执行·将swap所在行注释掉</span><br></pre></td></tr></table></figure>
+<p>克隆2台虚拟机作为NodeA和NodeB工作节点。</p>
+<h1 id="配置k8s-master节点">配置k8s Master节点</h1>
+<p><strong>获取所需容器镜像</strong></p>
+<p>由于不能直连其中涉及到的域名，所以只能额外增加了这步操作，查看所需的镜像。也可以通过配置Proxy或者开VPN的方式，这样不需要提前下载镜像。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubeadm config images list</span></span><br><span class="line">k8s.gcr.io/kube-apiserver:v1.14.2</span><br><span class="line">k8s.gcr.io/kube-controller-manager:v1.14.2</span><br><span class="line">k8s.gcr.io/kube-scheduler:v1.14.2</span><br><span class="line">k8s.gcr.io/kube-proxy:v1.14.2</span><br><span class="line">k8s.gcr.io/pause:3.1</span><br><span class="line">k8s.gcr.io/etcd:3.3.10</span><br><span class="line">k8s.gcr.io/coredns:1.3.1</span><br></pre></td></tr></table></figure>
+<p>准备如下shell脚本文件并运行，之后使用docker image ls可以看到下载好的镜像。 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#! /bin/bash</span></span><br><span class="line">images=(</span><br><span class="line">  kube-apiserver:v1.14.2</span><br><span class="line">  kube-controller-manager:v1.14.2</span><br><span class="line">  kube-scheduler:v1.14.2</span><br><span class="line">  kube-proxy:v1.14.2</span><br><span class="line">  pause:3.1</span><br><span class="line">  etcd:3.3.10</span><br><span class="line">  coredns:1.3.1</span><br><span class="line">)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> imageName <span class="keyword">in</span> <span class="variable">$&#123;images[@]&#125;</span> ; <span class="keyword">do</span></span><br><span class="line">  docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$imageName</span></span><br><span class="line">  docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$imageName</span> k8s.gcr.io/<span class="variable">$imageName</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure></p>
+<p>确认下载image，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master ~]<span class="comment"># docker image ls</span></span><br></pre></td></tr></table></figure>
+<p>初始化Master节点（使用kubeadm reset可以回滚）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm init --apiserver-advertise-address 192.168.56.117 --pod-network-cidr=10.244.0.0/16</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubeadm init --apiserver-advertise-address 192.168.56.117 --pod-network-cidr=10.244.0.0/16</span></span><br><span class="line">...</span><br><span class="line">Your Kubernetes control-plane has initialized successfully!</span><br><span class="line"></span><br><span class="line">To start using your cluster, you need to run the following as a regular user:</span><br><span class="line"></span><br><span class="line">  mkdir -p <span class="variable">$HOME</span>/.kube</span><br><span class="line">  sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</span><br><span class="line">  sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config</span><br><span class="line"></span><br><span class="line">You should now deploy a pod network to the cluster.</span><br><span class="line">Run <span class="string">"kubectl apply -f [podnetwork].yaml"</span> with one of the options listed at:</span><br><span class="line">  https://kubernetes.io/docs/concepts/cluster-administration/addons/</span><br><span class="line"></span><br><span class="line">Then you can join any number of worker nodes by running the following on each as root:</span><br><span class="line"></span><br><span class="line">kubeadm join 192.168.56.117:6443 --token qivprv.la764w1vr8onk3ik \</span><br><span class="line">    --discovery-token-ca-cert-hash sha256:23df71bdfacb9de49311a2ba16fc7a3efb3d707dd8ece2502237955e5ea299e8</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p <span class="variable">$HOME</span>/.kube</span><br><span class="line">sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</span><br><span class="line">sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config</span><br></pre></td></tr></table></figure>
+<h1 id="配置k8s-slave节点">配置k8s Slave节点</h1>
+<p>修改两台worker节点主机名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#nodea</span><br><span class="line">hostnamectl --static set-hostname nodea</span><br><span class="line">#nodeb</span><br><span class="line">hostnamectl --static set-hostname nodeb</span><br></pre></td></tr></table></figure>
+<p>在master，nodea，nodeb上修改/etc/hosts文件，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">192.168.56.117 master</span><br><span class="line">192.168.56.118 nodea</span><br><span class="line">192.168.56.119 nodeb</span><br></pre></td></tr></table></figure>
+<p>在nodea和nodeb上执行，（使用kubeadm reset可以回滚）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubeadm join 192.168.56.117:6443 --token cn6unj.8xj0rfk7w9a49x5y \</span><br><span class="line">    --discovery-token-ca-cert-hash sha256:0489ee84cbbdd26f759fddac685da43cb5d327fe1b8a5f5f30d90de8d5cd233c</span><br></pre></td></tr></table></figure>
+<p>在master上执行，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]# kubectl get nodes</span><br><span class="line">NAME     STATUS     ROLES    AGE   VERSION</span><br><span class="line">master   NotReady   master   12m   v1.14.2</span><br><span class="line">nodea    NotReady   &lt;none&gt;   3m    v1.14.2</span><br><span class="line">nodeb    NotReady   &lt;none&gt;   6s    v1.14.2</span><br></pre></td></tr></table></figure>
+<p>查看NotReady的原因，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master ~]# kubectl describe node k8s-nodea</span><br><span class="line">...</span><br><span class="line">KubeletNotReady              runtime network not ready: NetworkReady=false reason:NetworkPluginNotReady message:docker: network plugin is not ready: cni config uninitialized</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h1 id="安装网络插件">安装网络插件，</h1>
+<p>此处使用calico插件，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://docs.projectcalico.org/v3.7/manifests/calico.yaml</span><br></pre></td></tr></table></figure>
+<p>查看Node状态，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubectl get nodes</span></span><br><span class="line">NAME     STATUS   ROLES    AGE   VERSION</span><br><span class="line">master   Ready    master   10h   v1.14.2</span><br><span class="line">nodea    Ready    &lt;none&gt;   10h   v1.14.2</span><br><span class="line">nodeb    Ready    &lt;none&gt;   10h   v1.14.2</span><br></pre></td></tr></table></figure>
+<p>查看Pod状态，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubectl get pods --all-namespaces</span></span><br><span class="line">NAMESPACE     NAME                                       READY   STATUS             RESTARTS   AGE</span><br><span class="line">kube-system   calico-kube-controllers-8646dd497f-n8wl6   1/1     Running            0          </span><br><span class="line">kube-system   calico-node-2lcjn                          1/1     Running            0          </span><br><span class="line">kube-system   calico-node-kvmz7                          1/1     Running            0          </span><br><span class="line">kube-system   calico-node-p2nft                          1/1     Running            0        </span><br><span class="line">kube-system   coredns-fb8b8dccf-qzr5m                    1/1     Running            0          </span><br><span class="line">kube-system   coredns-fb8b8dccf-txgzh                    1/1     Running            0          </span><br><span class="line">kube-system   etcd-master                                1/1     Running            0          </span><br><span class="line">kube-system   kube-apiserver-master                      1/1     Running            0          </span><br><span class="line">kube-system   kube-controller-manager-master             1/1     Running            0          </span><br><span class="line">kube-system   kube-proxy-49t6x                           1/1     Running            0          </span><br><span class="line">kube-system   kube-proxy-86j9l                           1/1     Running            0          </span><br><span class="line">kube-system   kube-proxy-kttxv                           1/1     Running            0          </span><br><span class="line">kube-system   kube-scheduler-master                      1/1     Running            0</span><br></pre></td></tr></table></figure>
+<p>以上阶段性完成了配置工作。</p>
+<h1 id="遇到的一个小问题">遇到的一个小问题</h1>
+<p>安装网络插件后，查看Node状态和Pod状态，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubectl get nodes</span></span><br><span class="line">NAME     STATUS     ROLES    AGE   VERSION</span><br><span class="line">master   Ready      master   9h    v1.14.2</span><br><span class="line">nodea    NotReady   &lt;none&gt;   9h    v1.14.2</span><br><span class="line">nodeb    NotReady   &lt;none&gt;   9h    v1.14.2</span><br><span class="line"></span><br><span class="line">[root@master ~]<span class="comment"># kubectl get pods --all-namespaces</span></span><br><span class="line">...</span><br><span class="line">kube-system   calico-node-2lcjn           0/1     Init:0/2            0          9h</span><br><span class="line">kube-system   calico-node-kvmz7           1/1     Running             0          9h</span><br><span class="line">kube-system   calico-node-p2nft           0/1     Init:0/2            0          9h</span><br><span class="line">...</span><br><span class="line">kube-system   kube-proxy-86j9l            0/1     ContainerCreating   0          9h</span><br><span class="line">kube-system   kube-proxy-kttxv            0/1     ContainerCreating   0          9h</span><br><span class="line">kube-system   kube-scheduler-master       1/1     Running             0          9h</span><br></pre></td></tr></table></figure>
+<p>查看原因，404</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubectl describe pod kube-proxy-86j9l --namespace=kube-system</span></span><br><span class="line">...</span><br><span class="line">Warning  FailedCreatePodSandBox  3m6s (x1211 over 9h)  kubelet, nodeb  Failed create pod sandbox: rpc error: code = Unknown desc = failed pulling image <span class="string">"k8s.gcr.io/pause:3.1"</span>: Error response from daemon: Get https://k8s.gcr.io/v2/: net/http: request canceled <span class="keyword">while</span> waiting <span class="keyword">for</span> connection (Client.Timeout exceeded <span class="keyword">while</span> awaiting headers)</span><br></pre></td></tr></table></figure>
+<p>拉缺失镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@nodeb ~]<span class="comment"># docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.1</span></span><br><span class="line">[root@nodeb ~]<span class="comment"># docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.1 k8s.gcr.io/pause:3.1</span></span><br></pre></td></tr></table></figure>
+<p>再次查看失败原因，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment">#  kubectl describe pod calico-node-p2nft --namespace=kube-system</span></span><br><span class="line">...</span><br><span class="line">Warning  Failed                  49s (x3 over 11m)    kubelet, nodea  Error: ErrImagePull</span><br><span class="line">Warning  Failed                  49s (x2 over 9m40s)  kubelet, nodea  Failed to pull image <span class="string">"calico/cni:v3.7.2"</span>: rpc error: code = Unknown desc = context canceled</span><br></pre></td></tr></table></figure>
+<p>拉缺失镜像，换了几个国内源终于找到了一个。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@nodea ~]<span class="comment"># docker pull quay-mirror.qiniu.com/calico/cni:v3.7.2</span></span><br><span class="line">[root@nodeb ~]<span class="comment"># docker pull quay-mirror.qiniu.com/calico/cni:v3.7.2</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -423,7 +457,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://totozhang.github.io/2019-05-01-learning-k8s-1/" title="一个单独的容器应用">http://totozhang.github.io/2019-05-01-learning-k8s-1/</a>
+    <a href="http://totozhang.github.io/2019-05-10-learning-k8s-2/" title="搭建Kubernetes集群">http://totozhang.github.io/2019-05-10-learning-k8s-2/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -445,8 +479,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019-04-18-the-essence-of-container/" rel="next" title="容器的本质">
-                <i class="fa fa-chevron-left"></i> 容器的本质
+              <a href="/2019-05-01-learning-k8s-1/" rel="next" title="一个单独的容器应用">
+                <i class="fa fa-chevron-left"></i> 一个单独的容器应用
               </a>
             
           </div>
@@ -454,10 +488,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019-05-10-learning-k8s-2/" rel="prev" title="搭建Kubernetes集群">
-                搭建Kubernetes集群 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -619,7 +649,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在容器中启动web应用"><span class="nav-number">1.</span> <span class="nav-text">在容器中启动Web应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装docker"><span class="nav-number">1.1.</span> <span class="nav-text">安装docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从镜像启动一个web应用"><span class="nav-number">1.2.</span> <span class="nav-text">从镜像启动一个Web应用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写一个dockerfile"><span class="nav-number">2.</span> <span class="nav-text">写一个Dockerfile</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用新镜像启动web应用"><span class="nav-number">3.</span> <span class="nav-text">用新镜像启动Web应用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#网络拓扑"><span class="nav-number">1.</span> <span class="nav-text">网络拓扑</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置虚拟机系统及软件安装"><span class="nav-number">2.</span> <span class="nav-text">配置虚拟机系统及软件安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置k8s-master节点"><span class="nav-number">3.</span> <span class="nav-text">配置k8s Master节点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置k8s-slave节点"><span class="nav-number">4.</span> <span class="nav-text">配置k8s Slave节点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装网络插件"><span class="nav-number">5.</span> <span class="nav-text">安装网络插件，</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#遇到的一个小问题"><span class="nav-number">6.</span> <span class="nav-text">遇到的一个小问题</span></a></li></ol></div>
             
 
           </div>
