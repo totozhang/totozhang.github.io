@@ -89,7 +89,7 @@
 <meta property="og:description" content="尝试用虚拟机手工搭建k8s集群，本文是搭建流程简单记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且过程中遇到了很多莫名巧妙的问题，多次重新安装了虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略少部分细节。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://totozhang.github.io/2019-05-01-learning-k8s-2/1.png">
-<meta property="og:updated_time" content="2019-05-23T10:16:20.418Z">
+<meta property="og:updated_time" content="2019-05-23T10:19:23.197Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建Kubernetes集群">
 <meta name="twitter:description" content="尝试用虚拟机手工搭建k8s集群，本文是搭建流程简单记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且过程中遇到了很多莫名巧妙的问题，多次重新安装了虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略少部分细节。">
@@ -382,7 +382,7 @@
       
         <p>尝试用虚拟机手工搭建k8s集群，本文是搭建流程简单记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且过程中遇到了很多莫名巧妙的问题，多次重新安装了虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略少部分细节。<a id="more"></a></p>
 <h1 id="网络拓扑">网络拓扑</h1>
-<p>使用三台虚拟机运行Linux，一台作为Master Node使用，两台作为Slave Node使用，网络配置如下，其中Bridge网络作为OAM网络及极端情况下挂VPN下载镜像及组件等（整个过程实际没有使用VPN），Internal网络作为Node直接的联络网络，Pod网络是Calico自建网络。</p>
+<p>使用三台虚拟机运行Linux，一台作为Master Node使用，两台作为Slave Node使用，网络配置如下，其中Bridge网络作为OAM网络及极端情况下挂VPN下载镜像及组件等（整个过程实际没有使用VPN），Internal网络作为Node之间的联络网络，Pod网络是Calico自建网络。</p>
 <p><img src="/2019-05-01-learning-k8s-2/1.png"></p>
 <h1 id="配置虚拟机系统及软件安装">配置虚拟机系统及软件安装</h1>
 <p>更改主机名为</p>
