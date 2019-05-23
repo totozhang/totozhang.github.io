@@ -89,7 +89,7 @@
 <meta property="og:description" content="尝试用虚拟机手工搭建k8s集群，本文是搭建流程简单记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且过程中遇到了很多莫名巧妙的问题，多次重新安装了虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略少部分细节。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://totozhang.github.io/2019-05-10-learning-k8s-2/1.png">
-<meta property="og:updated_time" content="2019-05-23T13:38:10.509Z">
+<meta property="og:updated_time" content="2019-05-23T15:04:49.666Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建Kubernetes集群">
 <meta name="twitter:description" content="尝试用虚拟机手工搭建k8s集群，本文是搭建流程简单记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且过程中遇到了很多莫名巧妙的问题，多次重新安装了虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略少部分细节。">
@@ -332,8 +332,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/学习K8S容器集群/" itemprop="url" rel="index">
-                    <span itemprop="name">学习K8S容器集群</span>
+                  <a href="/categories/k8s-cluster/" itemprop="url" rel="index">
+                    <span itemprop="name">k8s cluster</span>
                   </a>
                 </span>
 
@@ -425,8 +425,11 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubectl get nodes</span></span><br><span class="line">NAME     STATUS   ROLES    AGE   VERSION</span><br><span class="line">master   Ready    master   10h   v1.14.2</span><br><span class="line">nodea    Ready    &lt;none&gt;   10h   v1.14.2</span><br><span class="line">nodeb    Ready    &lt;none&gt;   10h   v1.14.2</span><br></pre></td></tr></table></figure>
 <p>查看Pod状态，</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubectl get pods --all-namespaces</span></span><br><span class="line">NAMESPACE     NAME                                       READY   STATUS             RESTARTS   AGE</span><br><span class="line">kube-system   calico-kube-controllers-8646dd497f-n8wl6   1/1     Running            0          </span><br><span class="line">kube-system   calico-node-2lcjn                          1/1     Running            0          </span><br><span class="line">kube-system   calico-node-kvmz7                          1/1     Running            0          </span><br><span class="line">kube-system   calico-node-p2nft                          1/1     Running            0        </span><br><span class="line">kube-system   coredns-fb8b8dccf-qzr5m                    1/1     Running            0          </span><br><span class="line">kube-system   coredns-fb8b8dccf-txgzh                    1/1     Running            0          </span><br><span class="line">kube-system   etcd-master                                1/1     Running            0          </span><br><span class="line">kube-system   kube-apiserver-master                      1/1     Running            0          </span><br><span class="line">kube-system   kube-controller-manager-master             1/1     Running            0          </span><br><span class="line">kube-system   kube-proxy-49t6x                           1/1     Running            0          </span><br><span class="line">kube-system   kube-proxy-86j9l                           1/1     Running            0          </span><br><span class="line">kube-system   kube-proxy-kttxv                           1/1     Running            0          </span><br><span class="line">kube-system   kube-scheduler-master                      1/1     Running            0</span><br></pre></td></tr></table></figure>
-<p>以上阶段性完成了配置工作。</p>
-<h1 id="遇到的一个小问题">遇到的一个小问题</h1>
+<p>以上就完成了k8s集群的配置工作。</p>
+<h1 id="运行一个应用">运行一个应用</h1>
+<p>在集群上运行镜像，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubectl run nginx --image=mywebv1 --port=8080 --generator=run/pod-v1</span></span><br><span class="line"></span><br><span class="line">[root@master ~]<span class="comment"># kubectl get pod</span></span><br><span class="line">NAME            READY   STATUS              RESTARTS   AGE</span><br><span class="line">totoweb-v8bxz   0/1     ContainerCreating   0          28s</span><br></pre></td></tr></table></figure>
+<h1 id="过程中遇到的一个小问题">过程中遇到的一个小问题</h1>
 <p>安装网络插件后，查看Node状态和Pod状态，</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubectl get nodes</span></span><br><span class="line">NAME     STATUS     ROLES    AGE   VERSION</span><br><span class="line">master   Ready      master   9h    v1.14.2</span><br><span class="line">nodea    NotReady   &lt;none&gt;   9h    v1.14.2</span><br><span class="line">nodeb    NotReady   &lt;none&gt;   9h    v1.14.2</span><br><span class="line"></span><br><span class="line">[root@master ~]<span class="comment"># kubectl get pods --all-namespaces</span></span><br><span class="line">...</span><br><span class="line">kube-system   calico-node-2lcjn           0/1     Init:0/2            0          9h</span><br><span class="line">kube-system   calico-node-kvmz7           1/1     Running             0          9h</span><br><span class="line">kube-system   calico-node-p2nft           0/1     Init:0/2            0          9h</span><br><span class="line">...</span><br><span class="line">kube-system   kube-proxy-86j9l            0/1     ContainerCreating   0          9h</span><br><span class="line">kube-system   kube-proxy-kttxv            0/1     ContainerCreating   0          9h</span><br><span class="line">kube-system   kube-scheduler-master       1/1     Running             0          9h</span><br></pre></td></tr></table></figure>
 <p>查看原因，404</p>
@@ -453,7 +456,7 @@
         <ul class="post-copyright">
   <li class="post-copyright-author">
     <strong>Post author:</strong>
-    toto.zhang@gmail.com
+    toto
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
@@ -579,7 +582,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>
@@ -649,7 +652,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#网络拓扑"><span class="nav-number">1.</span> <span class="nav-text">网络拓扑</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置虚拟机系统及软件安装"><span class="nav-number">2.</span> <span class="nav-text">配置虚拟机系统及软件安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置k8s-master节点"><span class="nav-number">3.</span> <span class="nav-text">配置k8s Master节点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置k8s-slave节点"><span class="nav-number">4.</span> <span class="nav-text">配置k8s Slave节点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装网络插件"><span class="nav-number">5.</span> <span class="nav-text">安装网络插件，</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#遇到的一个小问题"><span class="nav-number">6.</span> <span class="nav-text">遇到的一个小问题</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#网络拓扑"><span class="nav-number">1.</span> <span class="nav-text">网络拓扑</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置虚拟机系统及软件安装"><span class="nav-number">2.</span> <span class="nav-text">配置虚拟机系统及软件安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置k8s-master节点"><span class="nav-number">3.</span> <span class="nav-text">配置k8s Master节点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置k8s-slave节点"><span class="nav-number">4.</span> <span class="nav-text">配置k8s Slave节点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装网络插件"><span class="nav-number">5.</span> <span class="nav-text">安装网络插件，</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运行一个应用"><span class="nav-number">6.</span> <span class="nav-text">运行一个应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#过程中遇到的一个小问题"><span class="nav-number">7.</span> <span class="nav-text">过程中遇到的一个小问题</span></a></li></ol></div>
             
 
           </div>
