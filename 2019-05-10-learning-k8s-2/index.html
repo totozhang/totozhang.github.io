@@ -89,7 +89,7 @@
 <meta property="og:description" content="尝试用虚拟机手工搭建k8s集群，本文是搭建流程简单记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且过程中遇到了很多莫名巧妙的问题，多次重新安装了虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略少部分细节。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://totozhang.github.io/2019-05-10-learning-k8s-2/1.png">
-<meta property="og:updated_time" content="2019-05-23T15:04:49.666Z">
+<meta property="og:updated_time" content="2019-05-24T14:19:14.298Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建Kubernetes集群">
 <meta name="twitter:description" content="尝试用虚拟机手工搭建k8s集群，本文是搭建流程简单记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且过程中遇到了很多莫名巧妙的问题，多次重新安装了虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略少部分细节。">
@@ -428,11 +428,11 @@
 <p>以上就完成了k8s集群的配置工作。</p>
 <h1 id="运行一个应用">运行一个应用</h1>
 <p>在集群上运行镜像，</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubectl run nginx --image=mywebv1 --port=8080 --generator=run/pod-v1</span></span><br><span class="line"></span><br><span class="line">[root@master ~]<span class="comment"># kubectl get pod</span></span><br><span class="line">NAME            READY   STATUS              RESTARTS   AGE</span><br><span class="line">totoweb-v8bxz   0/1     ContainerCreating   0          28s</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubectl run totoweb --image=mywebv1 --port=8080 --generator=run/pod-v1</span></span><br><span class="line"></span><br><span class="line">[root@master ~]<span class="comment"># kubectl get pod</span></span><br><span class="line">NAME            READY   STATUS              RESTARTS   AGE</span><br><span class="line">totoweb-v8bxz   0/1     ContainerCreating   0          28s</span><br></pre></td></tr></table></figure>
 <h1 id="过程中遇到的一个小问题">过程中遇到的一个小问题</h1>
 <p>安装网络插件后，查看Node状态和Pod状态，</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubectl get nodes</span></span><br><span class="line">NAME     STATUS     ROLES    AGE   VERSION</span><br><span class="line">master   Ready      master   9h    v1.14.2</span><br><span class="line">nodea    NotReady   &lt;none&gt;   9h    v1.14.2</span><br><span class="line">nodeb    NotReady   &lt;none&gt;   9h    v1.14.2</span><br><span class="line"></span><br><span class="line">[root@master ~]<span class="comment"># kubectl get pods --all-namespaces</span></span><br><span class="line">...</span><br><span class="line">kube-system   calico-node-2lcjn           0/1     Init:0/2            0          9h</span><br><span class="line">kube-system   calico-node-kvmz7           1/1     Running             0          9h</span><br><span class="line">kube-system   calico-node-p2nft           0/1     Init:0/2            0          9h</span><br><span class="line">...</span><br><span class="line">kube-system   kube-proxy-86j9l            0/1     ContainerCreating   0          9h</span><br><span class="line">kube-system   kube-proxy-kttxv            0/1     ContainerCreating   0          9h</span><br><span class="line">kube-system   kube-scheduler-master       1/1     Running             0          9h</span><br></pre></td></tr></table></figure>
-<p>查看原因，404</p>
+<p>查看原因，</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubectl describe pod kube-proxy-86j9l --namespace=kube-system</span></span><br><span class="line">...</span><br><span class="line">Warning  FailedCreatePodSandBox  3m6s (x1211 over 9h)  kubelet, nodeb  Failed create pod sandbox: rpc error: code = Unknown desc = failed pulling image <span class="string">"k8s.gcr.io/pause:3.1"</span>: Error response from daemon: Get https://k8s.gcr.io/v2/: net/http: request canceled <span class="keyword">while</span> waiting <span class="keyword">for</span> connection (Client.Timeout exceeded <span class="keyword">while</span> awaiting headers)</span><br></pre></td></tr></table></figure>
 <p>拉缺失镜像</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@nodeb ~]<span class="comment"># docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.1</span></span><br><span class="line">[root@nodeb ~]<span class="comment"># docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.1 k8s.gcr.io/pause:3.1</span></span><br></pre></td></tr></table></figure>
@@ -582,7 +582,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>
