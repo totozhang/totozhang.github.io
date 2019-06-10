@@ -73,6 +73,8 @@
 
 
 
+  
+
 
   <link rel="alternate" href="/atom.xml" title="Back To The Basics" type="application/atom+xml" />
 
@@ -89,7 +91,7 @@
 <meta property="og:description" content="尝试用虚拟机手工搭建k8s集群，本文是搭建流程简单记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且过程中遇到了很多莫名巧妙的问题，多次重新安装了虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略少部分细节。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://totozhang.github.io/2019-05-10-learning-k8s-2/1.png">
-<meta property="og:updated_time" content="2019-05-26T12:40:12.882Z">
+<meta property="og:updated_time" content="2019-06-03T14:46:15.079Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建Kubernetes集群">
 <meta name="twitter:description" content="尝试用虚拟机手工搭建k8s集群，本文是搭建流程简单记录，使用了三台CentOS虚拟机节点作为物理Node，由于众所周知的原因，公网引发问题不计其数，所以需要一些额外的垃圾步骤，并且过程中遇到了很多莫名巧妙的问题，多次重新安装了虚拟机及中间的一些Trouble Shooting，为了确保流程简洁此处暂时省略少部分细节。">
@@ -309,7 +311,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-10T23:49:00+09:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-10T23:49:00+08:00">
                 2019-05-10
               </time>
             
@@ -427,8 +429,8 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubectl get pods --all-namespaces</span></span><br><span class="line">NAMESPACE     NAME                                       READY   STATUS             RESTARTS   AGE</span><br><span class="line">kube-system   calico-kube-controllers-8646dd497f-n8wl6   1/1     Running            0          </span><br><span class="line">kube-system   calico-node-2lcjn                          1/1     Running            0          </span><br><span class="line">kube-system   calico-node-kvmz7                          1/1     Running            0          </span><br><span class="line">kube-system   calico-node-p2nft                          1/1     Running            0        </span><br><span class="line">kube-system   coredns-fb8b8dccf-qzr5m                    1/1     Running            0          </span><br><span class="line">kube-system   coredns-fb8b8dccf-txgzh                    1/1     Running            0          </span><br><span class="line">kube-system   etcd-master                                1/1     Running            0          </span><br><span class="line">kube-system   kube-apiserver-master                      1/1     Running            0          </span><br><span class="line">kube-system   kube-controller-manager-master             1/1     Running            0          </span><br><span class="line">kube-system   kube-proxy-49t6x                           1/1     Running            0          </span><br><span class="line">kube-system   kube-proxy-86j9l                           1/1     Running            0          </span><br><span class="line">kube-system   kube-proxy-kttxv                           1/1     Running            0          </span><br><span class="line">kube-system   kube-scheduler-master                      1/1     Running            0</span><br></pre></td></tr></table></figure>
 <p>以上就完成了k8s集群的配置工作。</p>
 <h1 id="运行一个应用">运行一个应用</h1>
-<p>创建一个myweb.yml文件，</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">mywebv1</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  restartPolicy:</span> <span class="string">OnFailure</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">myweb</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">mywebv1</span></span><br><span class="line"><span class="attr">    imagePullPolicy:</span> <span class="string">Never</span></span><br></pre></td></tr></table></figure>
+<p>创建一个myweb.yaml文件，</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">mywebv1</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  restartPolicy:</span> <span class="string">OnFailure</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">myweb</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">mywebv1</span></span><br><span class="line"><span class="attr">    imagePullPolicy:</span> <span class="string">Never</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="attr">    - containerPort:</span> <span class="number">80</span></span><br><span class="line"><span class="attr">      protocol:</span> <span class="string">TCP</span></span><br></pre></td></tr></table></figure>
 <p>在集群上运行镜像，</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubectl create -f myweb.yml </span></span><br><span class="line">[root@master ~]<span class="comment"># kubectl get pod</span></span><br><span class="line">NAME                     READY   STATUS             RESTARTS   AGE</span><br><span class="line">mywebv1                  1/1     Running            0          10s</span><br></pre></td></tr></table></figure>
 <h1 id="过程中遇到的一个小问题">过程中遇到的一个小问题</h1>
@@ -493,6 +495,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019-05-30-learning-k8s-3/" rel="prev" title="K8S中的标签使用">
+                K8S中的标签使用 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -573,7 +579,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
