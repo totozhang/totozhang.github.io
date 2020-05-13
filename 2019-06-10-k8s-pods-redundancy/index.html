@@ -81,17 +81,17 @@
 
 
 
-<meta name="description" content="k8s使用ReplicationController和ReplicaSet对pod进行冗余保护控制，另外还有DaemonSets，Job，CronJob几种特殊需求的冗余控制，使用配置文件定制好了冗余Pod数量之后，k8s自动进行Pod的冗余监控以及停启操作。">
+<meta name="description" content="k8s使用ReplicationController和ReplicaSet对pod进行冗余保护控制，ReplicationController逐渐被淘汰。另外还有DaemonSets，Job，CronJob几种特殊需求的冗余控制，使用配置文件定制好了冗余Pod数量之后，k8s自动进行Pod的冗余监控以及停启操作。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Pod的冗余保护">
 <meta property="og:url" content="http://totozhang.github.io/2019-06-10-k8s-pods-redundancy/index.html">
 <meta property="og:site_name" content="Back To The Basics">
-<meta property="og:description" content="k8s使用ReplicationController和ReplicaSet对pod进行冗余保护控制，另外还有DaemonSets，Job，CronJob几种特殊需求的冗余控制，使用配置文件定制好了冗余Pod数量之后，k8s自动进行Pod的冗余监控以及停启操作。">
+<meta property="og:description" content="k8s使用ReplicationController和ReplicaSet对pod进行冗余保护控制，ReplicationController逐渐被淘汰。另外还有DaemonSets，Job，CronJob几种特殊需求的冗余控制，使用配置文件定制好了冗余Pod数量之后，k8s自动进行Pod的冗余监控以及停启操作。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-06-17T14:54:56.755Z">
+<meta property="og:updated_time" content="2019-06-18T01:51:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Pod的冗余保护">
-<meta name="twitter:description" content="k8s使用ReplicationController和ReplicaSet对pod进行冗余保护控制，另外还有DaemonSets，Job，CronJob几种特殊需求的冗余控制，使用配置文件定制好了冗余Pod数量之后，k8s自动进行Pod的冗余监控以及停启操作。">
+<meta name="twitter:description" content="k8s使用ReplicationController和ReplicaSet对pod进行冗余保护控制，ReplicationController逐渐被淘汰。另外还有DaemonSets，Job，CronJob几种特殊需求的冗余控制，使用配置文件定制好了冗余Pod数量之后，k8s自动进行Pod的冗余监控以及停启操作。">
 
 
 
@@ -378,8 +378,8 @@
       
 
       
-        <p>k8s使用ReplicationController和ReplicaSet对pod进行冗余保护控制，另外还有DaemonSets，Job，CronJob几种特殊需求的冗余控制，使用配置文件定制好了冗余Pod数量之后，k8s自动进行Pod的冗余监控以及停启操作。<a id="more"></a></p>
-<p>创建RC和RS等的方式与创建Pod等一样，使用指令</p>
+        <p>k8s使用ReplicationController和ReplicaSet对pod进行冗余保护控制，ReplicationController逐渐被淘汰。另外还有DaemonSets，Job，CronJob几种特殊需求的冗余控制，使用配置文件定制好了冗余Pod数量之后，k8s自动进行Pod的冗余监控以及停启操作。<a id="more"></a></p>
+<p>创建RC和RS等的方式与创建Pod等一样，使用指令，</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]<span class="comment"># kubectl create -f myweb_replicationset.yaml</span></span><br><span class="line">replicaset.apps/mywebrs created</span><br><span class="line">[root@master ~]<span class="comment"># kubectl get rs</span></span><br><span class="line">NAME                  DESIRED   CURRENT   READY   AGE</span><br><span class="line">my-nginx-86459cfc9f   2         2         2       59s</span><br><span class="line">mywebrs               3         3         3       8s</span><br><span class="line">[root@master ~]<span class="comment"># kubectl get pod</span></span><br><span class="line">NAME                        READY   STATUS    RESTARTS   AGE</span><br><span class="line">my-nginx-86459cfc9f-48c2s   1/1     Running   0          68s</span><br><span class="line">my-nginx-86459cfc9f-wz6ng   1/1     Running   0          68s</span><br><span class="line">mywebrs-bddcv               1/1     Running   0          17s</span><br><span class="line">mywebrs-jczxq               1/1     Running   0          17s</span><br><span class="line">mywebrs-ksk66               1/1     Running   0          17s</span><br></pre></td></tr></table></figure>
 <p>其中myweb_replicationset.yaml文件内容为，</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1beta2</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicaSet</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">mywebrs</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">    replicas:</span> <span class="number">3</span></span><br><span class="line"><span class="attr">    selector:</span></span><br><span class="line"><span class="attr">      matchLabels:</span></span><br><span class="line"><span class="attr">        app:</span> <span class="string">mywebv1</span></span><br><span class="line"><span class="attr">    template:</span></span><br><span class="line"><span class="attr">      metadata:</span></span><br><span class="line"><span class="attr">        labels:</span></span><br><span class="line"><span class="attr">          app:</span> <span class="string">mywebv1</span></span><br><span class="line"><span class="attr">      spec:</span></span><br><span class="line"><span class="attr">        restartPolicy:</span> <span class="string">Always</span></span><br><span class="line"><span class="attr">        containers:</span></span><br><span class="line"><span class="attr">        - name:</span> <span class="string">myweb</span></span><br><span class="line"><span class="attr">          image:</span> <span class="string">mywebv1</span></span><br><span class="line"><span class="attr">          imagePullPolicy:</span> <span class="string">Never</span></span><br><span class="line"><span class="attr">          ports:</span></span><br><span class="line"><span class="attr">          - containerPort:</span> <span class="number">80</span></span><br><span class="line"><span class="attr">            protocol:</span> <span class="string">TCP</span></span><br></pre></td></tr></table></figure>
@@ -592,7 +592,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
